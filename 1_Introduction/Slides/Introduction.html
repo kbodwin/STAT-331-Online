@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intro to R, RStudio, and R Markdown</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intro to R, RStudio, and R Markdown
+
+---
+
+
+
+
+
+
+class: center, middle
+
+# What is R?
+
+---
+# What is R?
+
+**R** is a programming language designed originally for *statistical analyses*.
+
+--
+
+**R** was created by **Ross Ihaka** and **Robert Gentleman** in 1993.
+
+_(Their names are why it's called **R**, which is also a joke about the predecessor
+being called **S**.)_
+
+--
+
+**R** was formally released by the **R Core Group** in 1997.
+
+[https://www.r-project.org/contributors.html](https://www.r-project.org/contributors.html)
+
+
+This group of 20-ish volunteers are the *only* people who can change the **base** 
+(built-in) functionality of **R**.
+
+---
+# R is popular and growing!
+
+![](TIOBE.png)
+
+---
+# Strengths
+
+
+**R**'s **strengths** are...
+
+--
+
+... handling data with lots of **different types** of variables.
+
+--
+
+... making nice and complex data **visualizations**.
+
+--
+
+... having cutting-edge statistical **methods** available to users.
+
+---
+# Weaknesses
+
+**R**'s **weaknesses** are...
+
+--
+
+... performing non-analysis programming tasks, like website creation. 
+
+(*python*, *ruby*, ...)
+
+
+--
+
+... hyper-efficient numerical computation. 
+
+(*matlab*, *C*, ...)
+
+--
+
+... being a simple tool for all audiences 
+
+(*SPSS*, *STATA*, *JMP*, *minitab*, ...)
+
+---
+class: center, middle, invert
+
+# But wait!
+
+![](appforthat.jpg)
+
+---
+# Packages
+
+The heart and soul of **R** is **packages**.
+
+--
+
+These are "extra" sets of code that add **new functionality** to R when installed.
+
+--
+
+"Official" **R** packages live on the *Comprehensive R Archive 
+Network*, or **CRAN**
+
+--
+
+But anyone can write and share new code in "package form" (more later)
+
+---
+
+# Open-Source
+
+Importantly, **R** is *open-source*.
+
+--
+
+There is no company that owns **R**, like there is for *SAS* or *Matlab*.
+
+(*Python* is also open-source!)
+
+--
+
+This means nobody can sell their **R** code!
+
+--
+
+* (but you can sell "helpers" like **RStudio**)
+
+--
+
+* (and you can keep code **private** within an organization or company)
+
+--
+
+**Packages are created by users like you and me!**
+
+---
+# Open Source
+
+Being a good open-source citizen means...
+
+--
+
+... **sharing** your code publicly when possible. 
+
+(later in this course, we'll learn about *GitHub*!)
+
+--
+
+... **contributing** to public projects and packages, as you are able.
+
+--
+
+... creating your own **packages**, if you can.
+
+--
+
+... using **R** for **ethical and respectful** projects.
+
+---
+
+class: center, middle
+
+# Let's try it!
+
+---
+
+class: center, middle, inverse
+
+# Intro to RStudio
+
+---
+
+class: center, middle
+
+# What is RStudio?
+
+---
+# What is RStudio?
+
+**RStudio** is an IDE (*Integrated Developer Environment*).
+
+This means it is an application that makes it easier for you to interact with **R**.
+
+--
+
+![](https://d33wubrfki0l68.cloudfront.net/0b4d0569b2ddf6147da90b110fbb2a17653c8b08/f06f3/images/shutterstock/r_vs_rstudio_1.png)
+
+---
+# History of RStudio
+
+**RStudio** was released in 2011 by J.J. Allaire.
+
+--
+
+In 2014, RStudio hired *Hadley Wickham* as Chief Data Scientist.  They now employ around 20 full-time developers.
+
+--
+
+Recall: You can __not__ sell __R__ code; packages created by RStudio's team are freely available.  
+
+They make money off the IDE and other helper software.
+
+--
+
+In 2020, RStudio became a PBC (*Public Benefit Corp*), meaning they are legally obligated to support education and open-source development.
+
+---
+
+![](https://datacarpentry.org/genomics-r-intro/fig/rstudio_session_4pane_layout.png)
+
+
+---
+class: center, middle
+
+# Let's try it!
+
+---
+class: center, middle, inverse
+
+# Intro to R Markdown
+
+---
+
+# What is Markdown?
+
+**Markdown** (without the "R") is a *markup language*.  This means special symbols and formatting to pretty documents.
+
+--
+
+Markdown files have the **.md** extension.
+
+---
+
+![](https://d33wubrfki0l68.cloudfront.net/59f29676ef5e4d74685e14f801bbc10c2dbd3cef/c0688/lesson-images/markdown-1-markup.png)
+
+---
+# What is R Markdown?
+
+**R Markdown** (with the "R") uses regular markdown, plus it can run and display **R** code.  (Other languages, too!)
+
+--
+
+R Markdown files have the **.Rmd** extension.
+
+---
+
+![](https://d33wubrfki0l68.cloudfront.net/ece57b678854545e6602a23daede51ad72da2170/21cca/lesson-images/outputs-1-word.png)
+
+---
+![](https://miro.medium.com/max/1200/1*jL-whKGBhuUlU7Q2oevz9w.png)
+
+---
+# Knitting
+
+To convert your R Markdown file to a beautiful document, click **Knit**.
+
+![](https://rstudioblog.files.wordpress.com/2014/06/r-markdown-formats.png)
+---
+# Knitting
+
+You do **not** have to knit a file to *save* it!!!
+
+Do this the regular way:
+
+- `Ctrl/Cmd + S`
+
+- Click the Floppy Disk icon
+
+- Click "File &gt; Save As"
+
+--
+
+As you work, you should **save** extremely frequently and **knit** semi-regularly.
+
+---
+# Knitting
+
+When you click **knit**, here is what happens:
+
+--
+
+- Your file is saved.
+
+--
+
+- The R code written in your *.Rmd* file gets run.
+
+    + Any code you ran already doesn't "count"; we start from scratch.
+    + The code is run *in order*.
+
+--
+
+- A new file is created.
+
+    + If your R Markdown file is called "Lab1.Rmd", then a file called "Lab1.html" will be created.
+    + This will save in the same folder as "Lab1.Rmd".
+    
+---
+
+class: center, middle, invert
+
+# Let's try it!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false,
+"highlightLines": true,
+"highlightStyle": "github",
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

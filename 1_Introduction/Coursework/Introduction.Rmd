@@ -1,0 +1,255 @@
+---
+title: "Introduction to R, RStudio, R Markdown"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+```
+
+Let's get coding!
+
+![](../../Images/silly_gifs/typing_R.gif)
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "30 min", 
+                   reading_time = "60 min", 
+                   work_time = "90 min", 
+                   num_activities = 2)
+```
+
+---
+
+# Introduction to R
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Introdution to R", type = "Required", url = "https://www.youtube.com/embed/svRvp8QSvXI")
+```
+
+---
+
+## Basics of Visualization
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Primer: Basics of Visualization in R", url = "https://rstudio.cloud/learn/primers/1.1")
+```
+
+After working through the tutorial, if you feel more detail would be helpful,
+consider the following readings:
+
+
+```{r, results = "asis", echo = FALSE}
+extra_rec("")
+```
+
+* [R for Data Science:  Chapter 3](https://r4ds.had.co.nz/data-visualisation.html)
+
+* [Modern Dive: Chapter 2](https://moderndive.com/2-viz.html)
+
+---
+
+## Basics of R Programming
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Primer: Basics of Programming in R", url = "https://rstudio.cloud/learn/primers/1.2")
+```
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Basics of R")
+```
+
+**Question 1:** What does it mean for R to be **"open-source"**?
+
+a) Users are required to share all the code they write.
+b) Private companies must pay the *R Core Group* to use R.
+c) Developers cannot charge for the use of their R software.
+d) Anyone can change the base functionality of R.
+
+
+
+**Question 2:** Identify the elements of the following plot as
+
+(i) The aesthetic
+(ii) The geometry
+(iii) The scales
+(iv) None of the above
+
+<a href=<https://xkcd.com/252/"><img src="../../Images/other/xkcd.png"></a>
+
+(a) The x-axis is age
+(b) The y-axis is "Urge to run up the down escalator"
+(c) The y-axis ranges from "Weak" to "Strong"
+(d) This is a line graph
+(e) The two lines are "What I was supposed to feel" and "What I've actually felt"
+(f) The lines are labeled with text
+(g) Only even ages are labeled
+(h) Stick figure people are sliding down the line
+
+---
+
+# Introduction to RStudio
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Introduction to RStudio", type = "Required", url = "https://www.youtube.com/embed/kBT2ykhz6p4")
+```
+
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("A tour of RStudio", type = "Required", url = "https://rladiessydney.org/courses/ryouwithme/01-basicbasics-1/")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+extra_rec("")
+```
+
+* [Click Here](https://github.com/rstudio/cheatsheets/raw/master/rstudio-ide.pdf) 
+to download a "cheatsheet" (easy reference page) for RStudio.
+
+* [Here](https://youtu.be/cnQ-v1UUWyE) is another walkthrough video for touring
+RStudio.
+
+---
+
+# Installing R and RStudio
+
+---
+
+
+## Install R
+
+*If you already have R downloaded, please follow these steps anyways, to make sure
+you have the most recent version of R.*
+
+Download and install R by going to [https://cloud.r-project.org/]([https://cloud.r-project.org/).
+
+If you are a **Windows** user: 
+
+* Click on “Download R for Windows”
+
+* Click on “base”
+
+* Click on the Download link.
+
+
+If you are a **Linux** user: 
+
+Click on “Download R for Linux” and choose your distribution for more information on installing R for your setup.
+
+
+If you are **macOS** user: 
+
+* Click on “Download R for (Mac) OS X”
+
+* Under “Latest release:” click on R-X.X.X.pkg, where R-X.X.X is the version number. For example, the latest version of R as of June 22, 2020 was R-4.1.0.
+
+
+
+#### Troubleshooting for Macs
+
+First, identify which version of OSx you are running.  [How-to](https://support.apple.com/en-us/HT201260)
+
+Next, find out which version of R your computer can run.  [Link](https://cran.r-project.org/bin/macosx/)
+
+If this version is 3.5 or later, download the latest version that your computer can handle.
+
+If this version is 3.4 or earlier, you're going to run in to some trouble.  I recommend updating your version of OSx, if you are willing.  If you can't, then you can use [rstudio.cloud](rstudio.cloud) to run R and RStudio on a free server.  However, I recommend strongly against this option; your files will not be saved indefinitely, your computing power will be limited, and you will need an internet connection at all times to do your work.
+
+---
+
+## Install RStudio
+
+RStudio can be downloaded [here](https://rstudio.com/products/rstudio/download/)
+
+If you already have RStudio:
+
+You **do not** need an update if your RStudio logo looks like this: <img src='../../Images/other/rs_icon_new.png' height='25' width='50'>
+
+You **do** need an update if your RStudio logo looks like this: <img src='../../Images/other/rs_icon_old.png' height='25' width='25'>
+
+
+---
+
+## Install/update the tidyverse
+
+In this class, we will make heavy use of the *tidyverse* suite of packages.
+
+If you **have not** used the tidyverse before, type the following into your **console**:
+
+```{r, eval = FALSE}
+install.packages("tidyverse")
+```
+
+If you **have** used the tidyverse before, you only need to update packages.  
+Type the following into your console:
+
+```{r, eval = FALSE}
+library(tidyverse)
+tidyverse_update()
+```
+
+Then follow the instructions that print out to update a few of your tidyverse packages.
+
+
+---
+
+# Introduction to R Markdown
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Introduction to R Markdown", type = "Required", url = "https://www.youtube.com/embed/Zt6MJ2m2bNk")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("Intro to R Markdown", url = "https://rmarkdown.rstudio.com/articles_intro.html")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+extra_rec("")
+```
+
+
+* [Click Here](https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf) 
+to download a cheatsheet for R Markdown.
+
+* [This page](https://holtzy.github.io/Pimp-my-rmd/) has some tips for making your
+R Markdown documents more beautiful.
+---
+
+# Bringing it all together
+
+```{r, results = "asis", echo = FALSE}
+checkin("R, RStudio, and R Markdown")
+```
+
+Correct the following sentences, so that they make sense.
+
+1. "I wrote RStudio code to make a beautiful plot."
+
+2. "I used Markdown to put R code in my report."
+
+3. "I can't get R to open!"
+
+4. "Can I send you my RStudio so you can check out if my R Markdown code is 
+correct?  I can't get R to knit."

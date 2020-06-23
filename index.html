@@ -1,0 +1,453 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Adventures in R</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!--light box-->
+<script src="js/superfish.js"></script>
+<script type="text/javascript" src="js/jquery.lightbox.js"></script>
+<link rel="stylesheet" type="text/css" href="css/lightbox.css" media="screen">
+	<script type="text/javascript">
+		$(function() {
+			$('.gallery a').lightBox();
+		});
+   </script>
+<script type="text/javascript" src="js/move-top.js"></script>
+<script type="text/javascript" src="js/easing.js"></script>
+   <script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1200);
+			});
+		});
+	</script>
+	    <script
+      src="https://use.fontawesome.com/releases/v5.13.0/js/all.js"
+      data-auto-a11y="true"
+    ></script>
+</head>
+<body>
+   <div class="header">	
+    <div class="header-top">
+       <div class="wrap"> 
+	         <div class="logo">
+				<!--<a href="index.html"><img src="images/logo.png" alt=""/></a>-->
+				<h1><a href="index.html">Stat 431</a></h1>
+			 </div>
+			 <div class="cssmenu">
+				<ul id="nav">
+					 <li class="current"><a href="#section-1">Home</a></li>
+					 <li><a href="#section-2">About</a></li>
+					 <li><a href="#section-3">Overview</a></li>
+					 <li><a href="#section-4">Coursework</a></li>
+					 <li><a href="#section-5">Contact</a></li>
+				</ul>
+		    </div>
+		    <div class="clear"></div>
+	   </div>
+	 </div>
+   </div>
+    <div class="banner section" id="section-1">
+       <div class="wrap"> 
+       <h1>Statistics 431: Advanced Statistical Computing with R</h1>
+       </div>
+       </div>
+	<div class="main" id="container">
+	   <div class="content-top section" id="section-2">
+	       <div class="wrap">
+                    <p>This is a public-facing version of a new course (STAT 431) at Cal Poly taught by Dr. Kelly Bodwin and Dr. Hunter Glanz.</p>
+					<p>This 9-week course is fully virtual and asynchronous.  We would like to invite you to join along with us and our students.</p>
+					<h2>Course Description</h2>
+					<p>Advanced techniques for efficient use of computers to perform statistical computations and to analyze large amounts of data. Includes version control systems; tools supporting reproducibility; functional programming; randomization and bootstrapping; dynamic data visualizations; and R package development.</p>
+					<p><i>Disclaimer:</i> This is not an Advanced R Programming course for developers.  Rather, it is a second-year course for advanced uses of R in Data Science and Statistics.</p>
+         
+                <h2>Discord Server</h2>
+                
+                <p>To mimic a collaborative classroom environment, we have set up a <a href="https://discord.gg/SxGR4US">Discord Server</a> for this course. </p>
+                
+                <p><a href="./Canvas_Pages/Work_Parties_Public.html">Click here</a> for more info, and for some demos of how to best use the server.</p>
+                  
+                  	<h2>Prerequisites</h2>
+                  	
+					<p>We expect that students experience at the following approximate levels. (Note: Week 1 consists of review of some prerequisite material) </p>
+					<span style="font-size:75%">
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;Two courses in Statistics <i>(Basic hypothesis tests, ANOVA, multiple regression)</i>
+					<br>&nbsp;&nbsp;&nbsp;&nbsp;One course in basic computer science <i>(loops and conditionals, objects and functions, etc)</i>
+					  <br> &nbsp;&nbsp;&nbsp;&nbsp;One course in statistical computing with R <i>(Data cleaning and manipulation, visualization, strings and dates, writing functions, iteration, sampling and bootstrapping)</i>
+</span>
+               
+  		 </div>  
+		 
+	   <div class="content-middle section" id="section-3">
+		  <div class="wrap">
+<h3> 1. Coursework and practice</h3>
+
+<p>You will be given a sequence of readings, videos, and small practice activities.  These are meant to replace the in-class lecture and group work experience; as such, you are strongly encouraged to work on these in groups.  In particular, you may want to attack these assignments during the Work Parties on Discord.</p>
+
+<p>Note: You will often see links with this symbol dispersed in the coursework materials: <img src='./Canvas_Pages/Images/canvas.png' height='20' width='20'>.  Ignore these; they are for the Cal Poly students only.</p>
+
+
+<h3>2. Lab Assignment</h3>
+
+
+<p>The majority of the true work in this class comes from Lab Assignments.  You should plan to spend a large amount of time outside of class (4-8 hours each week) completing your Lab Assignment.</p>
+
+<p>Lab Assignments will be posted on the <a href="https://github.com/Cal-Poly-Advanced-R">Course GitHub Site</a>.  (They are also linked individually in the schedule below.)
+
+We encourage you to work together to review and give feedback on each other's work.  We will post grading rubrics for each Lab Assignment, to help with your Peer Review or Self-Assessment.</p>
+
+
+<h3> 3. Challenge</h3>
+
+<p>Finally, each week we will post a special challenge. This is your chance to push the limits of your new skills!  While you won't be able to join the student competition, we encourage you to share your work via GitHub, twitter, and/or on the public Discord.</p>
+
+</div>
+</div>
+</div>
+		<div class="content-top section" id="section-4">
+		   <div class="wrap">
+		        <h2>Coursework</h2>
+				 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+Week
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+Date
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Topic
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Lecture and Exercises
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+Lab Assignment
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+Challenge
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+0
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-03-30
+</td>
+<td style="text-align:left;">
+Basic Setup
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_1-Review/GitHub.html"></a>
+<a href="Canvas_Pages/Week_1-Review/GitHub.html">Getting started with GitHub</a>
+<br>
+<a class="fa fa-link" href="Canvas_Pages/Other/Workflow.html"></a>
+<a href="Canvas_Pages/Other/Workflow.html">Workflow</a>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/Lab_0"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/Lab_0">Lab 0: GitHub</a> <br>
+(No Peer Review)
+</td>
+<td style="text-align:center;">
+None
+</td>
+</tr>
+<!-- W1 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+1
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-04-06
+</td>
+<td style="text-align:left;">
+Review
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_1-Review/Data_Wrangling.html"></a>
+<a href="Canvas_Pages/Week_1-Review/Data_Wrangling.html">Data Wrangling</a>
+<br>
+<a class="fa fa-link" href="Canvas_Pages/Week_1-Review/Data_Visualization.html"></a>
+<a href="Canvas_Pages/Week_1-Review/Data_Visualization.html">Data Visualization</a>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/Lab_1"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/Lab_1">Lab 1: Review</a> <br>
+<a class="fas fa-tasks" href="https://docs.google.com/document/d/1kBY5oU6jJ1ln9Wp5R1ohYXUfDwlGDQgKECKK8kfAsy0/edit?usp=sharing"></a>
+<a href="https://docs.google.com/document/d/1kBY5oU6jJ1ln9Wp5R1ohYXUfDwlGDQgKECKK8kfAsy0/edit?usp=sharing">Peer Review Guide </a>
+
+</td>
+<td style="text-align:center;">
+<a class="fa fa-chart-bar" href="Challenges/Challenge_1.html"></a>
+<a href="Challenges/Challenge_1.html">Challenge 1</a> <br>
+<a href="Challenges/All_Challenge_1.html">(See Submissions)</a> <br>
+</td>
+</tr>
+<!-- W2 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+2
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-04-13
+</td>
+<td style="text-align:left;">
+Advanced Data Visualization
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-OtherPlots.html"></a>
+<a href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-OtherPlots.html">Beyond basic plot types</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-ggplot_Extensions.html"></a>
+<a href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-ggplot_Extensions.html">Extending ggplot</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-Leaflet.html"></a>
+<a href="Canvas_Pages/Week_2-Advanced_Data_Viz/Advanced_Data_Viz-Leaflet.html">Maps with Leaflet</a>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/Lab_2"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/Lab_2">Lab 2: Upgrade Plots</a> <br>
+(No Peer Review)
+</td>
+<td style="text-align:center;">
+<a class="fa fa-chart-bar" href="Challenges/Challenge_2.html"></a>
+<a href="Challenges/Challenge_2.html">Challenge 2</a> <br>
+<a href="Challenges/All_Challenge_2.html">(See Submissions)</a> <br>
+</td>
+</tr>
+<!-- W3 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+3
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-04-20
+</td>
+<td style="text-align:left;">
+Data From Many Sources
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_3-Data_Sources/NewDataFormats.html"></a>
+<a href="Canvas_Pages/Week_3-Data_Sources/NewDataFormats.html">New Data Formats</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_3-Data_Sources/NewDataSources.html"></a>
+<a href="Canvas_Pages/Week_3-Data_Sources/NewDataSources.html">New Data Sources</a><br>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/Lab_3"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/Lab_3">Lab 3: Use an API</a> <br>
+<a class="fas fa-tasks" href="https://docs.google.com/document/d/132DlRFqpC3j86Q8ueSLFbJMC8XRQyS7JGg0GMqI2kX8/edit?usp=sharing"></a>
+<a href="https://docs.google.com/document/d/132DlRFqpC3j86Q8ueSLFbJMC8XRQyS7JGg0GMqI2kX8/edit?usp=sharing">Peer Review Guide </a>
+</td>
+<td style="text-align:center;">
+<a class="fa fa-chart-bar" href="Challenges/Challenge_3.html"></a>
+<a href="Challenges/Challenge_3.html">Challenge 3</a> <br>
+<a href="Challenges/All_Challenge_3.html">(See Submissions)</a> <br>
+</td>
+</tr>
+<!-- W4 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+4
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-04-27
+</td>
+<td style="text-align:left;">
+Packages and Package-Based Workflow
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_4-Packages/Writing_Functions.html"></a>
+<a href="Canvas_Pages/Week_4-Packages/Writing_Functions.html">Writing Functions</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_4-Packages/Package_Basics.html"></a>
+<a href="Canvas_Pages/Week_4-Packages/Package_Basics.html">Basics of Packages</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_4-Packages/Contribute_to_Packages.html"></a>
+<a href="Canvas_Pages/Week_4-Packages/Contribute_to_Packages.html">Contributing to Packages</a><br>
+</td>
+<td style="text-align:center;">
+<a class="fa fa-link" href="Canvas_Pages/Week_4-Packages/Lab_4-Packages-Instructions-Public.html"></a>
+<a href="Canvas_Pages/Week_4-Packages/Lab_4-Packages-Instructions-Public.html">Lab 4: Create a Package</a><br>
+(Open-Ended Peer Review)
+</td>
+<td style="text-align:center;">
+(None)
+</td>
+</tr>
+<!-- W5 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+5
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-05-04
+</td>
+<td style="text-align:left;">
+Matrices and Efficient Computing
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_5-Matrix_Operations/Matrix_Algebra.html"></a>
+<a href="Canvas_Pages/Week_5-Matrix_Operations/Matrix_Algebra.html">Basics of Matrix Operations</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_5-Matrix_Operations/RegressionFromMatrices.html"></a>
+<a href="Canvas_Pages/Week_5-Matrix_Operations/RegressionFromMatrices.html">Multiple Regression</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_5-Matrix_Operations/Efficient_Coding.html"></a>
+<a href="Canvas_Pages/Week_5-Matrix_Operations/Efficient_Coding.html">Speed and Efficiency</a><br>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/regress431"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/regress431">Lab 5: Implement Regression</a> <br>
+</td>
+<td style="text-align:center;">
+(See Lab 5)
+</td>
+</tr>
+<!-- W6 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+6
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-05-11
+</td>
+<td style="text-align:left;">
+Matrix Decomposition; Gradient Descent
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_6-Iteration_to_Small_Error/GradientDescent.html"></a>
+<a href="Canvas_Pages/Week_6-Iteration_to_Small_Error/GradientDescent.html">Gradient Descent</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_6-Iteration_to_Small_Error/MatrixDecomposition.html"></a>
+<a href="Canvas_Pages/Week_6-Iteration_to_Small_Error/MatrixDecomposition.html">Matrix Decomposition</a><br>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-link" href="GH_Classroom-Labs/Lab_6/Lab_6_Instructions-Public.html"></a>
+<a href="GH_Classroom-Labs/Lab_6/Lab_6_Instructions-Public.html">Lab 6: Implement Regression 2</a> <br>
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/regress431"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/regress431">(Package Repo)</a> <br>
+</td>
+<td style="text-align:center;">
+(See Lab 6)
+</td>
+</tr>
+<!-- W7 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+7
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-05-18
+</td>
+<td style="text-align:left;">
+Iteration to Convergence
+</td>
+<td style="text-align:left; ">
+<a class="fa fa-link" href="Canvas_Pages/Week_7-Iteration_to_Convergence/kmeans.html"></a>
+<a href="Canvas_Pages/Week_7-Iteration_to_Convergence/kmeans.html">k-means Clustering</a><br>
+<a class="fa fa-link" href="Canvas_Pages/Week_7-Iteration_to_Convergence/hclust.html"></a>
+<a href="Canvas_Pages/Week_7-Iteration_to_Convergence/hclust.html">Hierarchical Clustering</a><br>
+</td>
+<td style="text-align:center;">
+<a class="fab fa-link" href="GH_Classroom-Labs/Lab_7/Lab_7_Instructions-Public.html"></a>
+<a href="GH_Classroom-Labs/Lab_7/Lab_7_Instructions-Public.html">Lab 7: Implement Clustering</a> <br>
+<a class="fab fa-github" href="https://github.com/Cal-Poly-Advanced-R/clust431"></a>
+<a href="https://github.com/Cal-Poly-Advanced-R/clust431">(Package Repo)</a> <br>
+</td>
+<td style="text-align:center;">
+(See Lab 7 Instructions)
+</td>
+</tr>
+<!-- W8 -->
+<tr>
+<td style="text-align:center;width: 0.5cm;  padding-left: 2em;" indentlevel="1">
+8/9
+</td>
+<td style="text-align:center;width: 3cm; ">
+2020-05-25
+</td>
+<td style="text-align:left;">
+The EM Algorithm
+</td>
+<td style="text-align:left; ">
+
+</td>
+<td style="text-align:center;">
+
+</td>
+<td style="text-align:center;">
+<!-- W6 -->
+</tbody>
+</table>
+</div>
+</div>
+    <div class="footer section" id="section-5">
+       <div class="footer-top">
+     	  <div class="wrap">
+     		 <h2>About Us</h2>
+                
+               <p><img src="./img/hunter.jpg" height='100' width='100' align='left' hspace='50'><br> <a href="https://statistics.calpoly.edu/Hunter-Glanz">Dr. Hunter Glanz</a> is an Assistant Professor in the Statistics Department at Cal Poly, where he teaches programming in R and SAS, statistical learning, and data science. His favorite R package is ggplot2. <br> Find Hunter on twitter: <a href="https://twitter.com/hglanz">@hglanz</a></p><br>
+                
+                <p><img src="./img/kelly_bodwin.jpg" height='100' width='100' align='left' hspace='50'><br><a href="www.kelly-bodwin.com">Dr. Kelly Bodwin</a> is an Assistant Professor in the Statistics Department at Cal Poly, where she teaches courses in introductory statistics, R programming, and multivariate statistics. Her favorite R package is stringr. <br> Find Kelly on twitter: <a href="https://twitter.com/kellybodwin">@kellybodwin</a></p><br>
+                
+                <p><i>Please feel free to reach out to us by email or twitter with questions about the course. <br> However, please be patient with us; our priority is the Cal Poly students, and we may not be able to address your questions in a timely manner.</i></p>
+                </div>
+                <br><br>
+            </div>
+        </div>
+     <div class="footer-bottom">
+       <div class="wrap">
+        <div class="copy">
+		    <p class="copy">© 2013 Designed by  <a href="http://w3layouts.com" target="_blank">w3layouts</a> </p>
+	    </div>
+	   
+	    <div class="clear"></div>
+	    <script type="text/javascript">
+			$(document).ready(function() {
+			
+				var defaults = {
+		  			containerID: 'toTop', // fading element id
+					containerHoverID: 'toTopHover', // fading element hover id
+					scrollSpeed: 1200,
+					easingType: 'linear' 
+		 		};
+				
+				
+				$().UItoTop({ easingType: 'easeOutQuart' });
+				
+			});
+		</script>
+           <a href="#" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 1;"></span></a>
+	  </div>
+	</div>
+	<script src="js/jquery.scrollTo.js"></script>
+	<script src="js/jquery.nav.js"></script>
+	<script>
+	$(document).ready(function() {
+		$('#nav').onePageNav({
+			begin: function() {
+			console.log('start')
+			},
+			end: function() {
+			console.log('stop')
+			}
+		});
+	});
+	</script>
+</div>
+</body>
+</html>
+
+    	
+    	
+            
