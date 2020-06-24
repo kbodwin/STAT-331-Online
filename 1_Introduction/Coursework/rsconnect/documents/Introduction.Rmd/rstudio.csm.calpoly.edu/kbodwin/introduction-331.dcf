@@ -5,8 +5,8 @@ account: kbodwin
 server: rstudio.csm.calpoly.edu
 hostUrl: https://rstudio.csm.calpoly.edu/__api__
 appId: 141
-bundleId: 299
-url: https://rstudio.csm.calpoly.edu/content/141/
-when: 1592864096.65597
+bundleId: 303
+url: https://rstudio.csm.calpoly.edu/Introduction-331/
+when: 1593015974.00484
 asMultiple: FALSE
 asStatic: TRUE

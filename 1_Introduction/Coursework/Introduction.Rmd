@@ -140,7 +140,7 @@ RStudio.
 *If you already have R downloaded, please follow these steps anyways, to make sure
 you have the most recent version of R.*
 
-Download and install R by going to [https://cloud.r-project.org/]([https://cloud.r-project.org/).
+Download and install R by going to [https://cloud.r-project.org/](https://cloud.r-project.org/).
 
 If you are a **Windows** user: 
 
