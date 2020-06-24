@@ -27,7 +27,7 @@ In this coursework, you'll get set up with the Class Discord, learn about what
 is expected of you each week, and hear some tips from me about how to succeed.
 
 ```{r, results = "asis", echo = FALSE}
-req_vid("Welcome from Dr. B.", type = "Required", url = "https://www.youtube.com/embed/v=zLowv3u2GLs")
+req_vid("Welcome from Dr. B.", type = "Required", url = "https://www.youtube.com/embed/zLowv3u2GLs")
 ```
 
 
@@ -213,7 +213,7 @@ Introduce yourself in the "Introductions" channel of the Discord Server.
 ---
 
 ```{r, results = "asis", echo = FALSE}
-req_vid("Class Structure", type = "Required", url = "https://www.youtube.com/embed/v=naPSsxgiTPo")
+req_vid("Class Structure", type = "Required", url = "https://www.youtube.com/embed/naPSsxgiTPo")
 ```
 
 ---
