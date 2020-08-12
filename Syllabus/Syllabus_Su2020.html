@@ -1481,6 +1481,22 @@ border-bottom: 1px solid #fcfcfc;
 
 });
 </script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 
@@ -1546,8 +1562,8 @@ $(document).ready(function () {
 </div>
 <div id="office-hours" class="section level3">
 <h3>Office Hours:</h3>
-<div id="wednesday-friday-10am-12pm" class="section level4">
-<h4>Wednesday &amp; Friday, 10am-12pm</h4>
+<div id="twrf-1030am-1130am" class="section level4">
+<h4>TWRF 10:30am-11:30am</h4>
 <p>(All Office Hours held on Discord.)</p>
 </div>
 </div>
@@ -1626,13 +1642,12 @@ You will learn to work with unusual data types, to write your own functions, to 
 <h2>Practice Activities</h2>
 <p>Each week, you will be given a Practice Activity to complete, to get the hang of the week’s necessary R skills. These activities will always result in a single, straightforward correct answer, that you will submit via the Canvas site. Therefore, there is no reason you should not get full credit in this category!</p>
 <p>Since these activities are intended to be your first attempt at new skills, they are meant to be done with help from me and your peers. I <strong>strongly</strong> suggest that you attempt to start the activities before office hours, so you can maximize the utility of my help.</p>
-<p>Practice Activities are due <strong>Wednesdays at midnight.</strong></p>
+<p>Practice Activities are due <strong>Thursdays at midnight.</strong></p>
 </div>
 <div id="lab-assignments" class="section level2">
 <h2>Lab Assignments</h2>
-<p>Your typical homework assignments will be weekly labs. These labs are due on <strong>Fridays at midnight</strong>.</p>
-<p>There are no extensions on lab assignments. There is a grace period through <strong>Sunday at midnight</strong>, during which your lab is not penalized, but you will not receive Peer Review credit. (10% of the lab grade.)</p>
-<p>Labs turned in later than Sunday will not be reviewed, and instead will be quickly checked for completeness and receive an automatic grade of 50%.</p>
+<p>Your typical homework assignments will be weekly labs. These labs are due on <strong>Sunday at midnight</strong>.</p>
+<p>There are no extensions on lab assignments. Labs turned in later than Sunday will not be reviewed, and instead will be quickly checked for completeness and receive an automatic grade of 50%.</p>
 </div>
 <div id="challenges" class="section level2">
 <h2>Challenges</h2>
@@ -1642,7 +1657,7 @@ You will learn to work with unusual data types, to write your own functions, to 
 <div id="dates" class="section level3">
 <h3>Dates</h3>
 <p><strong>Midterm:</strong> Monday, July 27th</p>
-<p><strong>Final Exam:</strong> Friday, September 4th.</p>
+<p><strong>Final Exam:</strong> Friday, August 28th.</p>
 </div>
 </div>
 <div id="other-policies" class="section level2">

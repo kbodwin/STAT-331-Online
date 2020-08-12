@@ -1,0 +1,153 @@
+---
+title: "Git, GitHub, and R"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+```
+
+
+```{css, echo = FALSE}
+img {
+  vertical-align:middle;
+}
+
+body {
+  text-shadow:none;
+}
+
+```
+
+
+
+**GitHub** is a site for sharing and collaborating on code, and for careful tracking
+of changes as you progress.  As of right now, it is the best way to organize your
+work in **R**, to showcase it to  employers, or to share it with collaborators.
+
+Using **Git** and **GitHub** takes some getting used to, and can be frustrating
+at times even to experts.  We will use it only in the most basic form in this course.
+
+
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "45 min", 
+                   reading_time = "10 min", 
+                   work_time = "30 min", 
+                   num_activities = 4)
+```
+
+```{r, results = "asis", echo = FALSE}
+extra_rec("Git and GitHub")
+```
+
+* [This Video](https://www.youtube.com/watch?w3jLJU7DT5E) provides a cheesy but 
+cute introduction to GitHub.
+* [GitHub Desktop](https://desktop.github.com/) is a nice client for interfacing 
+with GitHub.  I highly recommend downloading it if you have not used GitHub before.
+* [This Video](https://www.youtube.com/watch?v=KjLycV1IWqc) summarizes the basics
+of GitHub with R, and is a good reference if you return to this material after
+your first pass through.
+
+---
+
+## Introduction to Git and GitHub
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Intro to Git and Github", type = "Required", url = "https://www.youtube.com/embed/BCQHnlnPusY")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Make a GitHub Account")
+```
+
+Create an account on [GitHub.com](GitHub.com), if you have not already.
+
+Ideally, your username will be related to your real name, e.g. "kbodwin" rather 
+than "SuperKrazy2000".  However, this is not required; choose whatever username 
+you prefer.  
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Make a repository")
+```
+
+Create a **private** repository called "Test Repo".
+
+Create a new text file called "My favorite".  Copy-paste your favorite quote or
+poem into the file.
+
+Take a screenshot of your repository.  It should look similar to 9:43 of the video.
+ 
+---
+
+## Branches and Pull Requests
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Branching", type = "Required", url = "https://www.youtube.com/embed/oPpnCh7InLY")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Make a branch and pull request")
+```
+
+Create a new branch of your "Test Repo" repository.  
+Name this branch after your favorite animal.
+
+In this branch, replace a word in your text file with the animal's name.
+
+Create a **Pull Request** to your `master` branch from your new branch.
+
+Take a screen shot of your completed pull request.  It should look like 8:14 of the video.
+
+---
+
+## Git and RStudio
+
+```{r, results = "asis", echo = FALSE}
+req_vid("GitHub and RStudio", type = "Required", url = "https://www.youtube.com/embed/qcjpHFwCugE")
+```
+
+```{r, results = "asis", echo = FALSE}
+checkin("Access GitHub from RStudio")
+```
+
+Follow the instructions in the video to make a new R Project that is also a 
+GitHub Repository.
+
+Take a screenshot showing yourself committing to a new branch. It should look
+like 8:26 of the video.
+
+**Note:** There are a lot of fiddly computer details that might prevent this from
+going as smoothly as in the video.  This doesn't necessarily mean you are doing
+something wrong!  If you hit a snag, please contact Dr. B. to get help.
+
+---
+
+## Renaming the `master` branch
+
+```{r, results = "asis", echo = FALSE}
+req_read("Renaming the master branch", type = "Required", url = "http://www.kapwing.com/blog/how-to-rename-your-master-branch-to-main-in-git/")
+```
+
+There is no Check-In for this reading; I ask only that you read the blog post and
+think carefully about the issues.  Please do not skip this section.
+
+If you do feel that you wish to rename your master branch, I am happy to help
+you through the process.

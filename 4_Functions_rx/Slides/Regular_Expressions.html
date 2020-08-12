@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Regular Expressions</title>
+    <meta charset="utf-8" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <link href="libs/str_view/str_view.css" rel="stylesheet" />
+    <script src="libs/str_view-binding/str_view.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Regular Expressions
+## Week 4
+
+---
+
+
+
+
+
+
+---
+class: center, middle
+# Regular Expressions
+
+---
+# Regular Expressions
+
+A **regular expression** is a way of "fuzzy matching" text.
+
+--
+
+
+All languages have regular expressions, but the rules can be slightly different.  R uses "extended" regular expressions, which are common.
+
+--
+
+You may encounter the `rebus` package.  It makes regular expression like this:
+
+
+```r
+START %R% "#" %R% hex_digit(6) %R% END
+```
+
+You're *allowed* to use this, of course, but I recommend against.
+
+--
+
+Regular expressions are the reason I love `stringr` so much.
+
+You may encounter `gsub()`, `grep()`, etc. from Base R.  
+
+---
+# Regular Expressions
+
+* Letters and numbers match themselves
+
+* `[A-Z]` matches any *capital* letter.
+
+* `[a-z]` matches any *lowercase* letter.
+
+* `[A-z]` or `[:alpha:]` matches *any* letter
+
+*  `[0-9]` or `[:digit:]` matches any *number*
+
+*  See the `stringr` cheatsheet for more shortcuts, like `[:punct:]`
+
+---
+
+
+```r
+my_str &lt;- c("Kelly", "Jelly", "Belly", "Smelly", "9elly", "elly") 
+
+str_extract(my_str, "Kelly")
+```
+
+```
+## [1] "Kelly" NA      NA      NA      NA      NA
+```
+
+--
+
+
+```r
+str_extract(my_str, "[:alpha:]elly")
+```
+
+```
+## [1] "Kelly" "Jelly" "Belly" "melly" NA      NA
+```
+
+```r
+str_extract(my_str, "[:digit:]elly")
+```
+
+```
+## [1] NA      NA      NA      NA      "9elly" NA
+```
+
+--
+
+
+```r
+str_extract(my_str, "[A-z][a-z]elly")
+```
+
+```
+## [1] NA       NA       NA       "Smelly" NA       NA
+```
+
+---
+# Regular Expressions
+
+* `.` matches any character at all (except new lines)
+
+* `?` means "the thing before me, 0 or 1 times"
+
+* `{2}` means "the thing before me, repeated exactly twice.
+
+* `+` means "the thing before me, repeated 1 to infinity times."
+
+* `*` means "the thing before me, repeated 0 to infinity times."
+
+* "escape" a special character with `\\` to match the literal character
+
+---
+
+---
+# Repeated Characters
+
+
+```r
+my_str &lt;- c("Key", "Kely", "Kelly", "Kellly", "Kelllllly")
+```
+
+--
+
+
+```r
+str_subset(my_str, "Kel{2}y")
+```
+
+```
+## [1] "Kelly"
+```
+
+--
+
+
+```r
+str_subset(my_str, "Kel+y")
+```
+
+```
+## [1] "Kely"      "Kelly"     "Kellly"    "Kelllllly"
+```
+
+--
+
+
+```r
+str_subset(my_str, "Kel*y")
+```
+
+```
+## [1] "Key"       "Kely"      "Kelly"     "Kellly"    "Kelllllly"
+```
+
+---
+# Regular Expressions
+
+
+```r
+my_str &lt;- c("Kelly", "Jelly", "Belly", "Smelly", "9elly", "elly") 
+
+str_extract(my_str, ".elly")
+```
+
+```
+## [1] "Kelly" "Jelly" "Belly" "melly" "9elly" NA
+```
+
+--
+
+
+```r
+str_extract(my_str, "[A-z]{2}elly")
+```
+
+```
+## [1] NA       NA       NA       "Smelly" NA       NA
+```
+
+--
+
+
+```r
+str_extract(my_str, "[A-z]+elly")
+```
+
+```
+## [1] "Kelly"  "Jelly"  "Belly"  "Smelly" NA       NA
+```
+
+--
+
+```r
+str_extract(my_str, ".+elly")
+```
+
+```
+## [1] "Kelly"  "Jelly"  "Belly"  "Smelly" "9elly"  NA
+```
+--
+
+```r
+str_extract(my_str, ".*elly")
+```
+
+```
+## [1] "Kelly"  "Jelly"  "Belly"  "Smelly" "9elly"  "elly"
+```
+
+---
+# Regular Expressions
+
+
+
+```r
+my_str &lt;- c("Kelly", "Hi Kelly.", "Kelly Bodwin", "Who is Kelly?")
+```
+
+
+
+```r
+str_extract(my_str, "Kelly[:punct:]")
+```
+
+```
+## [1] NA       "Kelly." NA       "Kelly?"
+```
+
+--
+
+
+```r
+str_extract(my_str, "Kelly?")
+```
+
+```
+## [1] "Kelly" "Kelly" "Kelly" "Kelly"
+```
+
+--
+
+
+```r
+str_extract(my_str, "Kelly\\?")
+```
+
+```
+## [1] NA       NA       NA       "Kelly?"
+```
+
+---
+class: center, middle, inverse
+
+# Tip 1:
+## Read the regular expressions out loud like a "request"
+
+---
+# Quick Quiz
+
+What will this code return?
+
+
+```r
+my_str &lt;- c("Key", "Kely", "Kelly", "Kellly", "Kelllllly")
+
+str_subset(my_str, "l{2}")
+```
+
+--
+
+"Which elements contain, somewhere, exactly 2 l's?"
+
+--
+
+```
+## [1] "Kelly"     "Kellly"    "Kelllllly"
+```
+
+---
+
+# Quick Quiz
+
+Based on what you've learned so far, what does `.*` match?
+
+--
+
+"Please give me any character (`.`), repeated 0 to infinity times (`*`)"
+
+--
+
+This matches **everything**!!!
+
+--
+
+This is a very common trick in regular expressions.
+
+---
+# Quick Quiz
+
+What will this return?
+
+
+```r
+my_str &lt;- c("Kelly", "Jelly and Peanut Butter", "Socks are smelly.", "Kelly is smelly", "Photosynthesis") 
+
+str_extract(my_str, ".*lly")
+str_extract(my_str, ".*lly")
+```
+
+--
+
+```
+## [1] "Kelly"            "Jelly"            "Socks are smelly" "Kelly is smelly" 
+## [5] NA
+```
+
+```
+## [1] "Kelly"            "Jelly"            "Socks are smelly" "Kelly is smelly" 
+## [5] NA
+```
+
+---
+class: center, middle, inverse
+
+# Tip 2:
+
+## Test out your expressions on small examples first
+
+---
+# Tip 2
+
+Use `str_view()` and `str_view_all()` to see matches
+
+
+```r
+str_view(my_str, ".*elly")
+```
+
+<div id="htmlwidget-e0f659e15cb643615b64" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e0f659e15cb643615b64">{"x":{"html":"<ul>\n  <li><span class='match'>Kelly<\/span><\/li>\n  <li><span class='match'>Jelly<\/span> and Peanut Butter<\/li>\n  <li><span class='match'>Socks are smelly<\/span>.<\/li>\n  <li><span class='match'>Kelly is smelly<\/span><\/li>\n  <li>Photosynthesis<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+```r
+str_view_all(my_str, ".*elly")
+```
+
+<div id="htmlwidget-e47360a1e520cfe34536" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e47360a1e520cfe34536">{"x":{"html":"<ul>\n  <li><span class='match'>Kelly<\/span><\/li>\n  <li><span class='match'>Jelly<\/span> and Peanut Butter<\/li>\n  <li><span class='match'>Socks are smelly<\/span>.<\/li>\n  <li><span class='match'>Kelly is smelly<\/span><\/li>\n  <li>Photosynthesis<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+
+---
+# Regular Expressions
+
+* `^` matches the start of the string
+
+
+```r
+my_str &lt;- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "^Kelly")
+```
+
+```
+## [1] "Kelly"        "Kelly Bodwin"
+```
+
+--
+
+**Alert!** This doesn't match the start of a *word*.  It matches the start of the *character object*.
+
+---
+# Regular Expressions
+
+* `$` matches the end of the string
+
+
+```r
+my_str &lt;- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "Kelly$")
+```
+
+```
+## [1] "Kelly"    "Hi Kelly"
+```
+
+--
+
+**Alert!** This doesn't match the end of a *word*.  It matches the end of the *character object*.
+
+
+
+---
+
+# Regular Expressions
+
+* `()` groups things together
+* `[]` is "match any of the characters in the box"
+
+--
+
+
+```r
+my_str &lt;- c("Kelly", "Kelkel")
+
+str_subset(my_str, "([Kk]el){2}")
+```
+
+```
+## [1] "Kelkel"
+```
+
+---
+class: center, middle, inverse
+
+# Tip 3:
+
+## I use the stringr cheatsheet more than any other
+## (by a lot!)
+
+---
+# Quick quiz
+
+What will the following outputs be?
+
+
+```r
+my_str &lt;- "The Dursleys of Number 4 Privet Drive were happy to say that they were perfectly normal, thank you very much."
+
+str_extract_all(my_str, ".*")
+
+str_extract_all(my_str, "\\w")
+
+str_extract_all(my_str, "\\s")
+
+str_extract_all(my_str, "[:alpha:]+")
+
+str_extract_all(my_str, "[:alpha:]*\\.")
+
+str_extract_all(my_str, "[wv]er[ey]")
+```
+---
+# Harder quick quiz
+
+What will the following outputs be?
+
+
+```r
+my_str &lt;- "The Dursleys of Number 4 Privet Drive were happy to say that they were perfectly normal, thank you very much."
+
+str_extract_all(my_str, "[:digit:] ([A-Z][a-z]*)+")
+
+str_extract_all(my_str, "(?&lt;=[:digit:] )[:alpha:]+")
+
+str_extract_all(my_str, "[:digit:].*Drive")
+
+my_str %&gt;%
+  str_split() %&gt;%
+  str_extract("^[A-Z]")
+```
+
+---
+class: center, middle, inverse
+
+# Tip 3:
+## Everyone has a love-hate relationship with regular expressions
+## Be kind to yourself.
+
+---
+
+&lt;img src="C:/Users/kbodwin/Dropbox/Teaching/STAT-331-Online/Images/silly_gifs/reg_ex_problems.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+class: center, middle, inverse
+# Your Turn
+
+&lt;img src="C:/Users/kbodwin/Dropbox/Teaching/STAT-331-Online/Images/silly_gifs/reg_ex.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Your Turn
+
+The file `hamlet_speech.txt` contains the text of a famous speech from the play "Hamlet" by Shakespeare.  Download this file and save it somewhere reasonable.  Read it into R with:
+
+
+```r
+hamlet &lt;- readLines("hamlet_speech.txt")
+```
+
+Answer the following:
+
+* How many words are in the speech?  (Hint: `str_count`)
+* How many times does Hamlet reference death or dying?
+* How many sentences are in the speech?
+* What is the longest word in the speech?
+* What is the only capitalized word that does not start a sentence or line?
+
+--
+
+*Hint:* Right now, your object is an **vector** of type **character**, where each element is a line of the speech.  You may want to use `str_c()` (with appropriate arguments) to turn this into a **single string**.  You may also want to turn it into a vector where each element is **one word**.
+
+Or you may want to do all three!  Different tasks will be easier with different object structures.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

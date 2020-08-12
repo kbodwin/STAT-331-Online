@@ -1,0 +1,12 @@
+name: pa-regex
+title: PA-regex
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 156
+bundleId: 326
+url: https://rstudio.csm.calpoly.edu/content/156/
+when: 1594666614.24862
+asMultiple: FALSE
+asStatic: TRUE

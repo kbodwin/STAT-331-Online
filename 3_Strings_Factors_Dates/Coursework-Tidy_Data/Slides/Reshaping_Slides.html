@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Reshaping and Joining</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Reshaping and Joining
+## Week 3
+
+---
+
+
+
+
+
+
+class: center, middle
+# Setup
+
+Find your R Markdown file in which you explored the `cereals` data.
+
+(This was probably called `Practice.Rmd`.)
+---
+class:center,middle,inverse
+# Reshaping
+
+&lt;img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/tidyr.png" width=300&gt;
+---
+# Reshaping
+
+* Note that the `cereals` dataset has separate columns for each nutritional item (`calories`, `sugar`, etc.)
+
+* What if we want to make a plot comparing some of these measures?
+
+
+```r
+ggplot(cereals, aes(x = ...????))
+```
+---
+# Tidy Data
+
+&lt;img src="https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png" width=4000&gt;
+
+---
+
+# Pivoting longer
+
+What if we want to make boxplots comparing the different bill dimensions of penguins?
+
+
+
+```r
+ggplot(penguins, 
+       aes(x = Bill.Dimension, y = Size, fill = species)) +
+  geom_boxplot()
+```
+
+```
+## Error in FUN(X[[i]], ...): object 'Bill.Dimension' not found
+```
+
+![](Reshaping_Slides_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+class: center, middle, inverse
+
+# Tip 1:
+## Work backwards - what is your end goal?
+
+---
+
+# Pivoting longer
+
+What if we want to make boxplots comparing the different bill dimensions of penguins?
+
+
+
+```r
+head(penguins)
+```
+
+```
+## # A tibble: 6 x 7
+##   species island bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex  
+##   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+## 1 Adelie  Torge~           39.1          18.7              181        3750 male 
+## 2 Adelie  Torge~           39.5          17.4              186        3800 fema~
+## 3 Adelie  Torge~           40.3          18                195        3250 fema~
+## 4 Adelie  Torge~           NA            NA                 NA          NA &lt;NA&gt; 
+## 5 Adelie  Torge~           36.7          19.3              193        3450 fema~
+## 6 Adelie  Torge~           39.3          20.6              190        3650 male
+```
+
+---
+class: center, middle, inverse
+
+# Tip 2:
+## Draw a picture
+
+---
+# Pivoting longer
+
+
+```r
+penguins %&gt;%
+  pivot_longer(bill_length_mm:bill_depth_mm, 
+               names_to = "Bill.Dimension", 
+               values_to = "Size")
+```
+
+```
+## # A tibble: 688 x 7
+##    species island    flipper_length_mm body_mass_g sex    Bill.Dimension  Size
+##    &lt;fct&gt;   &lt;fct&gt;                 &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;chr&gt;          &lt;dbl&gt;
+##  1 Adelie  Torgersen               181        3750 male   bill_length_mm  39.1
+##  2 Adelie  Torgersen               181        3750 male   bill_depth_mm   18.7
+##  3 Adelie  Torgersen               186        3800 female bill_length_mm  39.5
+##  4 Adelie  Torgersen               186        3800 female bill_depth_mm   17.4
+##  5 Adelie  Torgersen               195        3250 female bill_length_mm  40.3
+##  6 Adelie  Torgersen               195        3250 female bill_depth_mm   18  
+##  7 Adelie  Torgersen                NA          NA &lt;NA&gt;   bill_length_mm  NA  
+##  8 Adelie  Torgersen                NA          NA &lt;NA&gt;   bill_depth_mm   NA  
+##  9 Adelie  Torgersen               193        3450 female bill_length_mm  36.7
+## 10 Adelie  Torgersen               193        3450 female bill_depth_mm   19.3
+## # ... with 678 more rows
+```
+
+---
+# Pivoting longer
+
+![](Reshaping_Slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+
+---
+class: middle
+
+# Alert:
+## `pivot_longer()` is a new function name!
+## It used to be called `gather()`
+## `gather()` will still work, but I suggest you run `install.packages("tidyr")`
+
+---
+# Try it!
+
+Create a new dataset called `cereals_3`, that has three columns:
+* The name of the cereal
+* A column called "Nutrient" with values `protein`, `fat`, or `fiber`.
+* A column called "Amount" with the corresponding amount of the nutrient.
+
+---
+# Pivoting wider
+
+What about the reverse reshaping?
+
+
+```r
+penguins %&gt;%
+  select(species, body_mass_g) %&gt;%
+  pivot_wider(names_from = species, 
+              values_from = body_mass_g)
+```
+
+```
+## Warning: Values are not uniquely identified; output will contain list-cols.
+## * Use `values_fn = list` to suppress this warning.
+## * Use `values_fn = length` to identify where the duplicates arise
+## * Use `values_fn = {summary_fun}` to summarise duplicates
+```
+
+```
+## # A tibble: 1 x 3
+##   Adelie      Gentoo      Chinstrap 
+##   &lt;list&gt;      &lt;list&gt;      &lt;list&gt;    
+## 1 &lt;int [152]&gt; &lt;int [124]&gt; &lt;int [68]&gt;
+```
+
+---
+# Pivoting wider
+
+Need row IDs to pivot wide!
+
+
+```r
+penguins %&gt;%
+  rowid_to_column() 
+```
+
+```
+## # A tibble: 344 x 8
+##    rowid species island bill_length_mm bill_depth_mm flipper_length_~
+##    &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;
+##  1     1 Adelie  Torge~           39.1          18.7              181
+##  2     2 Adelie  Torge~           39.5          17.4              186
+##  3     3 Adelie  Torge~           40.3          18                195
+##  4     4 Adelie  Torge~           NA            NA                 NA
+##  5     5 Adelie  Torge~           36.7          19.3              193
+##  6     6 Adelie  Torge~           39.3          20.6              190
+##  7     7 Adelie  Torge~           38.9          17.8              181
+##  8     8 Adelie  Torge~           39.2          19.6              195
+##  9     9 Adelie  Torge~           34.1          18.1              193
+## 10    10 Adelie  Torge~           42            20.2              190
+## # ... with 334 more rows, and 2 more variables: body_mass_g &lt;int&gt;, sex &lt;fct&gt;
+```
+
+---
+class: center, middle, inverse
+
+# Tip 3:
+## Separate your task into bite-size steps
+### ... and write them down!
+### (This is called *decomposition*.)
+
+---
+# Pivoting wider
+
+
+```r
+penguins %&gt;%
+  rowid_to_column() %&gt;%
+  pivot_wider(names_from = species, 
+              values_from = body_mass_g,
+              id_cols = rowid)
+```
+
+```
+## # A tibble: 344 x 4
+##    rowid Adelie Gentoo Chinstrap
+##    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;     &lt;int&gt;
+##  1     1   3750     NA        NA
+##  2     2   3800     NA        NA
+##  3     3   3250     NA        NA
+##  4     4     NA     NA        NA
+##  5     5   3450     NA        NA
+##  6     6   3650     NA        NA
+##  7     7   3625     NA        NA
+##  8     8   4675     NA        NA
+##  9     9   3475     NA        NA
+## 10    10   4250     NA        NA
+## # ... with 334 more rows
+```
+---
+# Try it!
+
+Cereals in this dataset are placed on shelf 1, 2, or 3.  We would like to know if these cereal placements correspond to different nutritional values.
+
+Create a new dataset called `cereals_4`, that has four columns:
+* The name of the manufacturer
+* The mean amount of sugar in cereals on shelf 1.
+* The mean amount of sugar in cereals on shelf 2.
+* The mean amount of sugar in cereals on shelf 3.
+
+*Hint: You will need to `group_by` and `summarize` first!`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

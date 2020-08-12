@@ -1,0 +1,159 @@
+---
+title: "Lab 1: Introduction to R and R Markdown"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r write-data, include=FALSE}
+library(tidyverse)
+```
+## Setup
+
+### Make a Stat 331 and Lab 1 Folder
+
+1. If you have not already, create a folder on your computer called "Stat 331" or
+similar.  
+
+2. Inside this folder, create another folder called "Lab 1".
+
+### Create your Lab 1 File
+
+1. Open RStudio.cloud or RStudio on your computer (preferably RStudio on your computer!)
+
+2. In RStudio, go to "File" > "New File…" > "R Markdown…" and click "OK" in the dialog without changing anything.
+
+3. Delete all the placeholder text in that new file and replace it with this:
+
+    ````text
+    ---
+    title: "Lab 1"
+    author: "Put your name here"
+    output: html_document
+    ---
+    
+    
+    # Setup
+    
+    `r ''````{r load-libraries-data, include = FALSE}
+    library(tidyverse)
+    
+    cars <- ggplot2::mpg
+    ```
+    
+    ## About the dataset
+    
+    This dataset contains information about ______.
+    
+    It has _____ rows and ______ variables.
+    
+    # Plot 1
+    
+    Replace this line with a code chunk and use it to create a plot.
+    
+    # Plot 2
+    
+    # Plot 3
+    
+    ````
+
+4. Save the R Markdown file with some sort of name (**without any spaces!**). Make
+sure you save it to your new "Lab 1" folder.
+
+
+## Lab Instructions
+
+
+### Run the provided code
+
+Click the "Play" button on the right of the first code chunk to run the code.
+Alternatively, you can highlight the code you want to run and type <kbd>ctrl</kbd> +
+<kbd>Enter</kbd> or <kbd>⌘<</kbd> + <kbd>Enter</kbd>.  You should see the lines
+of code appear in the *console*, and a data frame named `cars` should appear in
+your *environment*.
+
+### Check the data documentation
+
+In your **console** (*NOT* in the R Markdown document), type `?ggplot2::mpg`.
+
+Use the information that pops up in your *Help* pane in RStudio to fill in the
+blanks in the Dataset Information section.
+
+
+### Make a code chunk
+
+Remove the text that says "Replace this line with a code chunk" and insert a new R code chunk. Either type <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>i</kbd> on Windows, or <kbd>⌘</kbd> + <kbd>⌥</kbd> + <kbd>i</kbd> on macOS, or use the "Insert Chunk" menu:
+
+![](../../Images/other/insert-chunk-button.png)
+
+### Create and discuss some visualizations
+
+Use `ggplot()` to create three plots using the `mpg` dataset.
+
+* Plot 1: Summarize one **categorical** variable, with a bar plot.
+
+* Plot 2: Compare two **quantitative** (numeric) variables, with a scatter plot.
+
+* Plot 3:  Compare a **quantitative** variable **across categories** with a side-by-side box plot.
+
+Type the code to create each new plot in a new empty chunk, in the appropriate
+section of your document.
+
+For full credit, make sure your plots have reasonable axis labels.  For example,
+if you use the `fl` variable, your axis should say "Fuel Type" not "fl".
+
+In regular text (possibly using *Markdown* formatting!), type a very brief interpretation
+of the plot.  What does it show?  What do you learn about cars from this plot?
+
+
+### Knit your document
+
+Knit your document as an **html** file. Use the "Knit" menu:
+
+![](../../Images/other/knit-button.png)
+
+If you run into trouble knitting, try running your code again in order, and see
+if you can find the problem.
+
+Another common issue is deleting the tick marks (`/``` `) that surrpund your code
+chunks.  If you notice that the code chunks are not showing a "play" button,
+or that they are not highlighted in grey, double check your tick marks!
+
+### Turn it in!
+
+Upload the knitted document to Canvas.
+
+
+:::fyi
+You'll be doing this same process for all your future Lab Assignments and
+Practice Activities. Each of these will involve an R Markdown file. 
+
+We will discuss easy ways to manage all these documents starting next week.
+:::
+
+
+## Challenge: 
+
+### Pretty R Markdown documents
+
+There are infinitely many ways to make R Markdown documents look prettier or 
+fancier.  In fact, that's how I create all the coursework and assignment documents
+for this class!
+
+1. Read through [this guide](https://holtzy.github.io/Pimp-my-rmd/), and make sure
+to check out the [themes](https://holtzy.github.io/Pimp-my-rmd/#theme) and [templates](https://holtzy.github.io/Pimp-my-rmd/#template) sections.
+
+2. Create a new R Markdown document that uses a new theme or template.
+
+3. In this document, demonstrate how to use one of the other tips in the guide. 
+Make sure you explicitly state which tip you tried; for example, you might write 
+"Here is an example of a figure with a caption:" and then show the figure.
+
+4. Upload your knitted (.html) document to the Challenge 1 assignment on Canvas.
+
+*Remember, you get full credit for a good faith attempt at the challenge that
+follows all directions.  However, for 100% in this grade category, you'll also
+need to earn bonus points occasionally by submitting extra impressive Challenges!*

@@ -1,0 +1,195 @@
+---
+title: "Reshaping and Joining"
+subtitle: "Week 3"
+
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(flair)
+library(palmerpenguins)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+class: center, middle
+# Setup
+
+Find your R Markdown file in which you explored the `cereals` data.
+
+(This was probably called `Practice.Rmd`.)
+---
+class:center,middle,inverse
+# Reshaping
+---
+# Reshaping
+
+* Note that the `cereals` dataset has separate columns for each nutritional item (`calories`, `sugar`, etc.)
+
+* What if we want to make a plot comparing some of these measures?
+
+```{r, eval = FALSE}
+ggplot(cereals, aes(x = ...????))
+
+```
+---
+# Tidy Data
+
+![](https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png)
+---
+
+# Pivoting longer
+
+What if we want to make boxplots comparing the different bill dimensions of penguins?
+
+
+```{r, error = TRUE}
+ggplot(penguins, 
+       aes(x = Bill.Dimension, y = Size, fill = species)) +
+  geom_boxplot()
+
+```
+
+---
+class: center, middle, inverse
+
+# Tip 1:
+## Work backwards - what is your end goal?
+
+---
+
+# Pivoting longer
+
+What if we want to make boxplots comparing the different bill dimensions of penguins?
+
+
+```{r}
+head(penguins)
+```
+
+---
+class: center, middle, inverse
+
+# Tip 2:
+## Draw a picture
+
+---
+# Pivoting longer
+
+```{r}
+
+penguins %>%
+  pivot_longer(bill_length_mm:bill_depth_mm, 
+               names_to = "Bill.Dimension", 
+               values_to = "Size")
+
+```
+
+---
+# Pivoting longer
+
+```{r}
+
+penguins %>%
+  pivot_longer(bill_length_mm:bill_depth_mm, 
+               names_to = "Bill.Dimension", 
+               values_to = "Size") %>%
+  ggplot(aes(x = Bill.Dimension, y = Size, fill = species)) +
+  geom_boxplot()
+  
+
+```
+
+
+---
+class: middle
+
+# Alert:
+## `pivot_longer()` is a new function name!
+## It used to be called `gather()`
+## `gather()` will still work, but I suggest you run `install.packages("tidyr")`
+
+---
+# Try it!
+
+Create a new dataset called `cereals_3`, that has three columns:
+* The name of the cereal
+* A column called "Nutrient" with values `protein`, `fat`, or `fiber`.
+* A column called "Amount" with the corresponding amount of the nutrient.
+
+---
+# Pivoting wider
+
+What about the reverse reshaping?
+
+```{r, error = TRUE}
+penguins %>%
+  select(species, body_mass_g) %>%
+  pivot_wider(names_from = species, 
+              values_from = body_mass_g)
+
+```
+
+---
+# Pivoting wider
+
+Need row IDs to pivot wide!
+
+```{r, echo = FALSE}
+penguins %>%
+  rowid_to_column() 
+```
+
+---
+class: center, middle, inverse
+
+# Tip 3:
+## Separate your task into bite-size steps
+### ... and write them down!
+### (This is called *decomposition*.)
+
+---
+# Pivoting wider
+
+```{r}
+penguins %>%
+  rowid_to_column() %>%
+  pivot_wider(names_from = species, 
+              values_from = body_mass_g,
+              id_cols = rowid)
+
+```
+---
+# Try it!
+
+Cereals in this dataset are placed on shelf 1, 2, or 3.  We would like to know if these cereal placements correspond to different nutritional values.
+
+Create a new dataset called `cereals_4`, that has four columns:
+* The name of the manufacturer
+* The mean amount of sugar in cereals on shelf 1.
+* The mean amount of sugar in cereals on shelf 2.
+* The mean amount of sugar in cereals on shelf 3.
+
+*Hint: You will need to `group_by` and `summarize` first!`
+
+

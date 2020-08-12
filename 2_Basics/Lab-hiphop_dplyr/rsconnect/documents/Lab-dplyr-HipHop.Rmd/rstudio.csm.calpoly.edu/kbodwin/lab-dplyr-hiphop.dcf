@@ -1,0 +1,12 @@
+name: lab-dplyr-hiphop
+title: Lab-dplyr-HipHop
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 150
+bundleId: 314
+url: https://rstudio.csm.calpoly.edu/Lab_2-dplyr-331/
+when: 1593423592.82443
+asMultiple: FALSE
+asStatic: TRUE

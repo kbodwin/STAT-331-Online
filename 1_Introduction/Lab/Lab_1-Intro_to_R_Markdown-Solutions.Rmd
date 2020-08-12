@@ -1,0 +1,76 @@
+---
+title: "Lab_1 Solutions"
+author: "Kelly Bodwin"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+```{r load-libraries-data, include = FALSE}
+library(tidyverse)
+    
+cars <- ggplot2::mpg
+```
+    
+## About the dataset
+    
+This dataset contains information about the qualities of certain car models made
+in 1999 and 2008.
+    
+It has 234 rows and 11 variables.
+
+(The plots below are only one option out of many possibilities, of course.)
+    
+    
+## Plot 1: 
+
+```{r}
+cars %>%
+  ggplot(aes(x = class, fill = drv)) +
+  geom_bar(position = "fill") +
+  xlab("Car Type")
+```
+
+
+This plot shows us the type of drive train (4 wheel drive, front-wheel drive, or
+rear-wheel drive) for each class of car in this dataset.  We can see that pickup
+trucks are all 4-wheel drive, 2-seaters are all rear-wheel drive, and minivans 
+are all front-wheel drive.  Subcompact cars have the most variety in drive train.
+
+
+## Plot 2:
+
+```{r}
+cars %>%
+  ggplot(aes(x = displ, y = cty)) +
+  geom_point() +
+  xlab("Engine volume") +
+  ylab("Miles per gallon (city)")
+```
+
+
+This plot shows the relationship between engine volume ("displacement") and the
+miles per gallon of the car.  We can see that more powerful cars - i.e. those 
+with a larger volume - tend to have a lower fuel efficiency.  The relationship is 
+not linear.
+    
+    
+## Plot 3:
+
+```{r}
+cars %>%
+  ggplot(aes(x = class, y = cty, fill = class)) +
+  geom_boxplot() +
+  xlab("Car Type") +
+  ylab("Miles per gallon (city)") + 
+  theme(legend.position = "none") 
+```
+
+
+This plot shows the fuel efficiency (miles per gallon) of each car type.  Larger
+cars like pickups and SUVs get fewer miles per gallon, while smaller cars are more
+efficient.

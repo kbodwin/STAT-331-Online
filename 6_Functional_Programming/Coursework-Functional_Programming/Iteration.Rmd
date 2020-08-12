@@ -1,0 +1,91 @@
+---
+title: "Iteration"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+```
+
+
+```{css, echo = FALSE}
+img {
+  vertical-align:middle;
+}
+
+body {
+  text-shadow:none;
+}
+
+```
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "30 min", 
+                   reading_time = "0 min", 
+                   work_time = "60 min", 
+                   num_activities = 2)
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Functional Programming", type = "Required", url = "https://www.youtube.com/embed/lq2a4m8TMYo")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Iteration", type = "Required", url = "https://rstudio.cloud/learn/primers/5")
+```
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Functional Programming")
+```
+
+Recall that in the last unit, we discussed the challenge of standardizing many
+columns in a data frame.  For example, we wanted to standardize all the numeric 
+variables in the dataset `iris`.
+
+Here is the function we wrote for that:
+
+```{r}
+standardize <- function(data) {
+  deviations <- data - mean(data, na.rm = TRUE)
+  newdata <- deviations / sd(data, na.rm = TRUE)
+  return(newdata)
+}
+```
+
+
+**Question 1:** Why does the following not work?
+
+```{r}
+iris %>%
+  mutate(
+    Petal.Length = map_dbl(Petal.Length, standardize)
+  )
+```
+
+**Question 2:** 
+
+Use appropriate `map` or `apply` functions, along with `scale()`, to create
+a standardized version of the `iris` dataset.  Do this **without** copy-pasting 
+lines and changing `Petal.Length` to `Petal.Width`, etc.
+
+(I recommend looking into `map_dfc()`, although this is not the only possible solution.)
+

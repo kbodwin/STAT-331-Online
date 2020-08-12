@@ -1,0 +1,754 @@
+---
+title: "Writing your own functions"
+author: "Week 4"
+
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+      
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(flair)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+
+
+# Why write functions
+
+* Functions allow you to automate common tasks
+
+--
+
+* We've been using functions since Day 1
+  
+* Did you ever find yourself copy-pasting an analysis and changing small parts?
+  
+--
+
+* Writing your OWN functions has 3 big advantages over copy-and-paste:
+
+1. Your code is easier to read (give a function an informative name!) 
+
+2. To change your analysis, simply change the function
+
+3. No more mistakes from copy-paste
+
+---
+
+# A simple function
+
+```{r my_fun}
+add_two <- function(x) {
+  
+  x + 2
+  
+}
+
+add_two(5)
+```
+
+--
+
+`x` is a placeholder!
+
+Whatever is entered in the function is passed along under the name "x".
+---
+
+# A simple function
+
+The **name** of the function is chosen by the author.
+
+```{r, echo = FALSE}
+
+decorate("my_fun") %>% flair("add_two")
+
+```
+
+---
+# Word of Caution 1
+
+Function names have no inherent meaning.
+
+```{r, eval = FALSE}
+add_three <- function(x) {
+  
+  x + 7
+  
+}
+
+add_three(5)
+
+```
+
+What will this give us?
+
+---
+# A simple function
+
+The **argument(s)** of the function are chosen by the author.
+
+```{r, echo = FALSE}
+
+decorate("my_fun") %>% flair("x")
+
+```
+
+---
+# A simple function
+
+The **body** of the function is where the action happens.
+
+```{r, echo = FALSE}
+
+decorate("my_fun") %>% flair("x + 2")
+
+```
+
+---
+class: center, middle, inverse
+
+# Arguments
+
+---
+# Word of Caution 2
+
+Unless you are very very experienced, do **not** reference outside objects!
+
+```{r, error = TRUE}
+add_two <- function() {
+  
+  x + 2
+  
+}
+
+add_two()
+
+x <- 10
+
+add_two()
+```
+
+---
+# Optional arguments
+
+If you supply a default value, the argument is optional:
+
+```{r add, include = FALSE}
+add_something <- function(x, something = 2) {
+  
+  x + something
+  
+}
+
+add_something(5)
+
+add_something(5, something = 6)
+```
+
+```{r, echo = FALSE}
+decorate("add") %>% flair_rx("something = .")
+```
+
+---
+# Required arguments
+
+If you **do not** supply a default value, the argument is **required**:
+
+```{r, error = TRUE}
+add_something <- function(x, something = 2) {
+  
+  x + something
+  
+}
+
+add_something()
+```
+
+
+---
+class: center, middle, inverse
+
+# What gets returned
+
+---
+# Returns
+
+Your function will "give back" whatever would normally "print out".
+
+```{r}
+add_two <- function(x) {
+  
+  x + 2
+  
+}
+
+7 + 2
+
+add_two(7)
+```
+---
+# Returns
+
+You can be explict (and clearer) by using `return()`
+
+```{r}
+add_two <- function(x) {
+  
+  return(x + 2)
+  
+}
+```
+
+---
+# Returns
+
+Objects you make in the function don't affect "real life".
+
+```{r}
+add_two <- function(x) {
+  
+  my_result <- x + 2
+  
+  return(my_result)
+  
+}
+
+my_result <- 2000
+
+add_something(5)
+
+my_result
+```
+
+---
+# Environments
+
+* The top right pane of your RStudio shows you **environment**.
+
+* This is the "current state" of the objects you've created.
+
+--
+
+* The code inside the function executes in the **function environment**.
+
+* It does not change your **global environment**.
+
+--
+
+* (When you knit a `.Rmd` file, it runs the code in another separate environment!)
+
+---
+# Conditional returns
+
+Maybe you want to return different results in different situations
+
+```{r even, include = FALSE}
+even_or_odd <- function(x) {
+  
+  if (x %% 2 == 0) {
+    
+    return("It's even!")
+    
+  } else {
+    
+    return("It's odd.")
+    
+  }
+  
+  
+}
+
+```
+
+```{r, echo = FALSE}
+decorate("even") %>%
+  flair("x %% 2 == 0") %>%
+  flair("It's even!", background = "green") %>%
+  flair("It's odd.", background = "pink")
+```
+---
+# Print versus return
+
+
+```{r}
+even_or_odd <- function(x) {
+  
+  if (x %% 2 == 0) {
+    
+    return("It's even!")
+    
+  } else {
+    
+    return("It's odd.")
+    
+  }
+  
+  
+}
+
+bob <- even_or_odd(7)
+
+bob
+
+```
+
+---
+# Print versus return
+
+
+```{r}
+even_or_odd <- function(x) {
+  
+  if (x %% 2 == 0) {
+    
+    cat("It's even!")
+    
+  } else {
+    
+    cat("It's odd.")
+    
+  }
+  
+  return(x)
+  
+  
+}
+
+bob <- even_or_odd(7)
+bob
+
+```
+
+---
+
+# Your turn
+
+Write a function called `times_seven()` which takes a single argument and multiplies by 7. 
+
+--
+*Sneak Preview* What happens when you run this?
+
+```{r, eval = FALSE}
+my_vec <- c(7, 8, 9)
+
+times_seven(my_vec)
+```
+
+
+What about this?
+
+```{r, eval = FALSE}
+times_seven(mtcars)
+```
+
+---
+class: center, middle, inverse
+
+# Errors
+
+---
+# Errors
+
+```{r}
+add_something <- function(x, something = 2) {
+  
+  if (!is.numeric(something)) {
+    
+    stop("Please enter a number!")
+    
+  }
+  
+  x + something
+  
+}
+```
+
+---
+# Errors
+```{r, error = TRUE}
+add_something(5, something = "bob")
+```
+
+
+---
+
+# Your turn
+
+Write a function called `times_seven()` which takes a single argument and multiplies by 7. 
+
+This function should check that the argument is numeric.
+
+This function should also excitedly announce (print) "I love sevens!" if the argument to the function is a 7.
+
+--
+*Sneak Preview:* What happens when you run this?
+
+```{r, eval = FALSE}
+my_vec <- c(7, 8, 9)
+
+times_seven(my_vec)
+```
+
+---
+
+# When should you write a function?
+
+* Consider writing a function whenever you've copied and pasted a block of code more than twice
+
+--
+
+* Consider the following bit of code. What does it do?
+
+```{r iris}
+myiris <- iris
+
+myiris$Sepal.Length <- (myiris$Sepal.Length - mean(myiris$Sepal.Length)) / sd(myiris$Sepal.Length)
+myiris$Sepal.Width <- (myiris$Sepal.Width - mean(myiris$Sepal.Length)) / sd(myiris$Sepal.Width)
+myiris$Petal.Length <- (myiris$Petal.Length - mean(myiris$Petal.Length)) / sd(myiris$Petal.Length)
+myiris$Petal.Width <- (myiris$Petal.Width - mean(myiris$Petal.Width)) / sd(myiris$Petal.Width)
+```
+
+--
+
+* That's right, this code standardizes each of the variables in `myiris` to have mean 0 and standard deviation 1
+
+--
+
+* ...or does it?
+
+---
+# Dangers of copy-paste
+
+```{r, echo = FALSE}
+decorate("iris") %>%
+  flair("Sepal.Width") %>%
+  flair("Sepal.Length", background = "pink")
+```
+
+
+---
+
+# Let's Make This a Function
+
+* Three key steps to creating a function:
+
+1. Pick a **name** for the function: informative and usually a **verb**
+
+2. List the inputs, or **arguments**, of the function inside `function()`
+
+3. Place the code we've developed in the **body** of the function, a `{` block following `function()`
+
+--
+
+```{r, eval = FALSE}
+standardize <- function(data) {
+  (data - mean(data)) / sd(data)
+}
+
+# OR
+
+standardize <- function(data) {
+  newdata <- (data - mean(data)) / sd(data)
+  return(newdata)
+}
+```
+
+What object structure/type does this function **expect**?
+What does it **return**?
+
+--
+```
+standardize(myiris$Sepal.Length)
+```
+
+---
+
+# Intermediate Steps - Function Building Blocks
+
+
+* Functions can get complex quickly
+
+* It's often a good idea to pull out intermediate calculations into named variables to increase clarity
+
+```{r}
+standardize <- function(data) {
+  deviations <- data - mean(data)
+  newdata <- deviations / sd(data)
+  return(newdata)
+}
+```
+
+---
+
+# Pump The Breaks a Bit
+
+* As exciting as working in R and writing functions can be, testing is **important**
+
+--
+
+* What if our dataset isn't as clean as `iris`?
+
+--
+
+```{r}
+testdata <- c(2, 4, 3, 9, NA, 4, 6)
+standardize(testdata)
+```
+
+
+---
+
+# Testing
+
+We Only Need to Change the Code in One Place: `standardize()`
+
+```{r testing, include = FALSE, eval = FALSE}
+standardize <- function(data) {
+  deviations <- data - mean(data, na.rm = TRUE)
+  newdata <- deviations / sd(data, na.rm = TRUE)
+  return(newdata)
+}
+
+testdata <- c(2, 4, 3, 9, NA, 4, 6)
+standardize(testdata)
+```
+
+```{r, echo = FALSE}
+decorate("testing") %>%
+  flair("na.rm = TRUE")
+```
+
+---
+```{r iris2, include = FALSE}
+myiris <- iris
+
+myiris$Sepal.Length <- (myiris$Sepal.Length - mean(myiris$Sepal.Length, na.rm = TRUE)) / sd(myiris$Sepal.Length, na.rm = TRUE)
+myiris$Sepal.Width <- (myiris$Sepal.Width - mean(myiris$Sepal.Length, na.rm = TRUE)) / sd(myiris$Sepal.Width, na.rm = TRUE)
+myiris$Petal.Length <- (myiris$Petal.Length - mean(myiris$Petal.Length, na.rm = TRUE)) / sd(myiris$Petal.Length, na.rm = TRUE)
+myiris$Petal.Width <- (myiris$Petal.Width - mean(myiris$Petal.Width, na.rm = TRUE)) / sd(myiris$Petal.Width, na.rm = TRUE)
+```
+
+```{r, echo = FALSE}
+decorate("iris2") %>%
+  flair("na.rm = TRUE")
+```
+
+---
+
+# Variables as arguments
+
+We haven't eliminated copy-and-pasting from our `iris` example, right?
+
+```{r, eval = FALSE}
+myiris$Sepal.Length <- standardize(myiris$Sepal.Length)
+myiris$Sepal.Width <- standardize(myiris$Sepal.Width)
+myiris$Petal.Length <- standardize(myiris$Petal.Length)
+myiris$Petal.Width <- standardize(myiris$Petal.Width)
+```
+
+---
+# Variables as arguments
+
+You probably would like to do this...
+
+```{r stdcol}
+stdize_column <- function(dat, variable) {
+  dat <- dat %>%
+    mutate(
+      variable = standardize(variable)
+    )
+  return(dat)
+}
+```
+
+*(Notice how we relied on the existing function `stdize()` inside the new function, for clarity!)*
+
+---
+# Variables as arguments
+
+Alas...
+
+```{r, error = TRUE}
+stdize_column(iris, Petal.Length)
+```
+
+What happened?
+
+---
+# Tidy evaluation
+
+```{r, echo = FALSE}
+decorate("stdcol") %>%
+  flair("stdize(variable)")
+```
+
+
+---
+# Tidy evaluation
+
+Functions that use **unquoted** variable names as arguments are called **nonstandard evaluation** or **tidy evaluation**.
+
+--
+
+They make life easier for users:
+
+```{r, eval = FALSE}
+iris %>% pull(Petal.Length)
+# or
+iris$Petal.Length
+# instead of
+iris[, "Petal.Length"]
+# or
+iris[["Petal.Length"]]
+```
+
+but they are complicated to write!
+
+---
+# Solutions
+
+1. Just don't use it in your functions.  Harder to read/use, but safe.
+
+```{r}
+stdize_column <- function(dat, variable) {
+  dat[[variable]] <- standardize(dat[[variable]])
+  return(dat)
+}
+
+stdize_column(iris, "Petal.Length")
+```
+
+---
+# Solutions
+
+2. The  `vars()` function.
+
+```{r}
+stdize_column <- function(dat, variable) {
+  dat <- dat %>%
+    mutate_at(variable, standardize)
+  return(dat)
+}
+
+stdize_column(iris, vars(Petal.Length))
+```
+
+**This only works for `mutate()` type functions, that do calculations on the variable.**
+
+---
+# Solutions
+
+3.  The **tunnelling** trick (`{{ }}`)
+
+```{r tunnel}
+stdize_column <- function(dat, variable) {
+  new_var <- dat %>%
+    pull({{variable}}) %>%
+    standardize()
+  return(new_var)
+}
+
+stdize_column(iris, Petal.Length)
+```
+
+```{r, echo = FALSE}
+decorate("tunnel") %>%
+  flair("{{variable}}")
+```
+
+**This only works for `pull()` and `select()` type functions, that use the name of the variable to subset the data.**
+
+---
+class: center, middle, inverse
+
+# Tip 1:
+## Keep thinking about object types and structures!!!
+
+---
+
+class: center, middle, inverse
+
+# Tip 2:
+## If you want to write a function for data wrangling, consider arguments that expect VECTORS rather than VARIABLE NAMES
+
+---
+# BUT WAIT
+
+Perhaps you observed that we haven't *completely* eliminated copy-pasting!
+
+```{r}
+stdize_column <- function(dat, variable) {
+  dat[[variable]] <- standardize(dat[[variable]])
+  return(dat)
+}
+
+iris <- iris %>%
+  stdize_column("Petal.Length") %>%
+  stdize_column("Petal.Width") %>%
+  stdize_column("Sepal.Length") %>%
+  stdize_column("Sepal.Width")
+
+```
+
+--
+
+Stay tuned...
+
+---
+class: center, middle
+
+# Debugging
+
+---
+
+```{r}
+fibonacci <- function(start, len) {
+  
+  fib <- vector()
+  
+  for (i in 1:len) {
+    
+    fib[i + 1] <- fib[i] + fib[i - 1]
+    
+  }
+  
+  return(fib)
+  
+  
+}
+```
+
+---
+# Debugging tricks
+
+## `print()`
+
+## `browser()`
+
+## `debugonce()`
+
+(Try it.)
+
+
+

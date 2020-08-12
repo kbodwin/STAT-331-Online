@@ -1,0 +1,210 @@
+---
+title: "Lab 3: Billboard Hot 100"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      echo=FALSE, warning=FALSE, message=FALSE,eval=FALSE)
+```
+
+
+## Instructions
+
+* Please answer these questions using code.
+
+* The **only** R printouts should be the answers to the questions. Make sure your code does not display any extra information.
+
+* If the question is fully answered by the code, you do not need to also answer it in text form.  For example, you do not need to write "The median weight of penguins is 4050"; you can just compute the median.
+
+* However, for more open-ended questions, you should still provide text to motivate and interpret your work.
+
+* Think about making your code readable.  Use white space (spacebars and new lines) carefully, use variable names that are clear, and be deliberate about how you use code chunks.
+
+---
+
+## The Data
+
+Today, we will study song popularity.  In the US, the Billboard Hot 100 is a list that comes out every week, showing the 100 most played songs that week.
+
+The following code will load a dataset of Billboard Hot 100 songs.  More information about the creation of this dataset, as well as some analyses by the author, can be found here: [https://mikekling.com/analyzing-the-billboard-hot-100/](https://mikekling.com/analyzing-the-billboard-hot-100/)  The dataset you are provided is a limited version of the full data, containing:
+- The title
+- The artist
+- The highest rank the song ever reached (1 is the best)
+- The number of weeks the song was on the chart
+- The latest date the song appeared on the Billboard Hot 100
+
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+```
+
+```{r, echo = TRUE}
+songs <- read.table("https://www.dropbox.com/s/jrwjthqo9b5o07g/billboard_songs.txt?dl=1", header = TRUE, stringsAsFactors = FALSE)
+```
+
+---
+
+## Advice
+
+This is a very large dataset!  Consider using a function like `sample_n` to create a small dataset with only, say, 200 of the rows.  You can try all your code out on the smaller dataset first, and then only run the analysis of the full data after you have perfected everything.
+
+---
+
+## Setup
+
+Do any data cleaning you need.
+
+*Hint: You'll want to create a datetime object for the date the song leaves the chart.*
+
+```{r}
+songs <- songs %>% 
+  mutate(
+    date = as.character(chart.date),
+    year = str_sub(date, 0, 4),
+    month = str_sub(date, 5, 6),
+    day = str_sub(date, 7, 8),
+    date = make_date(year =  year, month = month, day = day)
+  )
+
+```
+
+---
+
+## Questions
+
+1) What 10 songs spent the longest on the charts?  Give only the title, artist, and weeks.
+
+```{r}
+songs %>% 
+  top_n(10, weeks.on.chart) %>%
+  arrange(desc(weeks.on.chart)) %>%
+  select(title, artist, weeks.on.chart)
+```
+
+
+2) Find the oldest song(s) in this dataset, i.e., the earliest songs to **enter** the charts. What date did they **leave** the charts? 
+
+```{r}
+songs %>% 
+  top_n(1, desc(date)) %>%
+  distinct(date)
+```
+
+
+
+3) What hit songs could have been played at your 10th birthday party?  That is, which songs that **eventually** peaked at #1  **entered** the charts within two months (before or after) your 10th birthday?  Give only the song title, artist, and date of chart entry.
+
+
+
+```{r}
+my_bday <- mdy("April 2, 2005")
+
+songs %>% 
+  mutate(
+      entry_date = date - weeks(weeks.on.chart)
+  ) %>%
+  filter(overall.peak == 1 & entry_date %within% interval(my_bday - months(2), my_bday + months(2))) %>%
+  select(title, artist, entry_date)
+  
+```
+
+
+4) Which five artists had the most number 1 hits?
+
+*For this question, you may ignore songs with more than one artist listed.*
+
+```{r}
+songs %>% 
+  filter(overall.peak == 1) %>%
+  group_by(artist) %>%
+  summarize(num_songs = n()) %>%
+  top_n(5, num_songs)
+
+songs %>% 
+  group_by(artist) %>%
+  summarize(tot_weeks = sum(weeks.on.chart)) %>%
+  top_n(5, tot_weeks)
+```
+
+6) What is the most common word, at least 4 letters long, used in the title of any song?  Give only the word itself, and its count.
+
+*Hint:  "hello" and "Hello" are the same word!*
+
+```{r}
+titles <- songs %>% 
+  pull(title) 
+
+four_char_words <- titles %>%
+  str_extract_all("[:alpha:]{4,}") %>%
+  unlist()
+
+four_char_words %>%
+  table() %>%
+  sort() %>%
+  rev() %>%
+  head(1)
+```
+
+
+7) Let's take a look at artists who work together on songs. Which artists have **featured** on the most Billboard charting songs?  
+
+*Hint: The functions `separate()` or `str_split()` might be useful to you.*
+
+Definitions:
+```
+RAE SREMMURD featuring NICKI MINAJ & YOUNG THUG
+```
+In this string, Nicki Minaj and Young Thug are considered to be **featured**.
+```
+JESSIE J, ARIANA GRANDE & NICKI MINAJ
+```
+In this string, Jessie J and Ariana Grande and Nicki Minaj all worked 
+together (collaborated), but nobody was featured.
+
+
+
+```{r}
+artist_creds <- songs %>% pull(artist)
+
+feat_artists <- artist_creds %>% 
+  str_subset("featuring") %>% 
+  str_replace_all(".* featuring", "") %>%
+  str_split("([&,])|( or )|( and )") %>%
+  #str_extract_all("[^,&]+") %>%
+  unlist() %>%
+  str_trim(side = "both")
+  
+  
+feat_artists %>% 
+  table() %>%
+  sort() %>%
+  rev() %>%
+  head(1)
+
+collab_artists <- artist_creds %>%
+  str_replace_all("featuring .*", "") %>%
+  str_extract_all("[^,&]+") %>%
+  unlist() %>%
+  str_trim(side = "both")
+
+collab_artists %>% 
+  table() %>%
+  sort() %>%
+  rev() %>%
+  head(1)
+  
+```
+
+---
+## Challenge
+
+Choose a musical artist or band that has charted in at least 5 of the years in this dataset.
+
+Make a visualization that summarizes their Billboard success over time.

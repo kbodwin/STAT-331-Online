@@ -1,0 +1,524 @@
+---
+title: "Bootstrapping"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9' 
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(lubridate)
+library(palmerpenguins)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+set.seed(534)
+```
+
+---
+## Setup
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(infer)
+
+data(diamonds)
+```
+
+---
+## Estimating the mean
+
+The `diamonds` dataset contains information about 53940 diamonds.
+
+Suppose we want to estimate the mean `table` (flat top size) of a Premium diamond.
+
+```{r}
+
+diamonds <- diamonds %>%
+  filter(cut == "Premium")
+
+nrow(diamonds)
+
+diamonds %>%
+  summarize(mean(table))
+
+```
+
+
+---
+## Estimating the mean
+
+Of course, the 13,791 Premium diamonds in this dataset are **not** all the
+diamonds in the world.  
+
+--
+
+So the **true mean** table of a Premium diamond is probably not *exactly* 58.741.
+
+---
+## Estimating the mean
+
+What would be a **reasonable range** of guesses for the **true mean**?
+
+```{r}
+
+diamonds %>%
+  summarize(mean(table), sd(table))
+```
+
+---
+class: center, middle, inverse
+
+## Checkpoint: *Confidence Intervals*
+
+---
+## Confidence
+
+```{r}
+my_test <- diamonds %>%
+  t_test(response = table)
+
+my_test %>% select(lower_ci, upper_ci)
+```
+
+Based on **this sample**, we are **95% confident** that the **true mean** is between `r round(my_test$lower_ci, 3)` and `r round(my_test$upper_ci, 3)`.
+
+---
+## Confidence
+
+... But what does this mean?
+
+--
+
+![](CIs.png)
+
+
+---
+class: center, middle, inverse
+# What assumptions did we rely on?
+
+---
+## The t distribution
+
+```{r, echo = FALSE}
+ggplot(, aes(x = -5:5)) + stat_function(fun = dt, args = list(df = 99), color = "darkred", size = 2) + xlab("t statistic")
+```
+
+
+---
+## Our data
+
+```{r, echo = FALSE}
+ggplot(diamonds, aes(x = table)) +  
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "pink", color = "black")+
+  stat_function(fun = dnorm,
+                args = list(mean = mean(diamonds$table), sd = sd(diamonds$table)),
+                color = "cornflowerblue", lwd = 1.5) +
+  coord_cartesian(xlim = c(50, 65)) +
+  theme_bw()
+```
+---
+## Confidence Intervals
+
+```{r}
+diamonds %>%
+  pull(table) %>%
+  quantile(c(.025, .975))
+```
+--
+
+```{r}
+my_test %>% select(lower_ci, upper_ci)
+
+```
+
+---
+## The data
+
+```{r, echo = FALSE}
+ggplot(diamonds, aes(x = table)) + 
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "pink", color = "black")+
+  theme_bw() +
+  geom_vline(xintercept = c(55, 62), lwd = 1.5, color = "cornflowerblue") +
+  coord_cartesian(xlim = c(50, 65))
+```
+
+---
+## A subsample of the data
+
+```{r}
+set.seed(1094)
+
+diamonds_subsample <- diamonds %>% sample_n(100)
+
+diamonds_subsample %>%
+  pull(table) %>%
+  quantile(c(0.025, 0.975))
+```
+
+---
+## A subsample of the data
+
+
+```{r, echo = FALSE}
+ggplot(diamonds_subsample, aes(x = table)) + 
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "pink", color = "black")+
+  theme_bw() +
+  geom_vline(xintercept = c(55, 62), lwd = 1.5, color = "cornflowerblue") +
+  coord_cartesian(xlim = c(50, 65))
+```
+
+
+
+---
+## Confidence interval **of the mean**
+
+```{r, echo = FALSE}
+ggplot(diamonds, aes(x = table)) + 
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "pink", color = "black")+
+  theme_bw() +
+  geom_vline(xintercept = c(58.721, 58.770), lwd = 1.5, color = "cornflowerblue") +
+  coord_cartesian(xlim = c(50, 65))
+```
+
+---
+## Confidence interval **of the mean**
+
+```{r, echo = FALSE}
+ggplot(diamonds, aes(x = table)) + 
+  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "pink", color = "black")+
+  geom_vline(xintercept = c(58.721, 58.770), lwd = 1.5, color = "cornflowerblue")+
+  coord_cartesian(xlim = c(57, 60))+
+    theme_bw() 
+```
+
+
+---
+class: center, middle, inverse
+# The Central Limit Theorem!
+
+--
+
+## The *sample mean* is approximately Normal (t)
+
+## As long as it's a mean of many (say > 15) samples.
+
+
+---
+## The problem of skew
+
+Consider now the question of estimating the mean **price** of Premium diamonds.
+
+```{r, echo = FALSE}
+ggplot(diamonds, aes(x = price)) +  
+  geom_histogram(aes(y = ..density..), bins = 100, fill = "pink", color = "black")+
+  stat_function(fun = dnorm,
+                args = list(mean = mean(diamonds$price), sd = sd(diamonds$price)),
+                color = "cornflowerblue", lwd = 1.5) +
+  theme_bw()
+```
+
+---
+## Confidence Interval from t-distribution
+
+```{r}
+my_test_2 <- diamonds %>%
+  t_test(response = price)
+
+my_test_2 %>% select(lower_ci, upper_ci)
+```
+
+---
+class: center, middle
+# Ask yourself...
+
+Do you trust the t-confidence interval?
+
+--
+
+**YES!**  Central Limit Theorem!
+
+--
+
+* Is the mean the best measure of center?
+
+--
+
+**NO!**  The skew pulls the mean to the right.
+
+--
+
+* How would you make a confidence interval for the median?
+
+--
+
+Pull yourself up by your **bootstraps**!
+
+---
+
+background-image: url('bootstraps.png')
+
+---
+## Idea:
+
+
+* If we had **many** samples, we could compute the median of each sample and see what happens.
+
+--
+
+* But: we only have one sample. :(
+
+--
+
+* A large enough representative sample from a population is a good approximation for the population.
+
+--
+
+* Thus:  **Re-sample** from our sample!
+
+---
+## Resampling
+
+*(Why `replace = TRUE`?)*
+
+
+```{r}
+diamonds %>% 
+  sample_n(13791, replace = TRUE) %>%
+  select(price) %>%
+  head()
+```
+
+---
+## Resampling
+
+Observations might be sampled more than once!
+
+
+```{r}
+diamonds %>% 
+  sample_n(13791, replace = TRUE) %>%
+  count(price, sort = TRUE) %>%
+  slice(1:6)
+```
+---
+## Resampling
+
+Doing this multiple times gives different resamplings.
+
+--
+
+We can calculate the median price of each resampling:
+
+```{r}
+diamonds %>% 
+  sample_n(13791, replace = TRUE) %>%
+  summarize(median(price))
+```
+
+```{r}
+diamonds %>% 
+  sample_n(13791, replace = TRUE) %>%
+  summarize(median(price))
+```
+---
+class: center, middle, invert
+# Now, we just have to copy-paste that a bunch of times, right???
+
+--
+
+# Nope!  **modelr** to the rescue
+
+---
+## Bootstrapping
+
+The `bootstrap` function takes many resamplings.
+
+--
+
+**CAREFUL!** You want the `bootstrap` function from the `modelr` package,
+not from any other package you might have loaded, like `broom`!
+
+--
+
+```{r, cache = TRUE}
+my_boots <- diamonds %>% modelr::bootstrap(100)
+my_boots %>% head()
+```
+
+---
+class: center, middle, inverse
+
+# WARNING!
+
+## Bootstrapping can be computationally intense.  
+
+## Start with a smaller number of resamplings (say, 10) before you try big numbers.
+
+---
+## Bootstrapping
+
+What is that object in `my_boots$strap`?
+
+```{r}
+str(my_boots$strap[1])
+```
+---
+## Bootstrapping
+
+The `resample` object is a list containing:
+
+* `$data$`, a *pointer* to the original dataset.
+
+* `$idx` a vector of resampled indices
+
+--
+
+Why?
+
+--
+
+Saving many copies of the **dataset** is hard.
+
+Saving many **vectors of indices** is easy!
+
+---
+## Bootstrapping
+
+A `resample` object can automatically convert to the resampled data frame:
+
+```{r}
+data.frame(my_boots$strap[1])
+```
+
+---
+## Bootstrapping
+
+We are really just interested in the **Median price**.
+
+So, let's calculate it for **each resampling**:
+
+--
+
+```{r}
+boot_medians <- map_dbl(my_boots$strap, ~median(data.frame(.x)$price))
+                        
+boot_medians
+```
+---
+## Bootstrapping
+
+Better yet, let's add these to our data frame:
+
+```{r}
+my_boots <- my_boots %>%
+  mutate(
+    boot_medians = map_dbl(strap, ~median(data.frame(.x)$price))
+  )
+
+my_boots %>% head()
+```
+
+
+---
+## Any one resampling by itself is not very interesting...
+
+```{r, echo = FALSE}
+my_boots$strap[1] %>%
+  data.frame() %>%
+  ggplot(aes(x = price)) + 
+  geom_histogram(aes(y = ..density..), bins = 100, fill = "pink", color = "black") +
+   geom_vline(xintercept = median(diamonds$price), color = "cornflowerblue", lwd = 1.2) +
+  theme_bw()
+```
+
+---
+## ... but the **medians** of **all** the resamplings are!
+
+```{r, echo = FALSE}
+my_boots %>%
+  ggplot(aes(x = boot_medians)) + 
+  geom_histogram(aes(y = ..density..), bins = 10, fill = "cornflowerblue", color = "black") +
+  theme_bw()
+```
+---
+## Put them together:
+
+```{r, echo = FALSE}
+diamonds %>%
+  ggplot() +
+  geom_histogram(aes(x = price, y = ..density..), binwidth = 500,
+                 fill = "pink", color = "black", alpha = 0.5) +
+  geom_histogram(data = my_boots, aes(x = boot_medians, y = ..density../10), binwidth = 100,
+                 fill = "cornflowerblue", color = "black", alpha = 0.5) 
+```
+
+---
+## Bootstrapped Confidence Intervals
+
+What's a **reasonable range** of guesses for the **true median** price?
+
+--
+
+Well, where did most of our **bootstrapped medians** fall?
+
+--
+
+```{r}
+my_boots %>%
+  pull(boot_medians) %>%
+  quantile(c(0.025, 0.975))
+```
+
+
+---
+## Bootstrapped medians
+
+```{r, echo = FALSE}
+my_boots %>%
+  ggplot(aes(x = boot_medians, y = ..density..)) + 
+  geom_histogram(fill = "cornflowerblue", color = "black") +
+  geom_vline(xintercept = c(3071, 3353), color = "orange", lwd = 1.2)
+  theme_bw()
+```
+---
+class: center, middle, inverse
+
+# Your Turn!
+
+---
+# Your Turn
+
+Use the `mtcars` dataset to study horsepower of cars (`hp`).
+
+Make a **95% Confidence Interval** for:
+
+* The mean horsepower
+
+* The median horsepower
+
+* The variance of horsepower

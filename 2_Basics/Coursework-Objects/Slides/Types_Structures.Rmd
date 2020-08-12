@@ -1,0 +1,348 @@
+---
+title: "Basics: Structures and Types"
+subtitle: "Week 2"  
+
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(flair)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+
+class: center, middle, inverse
+# Data Types
+
+---
+# Data Types
+
+Does your data consist of...
+
+--
+
+* numbers?
+    + integers?
+    + doubles?
+    
+--
+
+* words?
+    + characters/string?
+    + factor?
+    
+--
+
+* `TRUE` or `FALSE` values (*boolean*)?
+
+--
+
+* something else???
+    + Dates and times?
+    + Images?
+    
+
+---
+# Data Types: Numeric
+
+```{r}
+
+a <- 5.5
+
+class(a)
+
+typeof(a)
+
+str(a)
+
+```
+
+---
+# Data Types: Numeric
+  
+```{r}
+
+is.numeric(a)
+
+is.double(a)
+```
+
+---
+# Data Types: Numeric
+
+*What do you think will happen?*
+
+```{r, eval = FALSE}
+a <- 5
+
+is.integer(a)
+```
+
+--
+
+```{r, echo = FALSE}
+a <- 5
+
+is.integer(a)
+```
+
+---
+
+# Data Types: Numeric
+
+Integers are special:
+
+
+```{r, echo = FALSE}
+decorate('a <- 5L') %>%
+  flair("L")
+
+```
+
+```{r}
+is.integer(a)
+
+typeof(a)
+```
+
+
+--
+
+For this class, it won't be important to make the distinction between integers and doubles.
+---
+# Data Types: Boolean
+
+For Boolean data , you should think of the data as having values `0` (`FALSE`) or `1` (`TRUE`).
+
+```{r}
+is_5 <- a == 5
+
+is_5
+
+class(is_5)
+
+as.integer(is_5)
+
+is_5 + 1
+```
+
+
+
+---
+# Data Types: Character
+
+```{r}
+my_word <- "Kelly"
+
+class(my_word)
+
+```
+
+--
+
+```{r}
+
+my_sentence <- "Hi, I'm Kelly!"
+
+class(my_sentence)
+```
+--
+Another word for a **character** type object is a **string**.
+
+
+---
+# Data Types: Factors
+
+
+```{r, echo = FALSE}
+library(palmerpenguins)
+```
+
+```{r}
+head(penguins)
+```
+
+
+---
+# Data Types: Factors
+
+Not just *any* string, but specifically defined **categories**.
+
+```{r}
+class(penguins$species)
+
+levels(penguins$species)
+
+str(penguins$species)
+```
+
+
+---
+# Data Types: Factors
+
+Warning:  Factors are *weird*
+
+```{r}
+as.character(penguins$species)
+```
+---
+# Data Types: Factors
+
+Warning:  Factors are *weird*
+
+```{r}
+as.integer(penguins$species)
+```
+
+---
+class: center, middle
+# Object Structures
+
+---
+
+# Object Structures
+
+Is your object a...
+
+* function?
+
+* vector?
+
+* list?
+
+* data frame?
+
+* matrix?
+
+---
+# Vectors
+
+A **vector** is a set of values that are all the same **type**
+
+```{r, error  = TRUE}
+my_vec <- c("a", "b", "c")
+
+str(my_vec)
+
+my_vec <- c(1, 3, 5)
+
+str(my_vec)
+
+my_vec <- c(1, "a")
+
+str(my_vec)
+```
+
+---
+# Vectors
+
+A vector with only one **element** is called an **atomic vector**.
+
+```{r, error  = TRUE}
+
+my_vec <- 1
+
+str(my_vec)
+
+my_vec[1]
+
+```
+
+---
+
+# Matrices
+
+A **matrix** is a **two-dimensional** set of values that are all the same type.
+
+
+
+```{r, error  = TRUE}
+my_mat <- matrix(c("a", "b", "c", "d"), nrow = 2, ncol = 2)
+
+str(my_mat)
+```
+
+--
+Note: If turning  vector into a matrix, be careful with rows and columns!
+
+```{r}
+my_mat
+```
+
+
+---
+# Lists
+
+A **list** is the the **most general** object.  Any structure and any data type can be stored in a list!
+
+```{r}
+my_list <- list(
+  a = "Well hi there",
+  b = 1:10,
+  c = my_mat
+)
+
+my_list
+```
+
+---
+# Lists
+
+```{r}
+str(my_list)
+
+my_list$a
+```
+
+---
+# Lists: brackets
+
+What is the difference between the following two ways of accessing information in a list?
+
+```{r}
+my_list[[2]]
+
+my_list[2]
+```
+
+---
+# Lists: brackets
+
+What is the difference between the following two ways of accessing information in a list?
+
+```{r}
+str(my_list[[2]])
+```
+
+--
+
+```{r}
+
+str(my_list[2])
+```
+
+---
+class: center, middle, inverse
+
+# Check-In: Object structures and data types

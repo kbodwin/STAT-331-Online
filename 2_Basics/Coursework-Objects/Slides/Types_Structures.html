@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Basics: Structures and Types</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Basics: Structures and Types
+## Week 2
+
+---
+
+
+
+
+
+
+
+class: center, middle, inverse
+# Data Types
+
+---
+# Data Types
+
+Does your data consist of...
+
+--
+
+* numbers?
+    + integers?
+    + doubles?
+    
+--
+
+* words?
+    + characters/string?
+    + factor?
+    
+--
+
+* `TRUE` or `FALSE` values (*boolean*)?
+
+--
+
+* something else???
+    + Dates and times?
+    + Images?
+    
+
+---
+# Data Types: Numeric
+
+
+```r
+a &lt;- 5.5
+
+class(a)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
+typeof(a)
+```
+
+```
+## [1] "double"
+```
+
+```r
+str(a)
+```
+
+```
+##  num 5.5
+```
+
+---
+# Data Types: Numeric
+  
+
+```r
+is.numeric(a)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+is.double(a)
+```
+
+```
+## [1] TRUE
+```
+
+---
+# Data Types: Numeric
+
+*What do you think will happen?*
+
+
+```r
+a &lt;- 5
+
+is.integer(a)
+```
+
+--
+
+
+```
+## [1] FALSE
+```
+
+---
+
+# Data Types: Numeric
+
+Integers are special:
+
+
+
+&lt;code class ='r hljs remark-code'&gt;a &lt;- 5&lt;span style='background-color:#ffff7f'&gt;L&lt;/span&gt;&lt;/code&gt;
+
+
+```r
+is.integer(a)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+typeof(a)
+```
+
+```
+## [1] "integer"
+```
+
+
+--
+
+For this class, it won't be important to make the distinction between integers and doubles.
+---
+# Data Types: Boolean
+
+For Boolean data , you should think of the data as having values `0` (`FALSE`) or `1` (`TRUE`).
+
+
+```r
+is_5 &lt;- a == 5
+
+is_5
+```
+
+```
+## [1] TRUE
+```
+
+```r
+class(is_5)
+```
+
+```
+## [1] "logical"
+```
+
+```r
+as.integer(is_5)
+```
+
+```
+## [1] 1
+```
+
+```r
+is_5 + 1
+```
+
+```
+## [1] 2
+```
+
+
+
+---
+# Data Types: Character
+
+
+```r
+my_word &lt;- "Kelly"
+
+class(my_word)
+```
+
+```
+## [1] "character"
+```
+
+--
+
+
+```r
+my_sentence &lt;- "Hi, I'm Kelly!"
+
+class(my_sentence)
+```
+
+```
+## [1] "character"
+```
+--
+Another word for a **character** type object is a **string**.
+
+
+---
+# Data Types: Factors
+
+
+
+
+
+```r
+head(penguins)
+```
+
+```
+## # A tibble: 6 x 7
+##   species island bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex  
+##   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+## 1 Adelie  Torge~           39.1          18.7              181        3750 male 
+## 2 Adelie  Torge~           39.5          17.4              186        3800 fema~
+## 3 Adelie  Torge~           40.3          18                195        3250 fema~
+## 4 Adelie  Torge~           NA            NA                 NA          NA &lt;NA&gt; 
+## 5 Adelie  Torge~           36.7          19.3              193        3450 fema~
+## 6 Adelie  Torge~           39.3          20.6              190        3650 male
+```
+
+
+---
+# Data Types: Factors
+
+Not just *any* string, but specifically defined **categories**.
+
+
+```r
+class(penguins$species)
+```
+
+```
+## [1] "factor"
+```
+
+```r
+levels(penguins$species)
+```
+
+```
+## [1] "Adelie"    "Chinstrap" "Gentoo"
+```
+
+```r
+str(penguins$species)
+```
+
+```
+##  Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+
+---
+# Data Types: Factors
+
+Warning:  Factors are *weird*
+
+
+```r
+as.character(penguins$species)
+```
+
+```
+##   [1] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##   [7] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [13] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [19] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [25] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [31] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [37] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [43] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [49] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [55] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [61] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [67] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [73] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [79] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [85] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [91] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+##  [97] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [103] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [109] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [115] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [121] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [127] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [133] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [139] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [145] "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"    "Adelie"   
+## [151] "Adelie"    "Adelie"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [157] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [163] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [169] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [175] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [181] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [187] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [193] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [199] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [205] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [211] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [217] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [223] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [229] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [235] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [241] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [247] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [253] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [259] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [265] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [271] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"   
+## [277] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [283] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [289] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [295] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [301] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [307] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [313] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [319] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [325] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [331] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [337] "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap" "Chinstrap"
+## [343] "Chinstrap" "Chinstrap"
+```
+---
+# Data Types: Factors
+
+Warning:  Factors are *weird*
+
+
+```r
+as.integer(penguins$species)
+```
+
+```
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [75] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [112] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [149] 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [186] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [223] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [260] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [297] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [334] 2 2 2 2 2 2 2 2 2 2 2
+```
+
+---
+class: center, middle
+# Object Structures
+
+---
+
+# Object Structures
+
+Is your object a...
+
+* function?
+
+* vector?
+
+* list?
+
+* data frame?
+
+* matrix?
+
+---
+# Vectors
+
+A **vector** is a set of values that are all the same **type**
+
+
+```r
+my_vec &lt;- c("a", "b", "c")
+
+str(my_vec)
+```
+
+```
+##  chr [1:3] "a" "b" "c"
+```
+
+```r
+my_vec &lt;- c(1, 3, 5)
+
+str(my_vec)
+```
+
+```
+##  num [1:3] 1 3 5
+```
+
+```r
+my_vec &lt;- c(1, "a")
+
+str(my_vec)
+```
+
+```
+##  chr [1:2] "1" "a"
+```
+
+---
+# Vectors
+
+A vector with only one **element** is called an **atomic vector**.
+
+
+```r
+my_vec &lt;- 1
+
+str(my_vec)
+```
+
+```
+##  num 1
+```
+
+```r
+my_vec[1]
+```
+
+```
+## [1] 1
+```
+
+---
+
+# Matrices
+
+A **matrix** is a **two-dimensional** set of values that are all the same type.
+
+
+
+
+```r
+my_mat &lt;- matrix(c("a", "b", "c", "d"), nrow = 2, ncol = 2)
+
+str(my_mat)
+```
+
+```
+##  chr [1:2, 1:2] "a" "b" "c" "d"
+```
+
+--
+Note: If turning  vector into a matrix, be careful with rows and columns!
+
+
+```r
+my_mat
+```
+
+```
+##      [,1] [,2]
+## [1,] "a"  "c" 
+## [2,] "b"  "d"
+```
+
+
+---
+# Lists
+
+A **list** is the the **most general** object.  Any structure and any data type can be stored in a list!
+
+
+```r
+my_list &lt;- list(
+  a = "Well hi there",
+  b = 1:10,
+  c = my_mat
+)
+
+my_list
+```
+
+```
+## $a
+## [1] "Well hi there"
+## 
+## $b
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## $c
+##      [,1] [,2]
+## [1,] "a"  "c" 
+## [2,] "b"  "d"
+```
+
+---
+# Lists
+
+
+```r
+str(my_list)
+```
+
+```
+## List of 3
+##  $ a: chr "Well hi there"
+##  $ b: int [1:10] 1 2 3 4 5 6 7 8 9 10
+##  $ c: chr [1:2, 1:2] "a" "b" "c" "d"
+```
+
+```r
+my_list$a
+```
+
+```
+## [1] "Well hi there"
+```
+
+---
+# Lists: brackets
+
+What is the difference between the following two ways of accessing information in a list?
+
+
+```r
+my_list[[2]]
+```
+
+```
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+```r
+my_list[2]
+```
+
+```
+## $b
+##  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+# Lists: brackets
+
+What is the difference between the following two ways of accessing information in a list?
+
+
+```r
+str(my_list[[2]])
+```
+
+```
+##  int [1:10] 1 2 3 4 5 6 7 8 9 10
+```
+
+--
+
+
+```r
+str(my_list[2])
+```
+
+```
+## List of 1
+##  $ b: int [1:10] 1 2 3 4 5 6 7 8 9 10
+```
+
+---
+class: center, middle, inverse
+
+# Check-In: Object structures and data types
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,232 @@
+---
+title: "Writing R Functions"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+```
+
+
+In this lesson, you will learn to:
+
+* Write your own functions in R
+
+* Make good decisions about function arguments and returns
+
+* Include side effects and/or error messages in your functions
+
+* Use good R code style
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "30 min", 
+                   reading_time = "10-30 min", 
+                   work_time = "60-90 min", 
+                   num_activities = 4)
+```
+
+---
+
+## Writing Functions
+
+---
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Writing Functions", type = "Required", url = "https://www.youtube.com/embed/qv_KAY-IBsk")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Primer: Writing Functions", url = "https://rstudio.cloud/learn/primers/6", type = "Required")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("R4DS: Functions", url = "https://r4ds.had.co.nz/functions.html", type = "Recommended")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Simple Functions")
+```
+
+Write a function called `times_seven()` which takes a single argument and multiplies by 7. 
+
+This function should check that the argument is numeric.
+
+This function should also excitedly announce (print) "I love sevens!" if the argument to the function is a 7.
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Predicting Function Behavior")
+```
+
+```{r addtwo}
+add_or_subtract <- function(first_num, second_num = 2, type = "add") {
+  
+  if (type == "add") {
+    first_num + second_num
+  } else if (type == "subtract") {
+    first_num - second_num
+  } else {
+    stop("Please choose `add` or `subtract` as the type.")
+  }
+  
+}
+  
+```
+
+**Question 1:** What will be returned by each of the following?
+
+i) 1
+ii) -1
+iii) 30
+iv) An error defined in the function `add_or_subtract`
+v) An error defined in a different function, that is called from inside `add_or_subtract`
+
+```{r, eval = FALSE}
+add_or_subtract(5, 6, type = "subtract")
+
+add_or_subtract("orange")
+
+add_or_subtract(5, 6, type = "multiply")
+
+add_or_subtract("orange", type = "multiply")
+```
+
+**Question 2:**
+
+Consider the following code:
+
+```{r}
+first_num <- 5
+second_num <- 3
+
+result <- 8
+
+result <- add_or_subtract(first_num, second_num = 4)
+
+result_2 <- add_or_subtract(first_num)
+```
+
+In your Global Environment, what is the value of...
+
+a) `first_num`
+b) `second_num`
+c) `result`
+d) `result_2`
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Functions and Data Wrangling")
+```
+
+Write a function called `find_car_make()` that takes as input the name of a car, and returns only the "make", or the company that created the car.  For example, `find_car_make("Toyota Camry")` should return `"Toyota"` and `find_car_make("Ford Anglica")` should return `"Ford"`.  (You can assume that the first word of a car name is always its make.)
+
+Use your function with the built-in dataset `mtcars`, to create a new column in the data called `make` that gives the company of the car.
+
+*Hint: You should start by using the function `dplyr::rownames_to_column()`, so that the car names are a variable in the data frame instead of row labels.*
+
+
+---
+
+## Good Code Style
+
+---
+
+Consider the following two chunks of code:
+
+```{r, eval = FALSE}
+some_data<-penguins%>%group_by(species)%>%
+summarize(av=mean(body_mass_g,0,TRUE))
+```
+
+```{r, eval = FALSE}
+avg_by_species <-
+  penguins %>% 
+    group_by(species) %>% 
+    summarize(
+      avg_mass = mean(body_mass_g, na.rm = TRUE)
+    )
+```
+
+Which one is easier to read?  The second one, of course!
+
+Part of writing reproducible and shareable code is following good **style guidelines**.  Mostly, this means choosing good object names and using white space in a consistent and clear way.
+
+There is no need to read this full resource, but please skim through it and read some of the examples.
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("Tidyverse style guide", url = "https://style.tidyverse.org/syntax.html", type = "Required")
+```
+
+### Summary
+
+Designing functions is somewhat subjective, but there are a few principles that apply:
+
+1. Choose a good, descriptive **names** 
+    + Your function name should describe what it does, and usually involves a verb.
+    + Your argument names should be simple and/or descriptive.
+    + Names of variables in the body of the function should be descriptive.
+2. Output should be **very predictable**
+    + Your function should always *return* the same object type, no matter what input it gets.
+    + Your function should expect certain objects or object types as *input*, 
+    and give errors when it does not get them.
+    + Your function should give errors or warnings for common mistakes.
+    + Default values of arguments should only be used when there is a clear common choice.
+3. The body of the function should be **easy to read**.
+    + Code should use [good style principles](https://style.tidyverse.org/).
+    + There should be occasional comments to explain the purpose of the steps.
+    + Complicated steps, or steps that are repeated many times, should be written into **separate functions** (sometimes called *helper functions*).
+4. Functions should be **self-contained**.
+    + They should not rely on any information besides what is given as input.
+    + *(Relying on other _functions_ is fine, though*)
+    + They should not alter the Global Environment
+    + *(do not put `library()` statements inside functions!)*
+
+
+---
+
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Function Design")
+```
+
+Identify five major violations of design principles for the following function:
+
+```{r, eval = FALSE}
+
+
+ugh <- function(dataset) {
+  
+  library(tidyverse)
+  
+  thing <- dataset%>%group_by(Species)%>%summarize(newvar = mean(Sepal.Length))
+  
+  ggplot(thing)+geom_col(aes(x = Species, y = newvar))+ggtitle("Sepal Lengths")
+  
+  
+}
+
+ugh(iris)
+```

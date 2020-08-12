@@ -1,0 +1,124 @@
+---
+title: "Reproducibility: Directories, Data, and Deliverables"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+```
+
+The theme of this lesson is good management of your files and data.
+
+You will learn how to:
+
+* Identify **folders** and **paths**.
+
+* Create and use **R Projects**.
+
+* **Load data** into R from files.
+
+* Deal with package challenges.
+
+* Create R Markdown documents with good **reproducible principles**.
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "40 min", 
+                   reading_time = "10-20 min", 
+                   work_time = "10 min", 
+                   num_activities = 2)
+```
+
+---
+
+## Directories, etc.
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Directories, Paths, Projects", type = "Required", url = "https://www.youtube.com/embed/fKBXX3C_WJU")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_read("Workflow and Projects", type = "Optional", url = "https://r4ds.had.co.nz/workflow-projects.html")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("R Projects")
+```
+
+Take a screenshot of your class directory, showing the **R Project** and the folder organization, including a **Data** folder.
+
+---
+
+## Loading Data Into R
+
+### Where does my data live?
+
+```{r, results = "asis", echo = FALSE}
+
+req_vid("Data Locations and the {here} package", type = "Required", url = "https://www.youtube.com/embed/kF_fmHEgUOM")
+
+```
+
+### How do I load the data?
+
+```{results = "asis", echo = FALSE}
+req_vid("Loading Data", type = "Required", url = "https://www.youtube.com/embed/WOmXNZm1Jr4")
+
+req_read("Data Import", type = "Recommended", url = "https://r4ds.had.co.nz/data-import.html")
+
+```
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Loading Data")
+```
+
+**Question 1**
+
+What line of code did you use - including the `here` function - to read in `ages.csv`?
+
+**Question 2**
+
+What does the `stringsAsFactors` argument do?
+
+**Question 3**
+
+What code did you use to read in `Name` as a factor and `Age` as a character?
+
+**Bonus Question**
+
+Just for fun - did you [recognize the men in this dataset?](https://www.hockey-reference.com/teams/SJS/2020.html)
+
+---
+
+## Packages
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Details of Packages", type = "Required", url = "https://www.youtube.com/embed/Ar9leuWF5ws")
+```
+
+---
+
+## Reproducible Deliverables
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Reproducible Deliverables in R Markdown", type = "Required", url = "https://www.youtube.com/embed/i3MHIBNaZzE")
+```
+

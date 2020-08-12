@@ -20,7 +20,7 @@ materials for more information on how to effectively use this server.
 
 ### Office Hours:
 
-#### Wednesday & Friday, 10am-12pm
+#### TWRF 10:30am-11:30am
 
 (All Office Hours held on Discord.)
 
@@ -127,18 +127,14 @@ are meant to be done with help from me and your peers. I **strongly** suggest th
 you attempt to start the activities before office hours, so you can maximize the 
 utility of my help.
 
-Practice Activities are due **Wednesdays at midnight.**
+Practice Activities are due **Thursdays at midnight.**
 
 
 ## Lab Assignments
 
-Your typical homework assignments will be weekly labs.  These labs are due on **Fridays at midnight**.  
+Your typical homework assignments will be weekly labs.  These labs are due on **Sunday at midnight**.  
 
-There are no extensions on lab assignments.  There is a grace period through 
-**Sunday at midnight**, during which your lab is not penalized, but you will
-not receive Peer Review credit. (10% of the lab grade.)
-
-Labs turned in later than Sunday will not be reviewed, and instead will be quickly
+There are no extensions on lab assignments. Labs turned in later than Sunday will not be reviewed, and instead will be quickly
 checked for completeness and receive an automatic grade of 50%.
 
 ## Challenges
@@ -158,7 +154,7 @@ Extra bonus points beyond 100 earn you extra credit.
 
 **Midterm:** Monday, July 27th
 
-**Final Exam:** Friday, September 4th.
+**Final Exam:** Friday, August 28th.
 
 
 ## Other Policies

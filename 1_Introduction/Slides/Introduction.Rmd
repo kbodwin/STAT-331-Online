@@ -7,9 +7,9 @@ output:
     css: xaringan-themer.css
     lib_dir: libs
     nature:
-      countIncrementalSlides: no
       highlightLines: yes
       highlightStyle: github
+      countIncrementalSlides: false
       ratio: '16:9'
 
 ---
@@ -21,7 +21,15 @@ library(tidyverse)
 
 ```{r xaringan-themer, include=FALSE}
 library(xaringanthemer)
-solarized_light()
+mono_light(
+  base_color = "#26116c",
+  text_bold_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  background_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
 ```
 
 class: center, middle

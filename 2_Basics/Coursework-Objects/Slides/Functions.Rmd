@@ -1,0 +1,343 @@
+---
+title: "Basics: Functions and Troubleshooting"
+subtitle: "Week 2"  
+
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(flair)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+class: center, middle
+
+# Functions
+
+---
+# Important R Facts
+
+*Fact 1:* **R** is an **open-source** language.
+
+--
+
+*Fact 2:* The power of **R** comes from **packages**.
+
+--
+
+*Fact 3:* **R** is a **functional programming** language.
+
+--
+
+(This means it is designed for using and writing *functions*.)
+
+---
+# Anatomy of a function
+
+```{r rnorm1}
+rnorm(10, mean = 5, sd =3)
+```
+
+---
+# Anatomy of a function
+
+```{r rnorm, eval = FALSE}
+rnorm(10, mean = 5, sd =3)
+```
+
+--
+Function name:
+
+```{r, echo = FALSE}
+decorate("rnorm", eval = FALSE) %>%
+  flair("rnorm")
+```
+
+--
+
+Required arguments:
+
+
+```{r, echo = FALSE}
+decorate("rnorm", eval = FALSE) %>%
+  flair("10")
+```
+
+(we often don't use the names for required arguments, but `n = 10` would be okay too)
+
+---
+# Anatomy of a function
+
+Optional arguments:
+
+
+```{r, echo = FALSE}
+decorate("rnorm", eval = FALSE) %>%
+  flair("mean = 5") %>%
+  flair("sd = 5")
+```
+
+(*always* use the argument names for optional arguments)
+
+---
+class: center, middle
+
+# Troubleshooting Errors
+
+---
+
+# Syntax Errors
+
+* Did you leave off a parenthesis?
+
+```{r, echo = FALSE}
+decorate('rnorm(10, mean = 5', eval = FALSE) %>%
+  flair("(")
+```
+
+```{r, echo = FALSE, error = TRUE}
+
+rnorm(10, mean = 5
+
+```
+
+
+---
+
+# Syntax Errors
+
+* Did you leave off a comma?
+
+```{r, echo = FALSE, error = TRUE}
+decorate('rnorm(10 mean = 5)', eval = FALSE) %>%
+  flair(" mean")
+```
+
+```{r, echo = FALSE, error = TRUE}
+
+rnorm(10 mean = 5)
+
+```
+
+
+---
+
+# Syntax Errors
+
+* Did you make a typo?
+
+
+```{r, echo = FALSE}
+decorate('rnrom(10, mean = 5)', eval = FALSE) %>%
+  flair("rnrom")
+```
+
+```{r, echo = FALSE, error = TRUE}
+
+rnrom(10, mean = 5)
+
+```
+
+---
+# Object type errors
+
+* Are you using the right **input** that the function expects?
+
+```{r, echo = FALSE}
+decorate("rnorm('hi', mean = 5)", eval = FALSE) %>%
+  flair("'hi'")
+```
+
+```{r, echo = FALSE, error = TRUE}
+
+rnorm('hi', mean = 5)
+
+```
+
+---
+# Object type errors
+
+* Are you expecting the right **output** of the function?
+
+```{r closure, echo = FALSE, error = TRUE}
+
+my_obj <- rnorm(10, mean = 5)
+
+my_obj(5)
+
+```
+
+```{r, echo = FALSE}
+decorate("closure") %>%
+  flair("my_obj(5)")
+```
+
+---
+class: center, middle
+
+# Errors, warnings, and messages
+
+---
+# Messages
+
+Just because you see scary red text, this does **not** mean something went wrong!  
+
+This is just **R** communicating with you.
+
+--
+
+For example, you often see:
+
+```{r}
+library(tidyverse)
+```
+
+---
+# Warnings
+
+Often, **R** will give you a **warning**.
+
+--
+
+This means that your code *did* run...
+
+--
+
+...but you probably want to make sure it succeeded.
+
+---
+# Warnings
+
+
+```{r}
+my_vec <- c("a", "b", "c")
+
+my_new_vec <- as.integer(my_vec)
+```
+
+--
+
+```{r}
+my_new_vec
+```
+
+---
+# Errors
+
+If the word **Error** appears in your message from **R**, then you have a problem.
+
+--
+
+This means your code **could not run**!
+
+--
+
+```{r, error = TRUE}
+my_vec <- c("a", "b", "c")
+
+my_new_vec <- my_vec + 1
+```
+---
+class: center, middle
+
+## Parlez-vous ERROR?
+
+Error messages can be confusing!
+
+---
+# Translations
+
+**R** says...
+
+> Error: Object 'some_obj' not found.
+
+It *probably* means...
+
+> You haven't run the code to create 'some_obj'  OR you have a typo in the name!
+
+--
+
+```{r, error = TRUE}
+some_ojb <- 1:10
+
+mean(some_obj)
+```
+
+---
+# Translations
+
+**R** says...
+
+> Error: Object of type 'closure' is not subsettable.
+
+It *probably* means...
+
+> Oops, you tried to use square brackets on a function
+
+--
+
+```{r, error = TRUE}
+mean[1,2]
+```
+
+---
+# Translations
+
+**R** says...
+
+> Error: Non-numeric argument to binary operator
+
+It *probably* means...
+
+> You tried to do math on data that isn't numeric.
+
+--
+
+```{r, error = TRUE}
+"a" + 2
+```
+
+---
+# Okay, now what?
+
+When all else fails, **Google** your error message.
+
+--
+
+* Leave out the specifics.
+
+--
+
+* Include the function you are using.
+
+
+---
+# Try it...
+
+*What's wrong here?*
+
+```{r, error = TRUE}
+matrix(c("a", "b", "c", "d"), num_row = 2)
+```
+

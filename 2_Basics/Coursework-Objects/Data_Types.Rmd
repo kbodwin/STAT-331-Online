@@ -1,0 +1,107 @@
+---
+title: "Objects in R"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+```
+
+In this lesson, you'll learn some formal definitions and vocabulary for objects in R.
+
+When you are finished, you should be able to...
+
+* Identify the **structure** of an object
+
+* Identify the **data type(s)** of an object.
+
+* Understand the *required* and *optional* arguments in a function.
+
+* Troubleshoot common error messages
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "40 min", 
+                   reading_time = "15 min", 
+                   work_time = "5 min", 
+                   num_activities = 2)
+```
+
+---
+
+## Types and Structures
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Intro to Object Types and Structures", type = "Required", url = "https://www.youtube.com/embed/abHbBykMWdI")
+```
+
+```{r, results = "asis", echo = FALSE}
+link_slides("Slides/Types_Structures.html")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_read("More Detail on Object Types and Structures", type = "Optional", url = "https://ramnathv.github.io/pycon2014-r/learn/structures.html")
+```
+
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Data Structures")
+```
+
+This lecture did **not** mention the important structure of **data frames**.
+
+That's because, in essence, a **data frame** is simply a special **list** - with a few extra restrictions on the list format.  
+
+Think about the datasets you have already worked with. Which of the following restrictions on lists do you think are needed for the list to be a **data frame**?
+
+a) The elements of the list must all be vectors of the same length.
+b) The elements of the list must all be the same data type.
+c) The elements of the list must all have no missing values.
+d) The elements of the list must all have names.
+
+---
+
+## Functions
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Intro to Functions", type = "Required", url = "https://www.youtube.com/embed/Cp_9y39ZRRM")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+link_slides("Slides/Functions.html")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("Basics of R", type = "Required", url = "https://r4ds.had.co.nz/workflow-basics.html")
+```
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Troubleshooting")
+```
+
+What is the reason for the error below?  How would you fix it?
+
+```{r, error = TRUE}
+matrix(c("a", "b", "c", "d"), num_row = 2)
+```

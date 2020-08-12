@@ -1,0 +1,200 @@
+---
+title: "The Tidyverse and dplyr"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(palmerpenguins)
+```
+
+In this lesson, you'll learn how to wrangle data using the `dplyr` package in the *tidyverse*
+
+When you are finished, you should be able to...
+
+* Understand what the *tidyverse* is
+
+* Use the pipe operator (`%>%`)
+
+* Use the five main `dplyr` verbs:
+
+  * `filter()`
+  
+  * `arrange()`
+  
+  * `select()`
+  
+  * `mutate()`
+  
+  * `summarize()`
+
+* Use `group_by()` to perform groupwise operations
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "40 min", 
+                   reading_time = "0-60 min", 
+                   work_time = "20 min", 
+                   num_activities = 1)
+```
+
+---
+
+## What is the Tidyverse?
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Intro to the Tidyverse", type = "Required", url = "https://www.youtube.com/embed/JrnjWii18L8")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("The beginning of the word 'tidyverse'", type = "Optional", url = "https://channel9.msdn.com/Events/useR-international-R-User-conference/useR2016/Towards-a-grammar-of-interactive-graphics")
+```
+
+
+---
+
+## Wrangling data with dplyr
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("Tibbles", type = "Required", url = "https://r4ds.had.co.nz/tibbles.html")
+req_vid("dplyr", type = "Required", url = "https://www.youtube.com/embed/p1NVeYm_DvG0")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+link_slides("Slides/Intro_to_Tidyverse.html")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("Data Wrangling", type = "Recommended", url = "https://moderndive.com/3-wrangling.html")
+req_read("Data Transformation", type = "Recommended", url = "https://r4ds.had.co.nz/transform.html")
+req_tutorial("Practice with Dplyr", type = "Recommended",  url = "https://rstudio.cloud/learn/primers/2")
+```
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("dplyr")
+```
+
+**Question 1:**  Suppose we would like to study how the ratio of penguin body mass to flipper size differs across the species.  Rearrange the following steps in the pipeline into an order that accomplishes this goal.
+
+```{r, include = FALSE}
+penguins %>%
+  mutate(
+    mass_flipper_ratio = body_mass_g/flipper_length_mm
+  ) %>%
+  group_by(species) %>%
+  summarize(
+    avg_mass_flipper_ratio = median(mass_flipper_ratio)
+  ) %>%
+  arrange(avg_mass_flipper_ratio)
+
+#cebda
+```
+```{r, eval = FALSE}
+
+# a
+arrange(avg_mass_flipper_ratioo)
+
+
+# b
+group_by(species)
+
+# c
+penguins 
+  
+
+# d
+summarize(
+  avg_mass_flipper_ratioo = median(mass_flipper_ratio)
+)
+  
+# e
+mutate(
+  mass_flipper_ratio = body_mass_g/flipper_length_mm
+)
+  
+```
+
+**Question 2:** 
+
+Consider the base R code below.
+
+
+```{r, eval = FALSE}
+mean(penguins[penguins$species == "Adelie", "body_mass_g"])
+```
+
+For each of the following `dplyr` pipelines, indicate if it
+
+(i) Returns the exact same thing as the Base R code;
+(ii) Returns the correct information, but the wrong object type;
+(iii) Returns incorrect information; or
+(iv) Returns an error
+
+```{r, eval = FALSE}
+# a
+penguins %>%
+  filter("body_mass_g") %>%
+  pull("Adelie") %>%
+  mean()
+
+
+# b
+penguins %>%
+  filter(species == "Adelie") %>%
+  select(body_mass_g) %>%
+  summarize(mean(body_mass_g))
+
+
+# c
+penguins %>%
+  pull(body_mass_g) %>%
+  filter(species == "Adelie") %>%
+  mean()
+
+# d
+penguins %>%
+  filter(species == "Adelie") %>%
+  select(body_mass_g) %>%
+  mean()
+
+# e
+penguins %>%
+  filter(species == "Adelie") %>%
+  pull(body_mass_g) %>%
+  mean()
+
+# f
+penguins %>%
+  select(species == "Adelie") %>%
+  filter(body_mass_g) %>%
+  summarize(mean(body_mass_g))
+```
+
+
+---
+## Walkthrough of `cereals` activity
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Live coding of cereals dataset", type = "Optional", url = "https://www.youtube.com/watch?v=CgQELANvAZ8")
+```
+

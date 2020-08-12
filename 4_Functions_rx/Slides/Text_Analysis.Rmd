@@ -1,0 +1,450 @@
+---
+title: "Text Analysis in R"
+subtitle: "Week 4"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+---
+class: center, middle
+# Regular Expressions
+
+---
+# Regular Expressions
+
+A **regular expression** is a way of "fuzzy matching" text.
+
+```{r}
+my_str <- c("Kelly", "Jelly", "Belly", "Smelly") 
+
+str_subset(my_str, "Kelly")
+
+```
+
+--
+
+```{r}
+
+str_subset(my_str, ".elly")
+
+```
+
+--
+
+```{r}
+
+str_subset(my_str, "[A-z]+elly")
+
+```
+
+---
+# Regular Expressions
+
+
+```{r}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+
+str_subset(my_str, "Kelly")
+
+```
+
+```{r}
+
+str_subset(my_str, "Kelly?")
+
+```
+
+```{r}
+
+str_subset(my_str, "Kelly\\?")
+
+```
+
+---
+# Regular Expressions
+
+* Letters and numbers match themselves
+
+* `[A-Z]` matches any *capital* letter.
+
+* `[a-z]` matches any *lowercase* letter.
+
+* `[A-z]` or `[:alpha:]` matches *any* letter
+
+*  `[0-9]` or `[:digit:]` matches any *number*
+
+*  See the `stringr` cheatsheet for more shortcuts, like `[:punct:]`
+
+---
+# Regular Expressions
+
+* `.` matches any character at all (except new lines)
+
+* `?` means "the thing before me, 0 or 1 times"
+
+* `{2}` means "the thing before me, repeated exactly twice.
+
+* `+` means "the thing before me, repeated 1 to infinity times."
+
+* `*` means "the thing before me, repeated 0 to infinity times."
+
+* "escape" a special character with `\\` to match the literal character
+
+---
+# Escaping a character
+
+
+```{r}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+
+str_subset(my_str, "Kelly")
+
+```
+
+```{r}
+
+str_subset(my_str, "Kelly?")
+
+```
+
+```{r}
+
+str_subset(my_str, "Kelly\\?")
+
+```
+
+
+---
+# Repeated Characters
+
+```{r}
+my_str <- c("Key", "Kely", "Kelly", "Kellly", "Kelllllly")
+
+```
+
+--
+
+```{r}
+str_subset(my_str, "Kel{2}y")
+```
+
+--
+
+```{r}
+str_subset(my_str, "Kel+y")
+```
+
+--
+
+```{r}
+str_subset(my_str, "Kel*y")
+```
+
+---
+class: center, middle, inverse
+
+# Tip 1:
+## Read the regular expressions out loud like a "request"
+
+---
+# Quick Quiz
+
+What will this code return?
+
+```{r, eval = FALSE}
+my_str <- c("Key", "Kely", "Kelly", "Kellly", "Kelllllly")
+
+str_subset(my_str, "l{2}")
+```
+
+--
+
+"Which elements contain, somewhere, exactly 2 l's?"
+
+--
+```{r, echo = FALSE}
+str_subset(my_str, "l{2}")
+```
+
+---
+
+# Quick Quiz
+
+Based on what you've learned so far, what does `.*` match?
+
+--
+
+"Please give me any character (`.`), repeated 0 to infinity times `*`"
+
+--
+
+This matches **everything**!!!
+
+--
+
+This is a very common trick in regular expressions.
+
+---
+# Quick Quiz
+
+What will this return?
+
+```{r, eval = FALSE}
+my_str <- c("Kelly", "Jelly and Peanut Butter", "Socks are smelly.", "Kelly is smelly", "Photosynthesis") 
+
+str_extract(my_str, ".*lly")
+str_extract(my_str, ".*lly")
+str_extract_all(my_str, ".*lly")
+```
+
+--
+```{r, echo = FALSE}
+my_str <- c("Kelly", "Jelly and Peanut Butter", "Socks are smelly.", "Kelly is smelly", "Photosynthesis") 
+
+str_extract(my_str, ".*lly")
+str_extract(my_str, ".*lly")
+str_extract_all(my_str, ".*lly")
+```
+
+---
+class: center, middle, inverse
+
+# Tip 2:
+## Use str_view() and str_view_all() to test out regular expressions on small examples
+
+```{r}
+str_view(my_str, ".*elly")
+```
+
+
+---
+# Regular Expressions
+
+* `^` matches the start of the string
+
+```{r}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "^Kelly")
+```
+
+--
+
+*Alert!** This doesn't match the start of a *word*.  It matches the start of the *character object*.
+
+---
+# Regular Expressions
+
+* `$` matches the end of the string
+
+```{r}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "Kelly$")
+```
+
+--
+
+*Alert!** This doesn't match the end of a *word*.  It matches the end of the *character object*.
+
+
+
+---
+
+# Regular Expressions
+
+* `()` groups things together
+* `[]` is "match any of the characters in the box"
+
+--
+
+```{r}
+my_str <- c("Kelly", "Kelkel")
+
+str_subset(my_str, "([Kk]el){2}")
+```
+
+---
+class: center, middle, inverse
+
+# Tip 3:
+
+## I use the stringr cheatsheet more than any other, by a lot.
+
+---
+# Quick quiz
+
+What will the following outputs be?
+
+```{r, eval = FALSE}
+my_str <- "The Dursleys of Number 4 Privet Drive were 
+happy to say that they were perfectly 
+normal, thank you very much."
+
+str_extract_all(my_str, ".*")
+
+str_extract_all(my_str, "\\w")
+
+str_extract_all(my_str, "\\s")
+
+str_extract_all(my_str, "[:alpha:]+")
+
+str_extract_all(my_str, "[:alpha:]*\\.")
+
+str_extract_all(my_str, "[wv]er[ey]")
+
+```
+---
+# Harder quick quiz
+
+What will the following outputs be?
+
+```{r, eval = FALSE}
+my_str <- "The Dursleys of Number 4 Privet Drive were 
+happy to say that they were perfectly 
+normal, thank you very much."
+
+str_extract_all(my_str, "[:digit:] ([A-Z][a-z]*)+")
+
+str_extract_all(my_str, "(?<=[:digit:] )[:alpha:]+")
+
+str_extract_all(my_str, "[:digit:].*Drive")
+
+my_str %>%
+  str_split() %>%
+  str_extract("^[A-Z]")
+```
+
+---
+
+# Your Turn
+
+The file `hamlet_speech.txt` contains the text of a famous speech from the play "Hamlet" by Shakespeare.  Download this file and save it somewhere reasonable.  Read it into R with:
+
+```{r, eval = FALSE}
+hamlet <- readLines("hamlet_speech.txt")
+```
+
+---
+class: center, middle, inverse
+# Your Turn
+
+---
+# Your Turn
+
+Answer the following:
+
+* How many words are in the speech?  (Hint: `str_count`)
+* How many times does Hamlet reference death or dying?
+* How many sentences are in the speech?
+* What is the longest word in the speech?
+* What is the only capitalized word that does not start a sentence or line?
+
+--
+
+*Hint:* Right now, your object is an *vector* of type *character*, where each element is a line of the speech.  You may want to use `str_c()` (with appropriate arguments) to turn this into a *single string*.  You may also want to turn it into a vector where each element is *one word*.
+
+Or you may want to do all three!  Different tasks will be easier with different object structures.
+
+---
+class: center, middle
+
+# Tokenizing
+
+<img src="tidytext.png" width=300>
+
+---
+
+# Converting text to data
+
+We need to separate text into words and/or n-grams.  These are called **tokens**.
+
+The package `tokenizers` makes this much easier.
+
+```{r}
+library(tokenizers)
+
+hamlet %>%
+  str_c(collapse = " ") %>%
+  tokenize_words()
+```
+
+---
+
+```{r}
+hamlet %>%
+  str_c(collapse = " ") %>%
+  tokenize_ngrams(3)
+```
+
+---
+
+# Sentiment analysis
+
+A popular approach to text analysis to to analyze *sentiments*, or how positive/negative certain language is.
+
+```{r}
+library(tidytext)
+
+positive <- get_sentiments("bing") %>%
+  filter(sentiment == "positive")
+
+positive
+```
+
+---
+# Sentiment analysis
+
+```{r}
+hdf <- hamlet %>%
+  str_c(collapse = " ") %>%
+  tokenize_words() %>%
+  data.frame()
+
+names(hdf) <- "word"
+
+```
+
+---
+# Sentiment analysis
+
+```{r}
+hdf %>%
+  semi_join(positive) %>%
+  count(word, sort = TRUE)
+
+```
+
+---
+# Try it
+
+* What is are most common **negative** words in Hamlet's speech?
+
+---
+# Flex Points
+
+* (10 flex points) The full text of the play is available as `hamlet.txt`.  Use this to make a plot of sentiment by Act of the play.  You may find [this book](https://www.tidytextmining.com/) helpful.
+
+---

@@ -1,0 +1,126 @@
+---
+title: "Package Basics"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+```
+
+
+```{css, echo = FALSE}
+img {
+  vertical-align:middle;
+}
+
+body {
+  text-shadow:none;
+}
+
+```
+
+
+In this short lesson, we will learn about the structure of R Packages.
+
+You will never be asked to write a full package in this class, but in the next
+three weeks, you will sometimes submit your work by writing functions in a package 
+that I give to you.  Thus, we need to understand a little bit about how packages work.
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "0 min", 
+                   reading_time = "10 min", 
+                   work_time = "15 min", 
+                   num_activities = 1)
+```
+
+```{r, results = "asis", echo = FALSE}
+extra_rec("")
+```
+
+* [R Packages](http://r-pkgs.had.co.nz/intro.html) by Hadley Wickham - more detailed
+and complex than you need, but a great resource if you ever go further with R packages.
+
+---
+
+## Basics of Packages
+
+In principle, an R Package is nothing more than a folder with a very specific structure, 
+which allows R to recognize it as a "Package".  Minimally, to be a package, a folder
+must contain:
+
+1. A subfolder named `/R/`, containing `.R` code files.
+2. A text file named `DESCRIPTION`, which contains information about the package 
+in a *very* specifically formatted way.
+3. A text file named `NAMESPACE`, which contains a list of the functions that 
+the package makes available.
+
+(If you're thinking to yourself, *"Boy, that sounds like a lot of annoyingly specific
+formatting!"* - you're not wrong.  Fortunately, there are automatic ways to make 
+these files, if you ever write your own packages.)
+
+Any folder with that structure can, in principle, be **installed** into R as a
+package.  Typically, you will be installing packages from one of three sources:
+
+#### 1. `install.packages("something")`
+
+If you are able to install a package directly using `install.packages()`, that
+means the package has been accepted to the [Comprehensive R Archive Network](https://cran.r-project.org/),
+or **CRAN**.  
+
+The minimal folder structure is not sufficient to be accepted to CRAN; these 
+packages must meet many strict guidelines about documenting and testing the package's functions.
+
+#### 2. `install_github("username/something")`
+
+You may have come across packages you wanted to use that could only be installed
+using the `install_github` function (from the `remotes` or `devtools` package).
+
+In principle, anyone can put a package-structured folder on GitHub, and if the repository
+is public, anyone else can install that package.
+
+In practice, it's good to have your package meet CRAN-like levels of careful 
+documentation before you share it with the public.
+
+
+#### 3. Installing from your personal sources
+
+If you use R heavily in the future, you may find it useful to write packages
+just for yourself.  For example, if you find yourself using the same small "helper"
+functions over and over, it can be nice to simply load a package rather than re-run
+them for every project.
+
+We won't worry about installing from sources for this class.
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Basic Package Structure")
+```
+
+
+Visit [this GitHub repository](https://github.com/Cal-Poly-Advanced-R/meangirls), 
+where our good friend Regina George has made a package.
+
+Answer the following questions about Regina's package by clicking around in her files.
+
+1. What is the name of this package?
+2. Besides Regina, who is listed as an author of this package?
+3. Which other packages does Regina's package depend on?  (Hint: Which packages 
+does this one *import*?)
+4. Which functions are defined in the file `insults.R`?
+5. In the documentation comments above the functions, what does `@param` indicate?
+6. In the documentation comments above the functions, what does `@importFrom` do?

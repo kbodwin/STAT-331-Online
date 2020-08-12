@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Functional Programming</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Functional Programming
+
+---
+
+class: center, middle, invert
+# Iteration
+
+
+
+
+
+---
+
+# Iteration
+
+- What if you want to do something a whole bunch of times, or to every item in a list?  
+
+
+```r
+cat("99 bottles of pop on the wall, 99 bottles of pop.  
+      Take one down, pass it around, 98 bottles of pop on the wall.")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.  
+##       Take one down, pass it around, 98 bottles of pop on the wall.
+```
+
+```r
+cat("98 bottles of pop on the wall, 98 bottles of pop.  
+    Take one down, pass it around, 97 bottles of pop on the wall.")
+```
+
+```
+## 98 bottles of pop on the wall, 98 bottles of pop.  
+##     Take one down, pass it around, 97 bottles of pop on the wall.
+```
+
+```r
+###.... and so on...
+```
+
+---
+# We could write a function...
+
+
+```r
+sing_about_pop &lt;- function(num) {
+  
+  
+  paste(num,
+    "bottles of pop on the wall,",
+    num,
+    "bottles of pop.",
+    "Take one down, pass it around,",
+    num - 1,
+    "bottles of pop on the wall.")
+  
+}
+```
+
+---
+# We could write a function...
+
+
+```r
+sing_about_pop &lt;- function(num) {
+  
+  
+  glue("{num} bottles of pop on the wall, {num} bottles of pop.
+       Take one down, pass it around, {num - 1} bottles of pop on the wall.")
+  
+}
+```
+
+---
+# This helped!
+
+
+```r
+sing_about_pop(99)
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+```
+
+```r
+sing_about_pop(98)
+```
+
+```
+## 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall.
+```
+
+
+---
+# But it is still repetitive...
+
+
+```r
+pop_song &lt;- paste(
+  sing_about_pop(99),
+  sing_about_pop(98),
+  sing_about_pop(97),
+  sing_about_pop(99),
+  sing_about_pop(98)
+)
+
+pop_song %&gt;% cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall. 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall. 97 bottles of pop on the wall, 97 bottles of pop.
+## Take one down, pass it around, 96 bottles of pop on the wall. 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall. 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall.
+```
+
+
+---
+# Old School: For loops
+
+
+```r
+pop_song &lt;- c()
+
+for (i in 99:95) {
+  
+  pop_song &lt;- c(pop_song, sing_about_pop(i))
+
+}
+
+pop_song %&gt;% cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+## 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall.
+## 97 bottles of pop on the wall, 97 bottles of pop.
+## Take one down, pass it around, 96 bottles of pop on the wall.
+## 96 bottles of pop on the wall, 96 bottles of pop.
+## Take one down, pass it around, 95 bottles of pop on the wall.
+## 95 bottles of pop on the wall, 95 bottles of pop.
+## Take one down, pass it around, 94 bottles of pop on the wall.
+```
+
+---
+# Old School: For loops
+
+**Pro:**
+
+* Classic programming approach; easy to understand
+
+* Can change values at each loop step.
+
+--
+
+
+**Con:**
+
+* A little messy to read the code
+
+* Don't fit "nicely" inside other functions or pipelines.
+
+
+---
+# Better: The `apply` functions
+
+
+```r
+sapply(99:95, sing_about_pop) %&gt;%
+  cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+## 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall.
+## 97 bottles of pop on the wall, 97 bottles of pop.
+## Take one down, pass it around, 96 bottles of pop on the wall.
+## 96 bottles of pop on the wall, 96 bottles of pop.
+## Take one down, pass it around, 95 bottles of pop on the wall.
+## 95 bottles of pop on the wall, 95 bottles of pop.
+## Take one down, pass it around, 94 bottles of pop on the wall.
+```
+---
+# Better: The `apply` functions
+
+- Pay attention to what type of input they *take* and what type of output they *give*
+
+- `sapply` takes a vector, returns a vector
+
+- `lapply` takes a list, returns a list
+
+- `apply` takes a dataset and a dimension (1 = row, 2 = col), returns a vector or list
+
+---
+# Best:  The `map` functions from `purrr`
+
+
+
+```r
+map_chr(99:95, sing_about_pop) %&gt;%
+  cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+## 98 bottles of pop on the wall, 98 bottles of pop.
+## Take one down, pass it around, 97 bottles of pop on the wall.
+## 97 bottles of pop on the wall, 97 bottles of pop.
+## Take one down, pass it around, 96 bottles of pop on the wall.
+## 96 bottles of pop on the wall, 96 bottles of pop.
+## Take one down, pass it around, 95 bottles of pop on the wall.
+## 95 bottles of pop on the wall, 95 bottles of pop.
+## Take one down, pass it around, 94 bottles of pop on the wall.
+```
+
+---
+# Best:  The `map` functions from `purrr`
+
+- `map` always returns a **list**
+
+- `map_chr` always returns a **character vector**  (or an error)
+
+- What do you think `map_dbl` returns?
+
+---
+class: inverse, center, middle
+
+# Mapping with multiple arguments
+
+---
+
+# What if I want some options in my function?
+
+
+```r
+sing_about_drinks &lt;- function(num, drink, container = "bottles") {
+  
+  
+    
+  glue("{num} {container} of {drink} on the wall, {num} {container} of {drink}.
+       Take one down, pass it around, {num - 1} {container} of {drink} on the wall.")
+  
+}
+```
+
+---
+# `sapply` has trouble!
+
+
+```r
+sapply(99:95, sing_about_drinks(drink = "beer"))
+```
+
+```
+## Error in eval(parse(text = text, keep.source = FALSE), envir): argument "num" is missing, with no default
+```
+---
+
+# You can kind of get around this...
+
+(This is called a **headless function**)
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;sapply(99:95, &lt;span style='background-color:#ffff7f'&gt;function(&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt;)&lt;/span&gt; sing_about_drinks(&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt;, drink = "beer")) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;cat(sep = "\n")&lt;/code&gt;
+
+```
+
+## 99 bottles of beer on the wall, 99 bottles of beer.
+## Take one down, pass it around, 98 bottles of beer on the wall.
+## 98 bottles of beer on the wall, 98 bottles of beer.
+## Take one down, pass it around, 97 bottles of beer on the wall.
+## 97 bottles of beer on the wall, 97 bottles of beer.
+## Take one down, pass it around, 96 bottles of beer on the wall.
+## 96 bottles of beer on the wall, 96 bottles of beer.
+## Take one down, pass it around, 95 bottles of beer on the wall.
+## 95 bottles of beer on the wall, 95 bottles of beer.
+## Take one down, pass it around, 94 bottles of beer on the wall.
+
+```
+
+---
+# You can also do this in `map` functions
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;map_chr(99:95, &lt;span style='background-color:#ffff7f'&gt;function(&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt;)&lt;/span&gt; sing_about_drinks(&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt;, drink = "beer")) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;cat(sep = "\n")&lt;/code&gt;
+
+```
+
+## 99 bottles of beer on the wall, 99 bottles of beer.
+## Take one down, pass it around, 98 bottles of beer on the wall.
+## 98 bottles of beer on the wall, 98 bottles of beer.
+## Take one down, pass it around, 97 bottles of beer on the wall.
+## 97 bottles of beer on the wall, 97 bottles of beer.
+## Take one down, pass it around, 96 bottles of beer on the wall.
+## 96 bottles of beer on the wall, 96 bottles of beer.
+## Take one down, pass it around, 95 bottles of beer on the wall.
+## 95 bottles of beer on the wall, 95 bottles of beer.
+## Take one down, pass it around, 94 bottles of beer on the wall.
+
+```
+
+
+---
+
+# But `map` has a cool shortcut!
+
+- Note the "~" in front of the function - this is important!
+
+- Note the "." before the "x" - this is important!
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;map_chr(99:95, &lt;span style='background-color:#ffff7f'&gt;~&lt;/span&gt;sing_about_drinks(&lt;span style='background-color:#ffff7f'&gt;.x&lt;/span&gt;, "beer")) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;cat(sep = "\n")&lt;/code&gt;
+
+```
+
+## 99 bottles of beer on the wall, 99 bottles of beer.
+## Take one down, pass it around, 98 bottles of beer on the wall.
+## 98 bottles of beer on the wall, 98 bottles of beer.
+## Take one down, pass it around, 97 bottles of beer on the wall.
+## 97 bottles of beer on the wall, 97 bottles of beer.
+## Take one down, pass it around, 96 bottles of beer on the wall.
+## 96 bottles of beer on the wall, 96 bottles of beer.
+## Take one down, pass it around, 95 bottles of beer on the wall.
+## 95 bottles of beer on the wall, 95 bottles of beer.
+## Take one down, pass it around, 94 bottles of beer on the wall.
+
+```
+
+
+---
+class: center, middle, inverse
+
+# But what if I want to iterate over multiple options?
+
+---
+# Multiple iteration
+
+
+
+
+```r
+head(data)
+```
+
+```
+##   num    drink
+## 1  99      pop
+## 2  98     beer
+## 3  97    water
+## 4  96 lemonade
+## 5  95     milk
+```
+
+---
+# Use `map2`!
+
+
+```r
+map2_chr(data$num, data$drink, ~sing_about_drinks(.x, .y, "cans")) %&gt;%
+  cat(sep = "\n")
+```
+
+```
+## 99 cans of pop on the wall, 99 cans of pop.
+## Take one down, pass it around, 98 cans of pop on the wall.
+## 98 cans of beer on the wall, 98 cans of beer.
+## Take one down, pass it around, 97 cans of beer on the wall.
+## 97 cans of water on the wall, 97 cans of water.
+## Take one down, pass it around, 96 cans of water on the wall.
+## 96 cans of lemonade on the wall, 96 cans of lemonade.
+## Take one down, pass it around, 95 cans of lemonade on the wall.
+## 95 cans of milk on the wall, 95 cans of milk.
+## Take one down, pass it around, 94 cans of milk on the wall.
+```
+
+---
+class: center, middle, inverse
+
+# I demand even more options!
+---
+# Mapping over many options
+
+
+
+
+```r
+head(data)
+```
+
+```
+##   num    drink container
+## 1  99      pop   bottles
+## 2  98     beer      cans
+## 3  97    water   glasses
+## 4  96 lemonade  beyonces
+## 5  95     milk   cartons
+```
+
+---
+# Mapping over many options
+
+`pmap` takes a list or data frame as input.
+
+
+```r
+pmap_chr(data, ~sing_about_drinks(..1, ..2, ..3)) %&gt;%
+  cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+## 98 cans of beer on the wall, 98 cans of beer.
+## Take one down, pass it around, 97 cans of beer on the wall.
+## 97 glasses of water on the wall, 97 glasses of water.
+## Take one down, pass it around, 96 glasses of water on the wall.
+## 96 beyonces of lemonade on the wall, 96 beyonces of lemonade.
+## Take one down, pass it around, 95 beyonces of lemonade on the wall.
+## 95 cartons of milk on the wall, 95 cartons of milk.
+## Take one down, pass it around, 94 cartons of milk on the wall.
+```
+
+---
+# Mapping over many options
+
+Since there are only 3 variables, and we want them to go into the arguments of
+`sing_about_drinks` in order...
+
+
+```r
+pmap_chr(data, sing_about_drinks) %&gt;%
+  cat(sep = "\n")
+```
+
+```
+## 99 bottles of pop on the wall, 99 bottles of pop.
+## Take one down, pass it around, 98 bottles of pop on the wall.
+## 98 cans of beer on the wall, 98 cans of beer.
+## Take one down, pass it around, 97 cans of beer on the wall.
+## 97 glasses of water on the wall, 97 glasses of water.
+## Take one down, pass it around, 96 glasses of water on the wall.
+## 96 beyonces of lemonade on the wall, 96 beyonces of lemonade.
+## Take one down, pass it around, 95 beyonces of lemonade on the wall.
+## 95 cartons of milk on the wall, 95 cartons of milk.
+## Take one down, pass it around, 94 cartons of milk on the wall.
+```
+
+---
+# Using map with the pipe
+
+The `map` functions work very nicely with `mutate()` and similar pipe-friendly functions.
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;penguins %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;smaller_dimension = &lt;span style='background-color:#ffff7f'&gt;min(bill_length_mm, bill_depth_mm)&lt;/span&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;select(bill_length_mm, bill_depth_mm, smaller_dimension)&lt;/code&gt;
+
+```
+
+## # A tibble: 344 x 3
+##    bill_length_mm bill_depth_mm smaller_dimension
+##             &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+##  1           39.1          18.7                NA
+##  2           39.5          17.4                NA
+##  3           40.3          18                  NA
+##  4           NA            NA                  NA
+##  5           36.7          19.3                NA
+##  6           39.3          20.6                NA
+##  7           38.9          17.8                NA
+##  8           39.2          19.6                NA
+##  9           34.1          18.1                NA
+## 10           42            20.2                NA
+## # … with 334 more rows
+
+```
+
+
+---
+# Using map with the pipe
+
+The `map` functions work very nicely with `mutate()` and similar pipe-friendly functions.
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;penguins %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;smaller_dimension = min(bill_length_mm, bill_depth_mm, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;select(bill_length_mm, bill_depth_mm, smaller_dimension)&lt;/code&gt;
+
+```
+
+## # A tibble: 344 x 3
+##    bill_length_mm bill_depth_mm smaller_dimension
+##             &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+##  1           39.1          18.7              13.1
+##  2           39.5          17.4              13.1
+##  3           40.3          18                13.1
+##  4           NA            NA                13.1
+##  5           36.7          19.3              13.1
+##  6           39.3          20.6              13.1
+##  7           38.9          17.8              13.1
+##  8           39.2          19.6              13.1
+##  9           34.1          18.1              13.1
+## 10           42            20.2              13.1
+## # … with 334 more rows
+
+```
+
+
+---
+# Using map with the pipe
+
+The `map` functions work very nicely with `mutate()` and similar pipe-friendly functions.
+
+
+
+
+&lt;code class ='r hljs remark-code'&gt;penguins %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;mutate(&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;smaller_dimension = &lt;span style='background-color:#ffff7f'&gt;map2_dbl&lt;/span&gt;(bill_length_mm, bill_depth_mm, &lt;span style='background-color:#ffff7f'&gt;min&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;select(bill_length_mm, bill_depth_mm, smaller_dimension)&lt;/code&gt;
+
+```
+
+## # A tibble: 344 x 3
+##    bill_length_mm bill_depth_mm smaller_dimension
+##             &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;
+##  1           39.1          18.7              18.7
+##  2           39.5          17.4              17.4
+##  3           40.3          18                18  
+##  4           NA            NA                NA  
+##  5           36.7          19.3              19.3
+##  6           39.3          20.6              20.6
+##  7           38.9          17.8              17.8
+##  8           39.2          19.6              19.6
+##  9           34.1          18.1              18.1
+## 10           42            20.2              20.2
+## # … with 334 more rows
+
+```
+
+
+
+---
+class: inverse, center, middle
+
+# The best iteration is no iteration
+
+---
+# Vectorized functions
+
+## What does it mean to be vectorized?
+
+
+```r
+add_odds &lt;- function(x, y){
+  
+  if(x %% 2 == 1 &amp; y %% 2 == 1){
+    
+    return(x + y)
+    
+  } else {
+    
+   return(0)
+    
+  }
+  
+}
+```
+
+---
+
+# What does it mean to be vectorized?
+
+
+```r
+add_odds(1, 3)
+```
+
+```
+## [1] 4
+```
+
+```r
+add_odds(2, 4)
+```
+
+```
+## [1] 0
+```
+
+---
+
+# What does it mean to be vectorized?
+
+
+```r
+first_nums &lt;- c(1, 2)
+next_nums &lt;- c(3, 4)
+
+add_odds(first_nums, next_nums)
+```
+
+```
+## Warning in if (x%%2 == 1 &amp; y%%2 == 1) {: the condition has length &gt; 1 and only
+## the first element will be used
+```
+
+```
+## [1] 4 6
+```
+
+---
+
+# Vectorized Functions
+
+`add_odds` is not a vectorized function!
+
+
+```r
+add_odds &lt;- function(x, y){
+  
+  if(x %% 2 == 1 &amp; y %% 2 == 1){
+    
+    return(x + y)
+    
+  } else {
+    
+   return(0)
+    
+  }
+  
+}
+```
+
+---
+
+# Vectorized Functions
+
+We can avoid the error by iteration, but this is slow!
+
+
+```r
+first_nums &lt;- c(1,2)
+next_nums &lt;- c(3,4)
+
+map2_dbl(first_nums, next_nums, add_odds)
+```
+
+```
+## [1] 4 0
+```
+
+---
+# Vectorized function
+
+A better (but harder!) approach is to make the function **truly** vectorized:
+
+ 
+
+```r
+add_odds &lt;- function(x, y){
+  
+  is_odd &lt;- x %% 2 == 1 &amp; y %% 2 == 1
+  
+  answers &lt;- x + y
+  
+  answers[!is_odd] &lt;- 0
+  
+  return(answers)
+  
+}
+```
+
+
+```r
+add_odds(first_nums, next_nums)
+```
+
+```
+## [1] 4 0
+```
+
+
+
+---
+
+# Function design: Things to think about
+
+- What does your function take as INPUT?
+
+- What does your function give as OUTPUT?
+
+--
+
+- How can we write it to be friendly with `apply` or `map`?
+
+--
+
+- Do you REALLY need to use `apply` or `map`, or is it vectorized?
+
+--
+
+- Bonus: How can we write it to be friendly with `%&gt;%`?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

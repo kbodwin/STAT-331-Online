@@ -1,0 +1,12 @@
+name: stat_331-pa-bootstrapping
+title: STAT_331-PA-bootstrapping
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 176
+bundleId: 367
+url: https://rstudio.csm.calpoly.edu/content/176/
+when: 1597141369.68169
+asMultiple: FALSE
+asStatic: TRUE

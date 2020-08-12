@@ -1,0 +1,483 @@
+---
+title: "Statistical Distributions and Simulation"
+
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9' 
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(lubridate)
+library(palmerpenguins)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+set.seed(534)
+```
+
+class: inverse, center, middle
+# Review: Statistical distributions
+
+---
+## Statistical distributions
+
+Recall from your previous statistics classes...
+
+- A **random variable** is a value we don't know until we take a **sample**.
+    + Coin flip:  Could be heads (0) or tails (1)
+    + Person's height:  Could be anything from 0 feet to 20 feet.
+    + Annual income of a US worker:  $0 to $1.6 billion
+    
+--
+
+- The **distribution** of the random variable tells us the **possible values** and **how likely they are**
+    + Coin flip has 50% chance of heads, 50% chance of tails
+    + Likelihood of heights follow a bell curve shape around 5 foot 7.
+    + Most American workers make under $100,000
+    
+---
+
+```{r, echo=FALSE, out.width = '80%', fig.align = "center"}
+knitr::include_graphics(here::here("Images", "other", "men_women_height_histogram.jpg"))
+```
+
+---
+
+```{r, echo=FALSE, out.width = '80%', fig.align = "center"}
+knitr::include_graphics(here::here("Images", "other", "income.png"))
+```
+
+---
+## Statistical distributions
+
+Some distributions have names.  
+
+For this class, you need to know a few of them.
+
+--
+    + Uniform
+    + Normal
+    + t-distribution
+    + Binomial
+    + Chi-Square
+
+---
+# Uniform
+
+When you know the **range**, but not much else.
+
+All values in the range are **equally likely** to occur.
+
+```{r, echo = FALSE, out.width="40%"}
+my_samples <- data.frame(x = runif(1000))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun=dunif, col = "cornflowerblue", lwd = 2) +
+  theme_classic()
+```
+---
+# Normal
+
+When you expect values to fall **near the center**.
+
+Frequency of values follows a **bell curve** shape.
+
+```{r, echo = FALSE, out.width="40%"}
+my_samples <- data.frame(x = rnorm(1000))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun=dnorm, col = "cornflowerblue", lwd = 2) +
+  theme_classic()
+```
+
+---
+# t-Distribution
+
+Slightly **wider bell curve** shape.
+
+Basically, the same context as the **Normal distribution**, but used more often in 
+real data.  (When the *standard deviation* is unknown.)
+
+```{r, echo = FALSE, out.width="40%"}
+my_samples <- data.frame(x = rt(1000, df = 5))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun= function(x) dt(x, df = 5), col = "cornflowerblue", lwd = 2) +
+  stat_function(fun = dnorm, col = "indianred", lwd = 1) +
+  theme_classic()
+```
+---
+# Chi-Square Distribution
+
+Somewhat **skewed**, and only allows values **above zero**.
+
+Used in testing **count data**.
+
+```{r, echo = FALSE, out.width="40%"}
+my_samples <- data.frame(x = rchisq(1000, df = 5))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun= function(x) dchisq(x, df = 5), col = "cornflowerblue", lwd = 2) +
+  theme_classic()
+```
+
+---
+# Binomial
+
+Appears when you have **two possible outcomes**, and you are **counting**
+how many times each outcome occurred.
+
+(Common example: voting data)
+
+```{r, echo = FALSE, out.width="40%"}
+my_samples <- data.frame(x = rbinom(1000, 10, .8))
+
+ggplot(my_samples, aes(x)) + 
+  geom_bar(fill = "grey", col = "white") + 
+  theme_classic()
+```
+---
+# Statistical Distributions
+
+Things you might want to use a Statistical distribution for:
+
+--
+
+* Find the **probability** of an **event**
+     + If I flip 10 coins, what are the chances I get all heads?
+     
+--
+
+* Estimate a **percentage** of a **population**:
+    + About what percent of people are above 6 feet tall?
+    
+--
+
+* Quantify the **evidence** in your **data**:
+    + In my survey of 100 people, 67 said they were voting for Measure A.  How
+    confident am I that Measure A will pass?
+
+---
+class: inverse, center, middle
+# Statistical distributions in R
+
+## Simulate observations
+## Make the computer do the math
+
+
+---
+## Distributions in R
+
+- `r` stands for for **random sampling**: generate a random value from the
+distribution
+
+--
+
+- We typically use this to **simulate** date; that is, to generate pretend observations
+to see what happens.
+
+---
+## Random Sampling
+
+```{r}
+runif(3)
+runif(3, min = 10, max = 20)
+
+rnorm(3)
+rnorm(3, mean = -100, sd = 50)
+
+
+```
+
+---
+## Random Sampling
+
+```{r}
+
+rt(3, df = 11)
+
+rbinom(3, size = 10, prob = 0.7)
+
+rchisq(3, df = 11)
+```
+
+---
+
+## Distributions in R
+
+- `p` for **probability**: i.e. compute the chances of an observation less than `x`
+
+--
+
+- We usually use this for calculating **p-values**
+
+---
+# Probabilities
+
+```{r}
+pnorm(1.5)
+pnorm(70, mean = 67, sd = 3)
+
+1 - pnorm(70, mean = 67, sd = 3)
+```
+
+---
+## Try it!
+
+- What is the probability that a Chi-Square distribution with 35 degrees of freedom gives a value of 25 or less?
+
+
+- What is the probability that 10 coin tosses give 6 or more heads?
+
+---
+## Try it!
+
+- What is the probability that a Chi-Square distribution with 35 degrees of freedom gives a value of 25 or less?
+
+```{r}
+pchisq(25, df = 35)
+```
+
+
+
+- What is the probability that 10 coin tosses give 6 or more heads?
+
+```{r}
+1 - pbinom(5, size = 10, prob = 0.5)
+```
+
+
+---
+## Distributions in R
+
+- `q` stands for **quantile**: given a probability p, compute the x-value
+such that P(X < x) = p.
+
+- the `q` functions are the "backwards" version of the `p` functions
+
+--
+
+- We don't use this very often
+
+---
+# Quantiles
+
+```{r}
+qnorm(.95)
+qnorm(.95, mean = 67, sd = 3)
+```
+
+---
+## Try it!
+
+- If I randomly sample a number between 16 and 22, I can be 80% sure my number will be less than what?
+
+- What is the critical value for a 1-sided t-test at the 0.05 significance level, with a sample size of 50?
+
+---
+## Try it!
+
+- If I uniformly sample a number between 16 and 22, I can be 80% sure my number will be less than what?
+
+```{r}
+qunif(.80, min = 16, max = 22)
+```
+
+
+- What is the critical value for a 1-sided t-test at the 0.05 significance level, with a sample size of 50?
+
+```{r}
+qt(.05, df = 50)
+```
+
+
+---
+## Distributions in R
+
+`d` stands for **density**: compute the height of distribution curve
+
+--
+* **Discrete** distributions: probability of getting that **exact value**
+
+* **Continuous** distributions: usually meaningless
+
+---
+## Try it
+
+What is the probability of getting exactly 12 heads in 20 coin tosses, for a
+coin with a 70% chance of tails?
+
+---
+
+## Try it
+
+What is the probability of getting exactly 12 heads in 20 coin tosses, for a
+coin with a 70% chance of tails?
+
+```{r}
+dbinom(12, size = 20, prob = .3)
+```
+
+---
+class: inverse, middle, center
+# Making fake data
+---
+# Simulating a dataset
+
+```{r fake, include = FALSE}
+fake_data <- tibble(
+  names = charlatan::ch_name(100),
+  height = rnorm(100, mean = 67, sd = 3),
+  age = runif(100, min = 15, max = 75),
+  measure = rbinom(100, size = 1, prob = 0.6)
+) %>%
+  mutate(
+    supports_measure_A = ifelse(measure == 1, "yes", "no")
+  )
+
+fake_data
+```
+
+```{r, echo = FALSE}
+decorate("fake") %>%
+  flair("runif") %>%
+  flair("rnorm") %>%
+  flair("rbinom")
+```
+
+---
+
+```{r, out.width="40%"}
+fake_data %>%
+  ggplot(aes(x = supports_measure_A, y = age)) +
+  geom_boxplot()
+```
+
+---
+# Plotting distributions
+
+```{r hist, echo = FALSE, out.width="30%"}
+fake_data %>%
+  ggplot(aes(x = age), fill = "grey", col = "white") +
+  geom_histogram(bins = 10)
+```
+
+---
+# Plotting Distributions
+
+```{r hist2, include = FALSE, out.width="30%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  geom_histogram(bins = 10, fill = "grey", col = "white") +
+  stat_function(fun = dnorm, 
+                col = "cornflowerblue", lwd = 2)
+```
+
+```{r, echo = FALSE, out.width="30%"}
+decorate("hist2") %>%
+  flair("stat_function", background = "pink") %>%
+  flair("dnorm")
+```
+
+---
+# Plotting Distributions
+
+```{r hist3, include = FALSE, out.width="30%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  geom_histogram(bins = 10, fill = "grey", col = "white") +
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 3), 
+                col = "cornflowerblue", lwd = 2)
+```
+
+```{r, echo = FALSE, out.width="30%"}
+decorate("hist3") %>%
+  flair("~", background = "pink") %>%
+  flair(".x", background = "pink") %>%
+  flair("mean = 67, sd = 3")
+```
+
+---
+# Plotting Distributions
+
+```{r hist4, include = FALSE, out.width="30%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  geom_histogram(aes(y = ..density..), 
+                 bins = 10, fill = "grey", col = "white") +
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 3), 
+                col = "cornflowerblue", lwd = 2)
+```
+
+```{r, echo = FALSE}
+decorate("hist4") %>%
+  flair("y = ..density..")
+```
+
+---
+# Plotting Distributions
+
+```{r hist5, out.width="30%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  geom_histogram(aes(y = ..density..), 
+                 bins = 10, fill = "grey", col = "white") +
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 3), 
+                col = "cornflowerblue", lwd = 2) +
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 2), 
+                col = "deeppink", lwd = 2)
+```
+---
+# Empirical Distribution
+
+```{r, echo = FALSE, out.width="40%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  geom_histogram(aes(y = ..density..), bins = 10) 
+  #stat_function(fun = ~dnorm(.x, mean = 67, sd = 3), 
+  #              col = "cornflowerblue", lwd = 2) +
+  #stat_function(fun = ~dnorm(.x, mean = 67, sd = 2), 
+   #             col = "deeppink", lwd = 2)
+```
+
+---
+# Theoretical Distributions
+
+```{r, echo = FALSE, out.width="40%"}
+fake_data %>%
+  ggplot(aes(x = height)) +
+  #geom_histogram(aes(y = ..density..), bins = 10) 
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 3), 
+                col = "cornflowerblue", lwd = 2) +
+  stat_function(fun = ~dnorm(.x, mean = 67, sd = 2), 
+                col = "deeppink", lwd = 2)
+```

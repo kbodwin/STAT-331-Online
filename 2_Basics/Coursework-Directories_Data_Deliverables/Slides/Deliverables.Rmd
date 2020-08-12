@@ -1,0 +1,149 @@
+---
+title: "Reproducible Deliverables"
+subtitle: "Week 2"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+## Principles of Reproducibile Documents
+
+1. Document is easy to find and organize.
+
+2. References to data and code work for everyone.
+
+3. Package dependency is clear.
+
+4. Code will run the same every time, even if data values change.
+
+5. Analysis process is well-explained and easy to read.
+
+```{r, include = FALSE}
+library(tidyverse)
+```
+
+---
+class: center, middle, invert
+# Deliverables in R Markdown
+
+---
+# Setup Steps
+
+- In the frontmatter, choose a good title.
+
+- Save your `.Rmd` file, and name it something meaningful (match the title!)
+
+--
+
+- Your first code chunk looks like this:
+
+````
+```{r setup, include=FALSE}`r ''`
+knitr::opts_chunk$set(echo = TRUE)
+```
+````
+
+--
+
+- Your second code chunk looks like this:
+
+````
+```{r libraries}`r ''`
+library(tidyverse)
+```
+````
+
+---
+
+## Good organization
+
+- Use `#` to make section headings etc.
+
+- Each code chunk is a unified thought.
+
+- Text before and after each code chunk to motivate your code and explain the output.
+
+- Make deliberate decisions about what to display:
+    + Does the reader need to see data loading step?
+    + Does the reader need to see your code?
+    + Does the reader need to see the output?
+    
+---  
+
+---
+
+## Naming code chunks
+
+- Notice that code chunks can have labels:
+
+````
+```{r data}`r ''`
+my_data <- read_csv("penguins.csv")
+```
+````
+
+--
+
+- Lets you jump between chunks
+
+--
+
+- Careful with copy-pasting, duplicate names are not allowed.
+
+
+---
+## Setting chunk options
+
+- `echo`: Should this code be **shown** (echoed)?
+
+- `eval`: Should this code be **run** (evaluated)?
+
+- `include`: Should this code be neither shown nor run?
+
+- `error`: If there is an error, should that display rather than breaking the knit?
+
+- `warning`: If there is a warning, should that display?
+
+- `message`: If there is a message, should that display?
+
+---
+## Setting options for ALL chunks
+
+Recall that first setup chunk.
+
+What do you think this does?
+
+````
+```{r global_options, eval=FALSE}`r ''`
+knitr::opts_chunk$set(fig.width=6, fig.height=4,
+                      echo=TRUE, warning=FALSE, 
+                      message=FALSE, eval=TRUE)
+```
+````
+
+--
+
+- (you can always override these for individual chunks)

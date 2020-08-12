@@ -37,7 +37,7 @@ make_summary_table(vid_time = "30 min",
 # Introduction to R
 
 ```{r, results = "asis", echo = FALSE}
-req_vid("Introdution to R", type = "Required", url = "https://www.youtube.com/embed/svRvp8QSvXI")
+req_vid("Introduction to R", type = "Required", url = "https://www.youtube.com/embed/svRvp8QSvXI")
 ```
 
 ---

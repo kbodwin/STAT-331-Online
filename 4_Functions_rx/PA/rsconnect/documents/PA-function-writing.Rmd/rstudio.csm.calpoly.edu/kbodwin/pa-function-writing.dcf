@@ -1,0 +1,12 @@
+name: pa-function-writing
+title: PA-function-writing
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 159
+bundleId: 338
+url: https://rstudio.csm.calpoly.edu/PA-writing-functions/
+when: 1595307950.70194
+asMultiple: FALSE
+asStatic: TRUE

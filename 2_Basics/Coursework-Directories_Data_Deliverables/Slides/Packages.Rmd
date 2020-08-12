@@ -1,0 +1,226 @@
+---
+title: "Packages"
+subtitle: "Week 2"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(
+  primary_color = "#26116c",
+  secondary_color = "#fd5e53",
+  title_slide_text_color = "#fff8e7",
+  header_font_google = google_font("Roboto"),
+  text_font_google   = google_font("Roboto Condensed"),
+  code_font_google   = google_font("Droid Mono")
+)
+```
+
+class: center, middle
+
+# Installing packages
+
+---
+
+## install.packages()
+
+To use a package, it must first be *installed* to your copy of R.
+
+This only needs to happen **ONCE** per computer or server.
+
+```{r install packages, eval = FALSE}
+install.packages("tidyverse")
+```
+
+---
+
+## update.packages()
+
+If a computer you are using has the package, but you aren't sure if it's up to date:
+
+```{r update packages, eval = FALSE}
+update.packages("tidyverse")
+```
+
+to install the most recent version.
+
+---
+class: center, middle, inverse
+
+# NEVER EVER EVER EVER PUT "install.packages" or "update.packages" INTO YOUR R MARKDOWN FILE!!!!!
+
+---
+
+class: center, middle
+
+# Loading Packages
+
+---
+
+# library() and require()
+
+- A package must only be *installed* once.
+
+- But it must be *loaded* every time, to tell R it is needed for this analysis.
+
+- `library` gives an **error** if the package isn't installed
+
+- `require` gives a `TRUE/FALSE` value depending on if the package was available
+
+- For now, you should always use `library`
+
+```{r library, eval = FALSE}
+library(tidyverse)
+
+# notice:  no quotes around package name
+```
+
+---
+class: center, middle, inverse
+
+# Three annoying complications of packages
+
+---
+class: center, middle
+
+# Versions
+
+---
+
+## Versions
+
+- From time to time, packages get updated
+
+- This is good!
+
+- But, it can mess with your code, which depended on the older version.
+
+- Outside the scope of this class; just be aware.
+
+
+---
+class: center, middle
+
+# Dependencies
+
+---
+
+## Dependencies
+
+- A *dependency* is when one package makes use of another.
+
+- For example, if you create a package that uses the function `group_by()`, your package **depends** on `dplyr`
+
+- Typically these get loaded automatically!
+
+- Occasionally, something goes weird and you need to manually install the dependency.
+
+
+---
+class: center, middle
+
+# Conflicts
+
+---
+
+
+## Conflicts
+
+- Sometimes, packages choose the same name for their functions.  This is called a *conflict*.
+
+- The version loaded first takes precedence.  For example...
+
+```{r conflicts1, message = FALSE}
+dat <- data.frame(bob = 1:10, joe = 11:20)
+
+library(MASS)
+library(dplyr)
+```
+
+```{r, error = TRUE}
+dat %>% select(bob)
+```
+
+---
+## Conflicts
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+detach("package:dplyr", unload=TRUE)
+detach("package:MASS", unload=TRUE)
+```
+
+```{r conflicts2, message = FALSE}
+dat <- data.frame(bob = 1:10, joe = 11:20)
+
+library(dplyr)
+library(MASS)
+```
+
+```{r, error = TRUE}
+dat %>% select(bob)
+```
+
+---
+
+## Conflicts
+
+But this is super annoying, because...
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+detach("package:dplyr", unload=TRUE)
+detach("package:MASS", unload=TRUE)
+```
+
+```{r conflicts3, eval = FALSE}
+dat <- data.frame(bob = 1:10, joe = 11:20)
+
+library(dplyr)  # dplyr loaded here
+library(MASS)
+library(dplyr)  # does nothing, because it sees we already have dplyr
+```
+
+```{r, error = TRUE}
+dat %>% select(bob)
+```
+
+---
+
+## Conflicts
+
+ARG!
+
+Best solution:  Be explicit about your intended package using `::`.
+
+```{r conflicts4, message = FALSE, eval = FALSE}
+dat <- data.frame(bob = 1:10, joe = 11:20)
+
+library(dplyr) 
+library(MASS)
+
+dat %>% dplyr::select(bob)
+```
+
+---
+## Conflicts
+
+Another solution: The `conflicted` package
+
+```{r}
+library(conflicted)
+
+conflict_prefer("select", "dplyr")
+```
+

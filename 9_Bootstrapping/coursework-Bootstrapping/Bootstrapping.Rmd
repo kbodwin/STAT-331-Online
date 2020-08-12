@@ -1,0 +1,130 @@
+---
+title: "Confidence Intervals and Bootstrapping"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+```
+
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "30 min", 
+                   reading_time = "30 min", 
+                   work_time = "30 min", 
+                   num_activities = 2)
+```
+
+---
+
+## Confidence Intervals
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Overview of Confidence Intervals", type = "Required", url = "https://www.youtube.com/embed/SoOWQTBEV20")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Simulate some confidence intervals", type = "Required", url = "https://rpsychologist.com/d3/ci/")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Calculating Confidence Intervals", type = "Optional", url = "https://www.youtube.com/watch?v=EJe3jiZNwUU")
+```
+
+(Content Note: A recent study on race and Covid is referenced in this video.)
+
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Confidence Intervals")
+```
+
+
+Educators in California are concerned that high school students do not get enough sleep.  They collect data about 300 students, and calculate a 99\% confidence interval for the average hours of sleep a night to be $(7.0, 7.5)$.
+
+
+Which of the following is a correct interpretation of the confidence interval?
+
+*  99% of all high school students get between 7 and 7.5 hours of sleep per night.
+*  99% of the 300 students surveyed got between 7 and 7.5 hours of sleep per night.
+*  We are 99% confident that the 300 students surveyed got between 7 and 7.5 hours of sleep on average per night.
+*  We are 99% confident that California students get between 7 and 7.5 hours of sleep on average per night.
+*  There is a 99% probability of a student getting between 7 and 7.5 hours of sleep.
+*  There is a 99% probability that the true mean hours of sleep of California students is between 7 and 7.5 hours of sleep.
+
+---
+
+## Bootstrapping
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Bootstrapping", type = "Required", url = "https://www.youtube.com/embed/fV3vZ_uHDPI")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_read("Modern Dive Chapter 8:  Bootstrapping and Confidence Intervals", type = "Required", url = "https://moderndive.com/8-confidence-intervals.html")
+```
+
+You don't need to carefully read every word in this chapter, but please look over it.
+In particular, you'll find some shortcuts from the `infer` package that make the
+bootstrapping process even easier and cleaner!
+
+```{r, results = "asis", echo = FALSE}
+req_read("Confidence Intervals and Bootstrapping", type = "Recommended", url = "https://seeing-theory.brown.edu/frequentist-inference/index.html")
+```
+
+---
+
+**Fun Fact:** 
+
+The term "bootstrap" comes from the phrase "pull yourself up by your bootstraps!"
+meaning, essentially, that you should take responsibility for your own life improvement.
+
+![](https://media1.giphy.com/media/h26fLv6Sba1lMegpf1/200.gif)
+
+This is kind of a joke - of course, you can't fly through the air by grabbing
+your shoelaces and pulling up!
+
+![](https://www.picgifs.com/gifs/actors-and-actresses/emma-stone/emma-stone-Fyt1zC.gif)
+
+Similarly, the bootstrap procedure in statistics feels a bit like cheating; we're magically 
+making more samples from our original.
+
+It's one of my favorite terms in all of statistics!
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R2o9D9EQbiQ?start=56" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Bootstrapping")
+```
+
+Use the `mtcars` dataset to study horsepower of cars (`hp`).
+
+Make a **95% Confidence Interval** for:
+
+* The mean horsepower
+
+* The median horsepower
+
+* The variance of horsepower

@@ -1,0 +1,227 @@
+---
+title: "Distributions and Simulation"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+```
+
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "30-60 min", 
+                   reading_time = "10 min", 
+                   work_time = "45 min", 
+                   num_activities = 3)
+```
+
+---
+
+## Review: Statistical Distributions
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of Statistical Distributions", type = "Required", url = "https://www.youtube.com/embed/KddbZr-ssZc")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_tutorial("Interactive Random Variable Creator", type = "Optional", url = "https://seeing-theory.brown.edu/probability-distributions/index.html#section1")
+```
+
+---
+
+## Simulating in R
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Simulating Data in R", type = "Required", url = "https://www.youtube.com/embed/LNg7kQbXvU0")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_read("RProg Ch 20: Simulation", type = "Optional", url = "https://bookdown.org/rdpeng/rprogdatascience/simulation.html")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("The r, p, q, and d functions")
+```
+
+Try to predict what the following outputs will be **WITHOUT** running the code
+in R.  Drawing pictures of the relevant distributions may help.
+
+(Yes, it is very easy to "cheat" on this question. But this is for your practice,
+and I recommend you give it some thought.)
+
+```{r, eval = FALSE}
+
+## a
+punif(0.674)
+
+## b
+
+pnorm(2)
+qnorm(.975)
+
+## c
+
+pchisq(0, df = 12)
+
+## d
+
+qt(10, df = 16)
+
+## e
+
+dbinom(2, size = 2, prob = .4)
+pbinom(1, size = 2, prob = .6)
+
+
+```
+
+---
+## Setting the Seed
+
+Functions like `rnorm` and `runif` rely on something called **pseudorandomness**.
+Because computers can never be *truly* random, complicated processes are implemented
+to make "random" number generation be so unpredictable as to behave like true
+randomness.
+
+This means that projects involving simulation are harder to make **reproducible**.
+For example, here are two identical lines of code that give different results!
+
+```{r}
+runif(1)
+```
+
+
+```{r}
+runif(1)
+```
+
+
+Fortunately, pseudorandomness depends on a **seed**, which is an arbitrary number
+where the randomizing process starts.  Normally, R will choose the seed for you,
+from a pre-generated vector:
+
+```{r}
+head(.Random.seed)
+```
+
+
+However, you can also choose your own seed using the `set.seed()` function. This
+guarantees your results will be consistent:
+
+```{r}
+set.seed(15)
+runif(1)
+```
+
+
+```{r}
+set.seed(15)
+runif(1)
+```
+
+(Of course, it doesn't mean the results will be the same in every subsequent run, 
+unless you reset the seed in between each line of code!)
+
+```{r}
+set.seed(15)
+runif(1)
+runif(1)
+```
+
+
+It is very important to always set a seed at the **beginning** of an R Markdown document
+that contains any random steps, so that your knitted results are consistent.
+
+Note, though, that this only guarantees your knitted results will be the same
+*if the code has not changed*.
+
+Changing up any part of the code will re-randomize everything that comes after it:
+
+```{r}
+set.seed(15)
+runif(1)
+runif(1)
+```
+
+```{r}
+set.seed(15)
+rnorm(1)
+runif(1)
+```
+
+---
+
+## Preparing for the Lab
+
+---
+
+### The Central Limit Theorem
+
+If you do not recall the Central Limit Theorem from you previous classes - or if
+you would benefit from a refresher:
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("The CLT", type = "Optional", url = "https://www.youtube.com/embed/YAlJCEDH2uY")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("The CLT")
+```
+
+Explain the idea behind the CLT in your own words, using as little jargon/vocabulary
+as you can.
+
+---
+
+### Plotting distributions
+
+Here is the code that made one of the plots from the lecture video:
+
+```{r}
+my_samples <- data.frame(x = rchisq(1000, df = 5))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun= ~dchisq(.x, df = 5), col = "cornflowerblue", lwd = 2) +
+  theme_classic()
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Plotting")
+```
+
+Re-create this plot from the lecture slides:
+(The two colors are "cornflowerblue" and "deeppink")
+
+```{r, echo = FALSE}
+my_samples <- data.frame(x = rt(1000, df = 5))
+
+ggplot(my_samples, aes(x)) + 
+  geom_histogram(bins = 40, aes(y = ..density..), fill = "grey", col = "white") + 
+  stat_function(fun= function(x) dt(x, df = 5), col = "cornflowerblue", lwd = 2) +
+  stat_function(fun = dnorm, col = "deeppink", lwd = 1) +
+  theme_classic()
+```
+

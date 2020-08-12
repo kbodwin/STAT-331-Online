@@ -1,0 +1,177 @@
+---
+title: "Regular Expressions"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = "../../Images/icons") 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(lubridate)
+```
+
+
+In this lesson, you will learn to:
+
+* Write regular expressions to match strings
+
+* Use special regular expression characters for general matching.
+
+* Use `stringr()` functions to analyze text with regular expressions
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "20 min", 
+                   reading_time = "0-20 min", 
+                   work_time = "90 min", 
+                   num_activities = 4)
+```
+
+
+---
+
+## Regular Expressions
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Regular Expressions", type = "Required", url = "https://www.youtube.com/embed/zBof1yfwoYE")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("R4DS: String Matching with Regular Expressions", url = "https://r4ds.had.co.nz/strings.html#matching-patterns-with-regular-expressions", type = "Recommended")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("A few more symbols")
+```
+
+**Question 1:**
+
+Recall that the regular expression `[abc]` matches the characters `a`, `b`, or `c`.  
+
+What does `[^abc]` match?
+
+**Question 2:**
+
+When it is **not** inside square brackets, the `^` symbol means "start of string".
+
+What will be returned by the following?
+
+```{r, eval = FALSE}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "^Kelly")
+```
+
+**Question 3:**
+
+THe `$` symbol in a regular expression means "end of string".
+
+What will be returned by the following?
+
+```{r, eval = FALSE}
+my_str <- c("Kelly", "Hi Kelly", "Kelly Bodwin", "Who is Kelly?")
+str_subset(my_str, "Kelly$")
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Simple Regular Expressions")
+```
+
+What will the following outputs be?
+
+```{r, eval = FALSE}
+my_str <- "The Dursleys of Number 4 Privet Drive were happy to say that they were perfectly normal, thank you very much."
+
+str_extract_all(my_str, ".*")
+
+str_extract_all(my_str, "\\w")
+
+str_extract_all(my_str, "\\s")
+
+str_extract_all(my_str, "[:alpha:]+")
+
+str_extract_all(my_str, "[:alpha:]*\\.")
+
+str_extract_all(my_str, "[wv]er[ey]")
+
+```
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Complex Regular Expressions")
+```
+
+
+```{r, eval = FALSE}
+my_str <- "The Dursleys of Number 4 Privet Drive were happy to say that they were perfectly normal, thank you very much."
+
+str_extract_all(my_str, "[:digit:] ([A-Z][a-z]*)+")
+
+str_extract_all(my_str, "(?<=[:digit:] )[:alpha:]+")
+
+str_extract_all(my_str, "[:digit:].*Drive")
+
+my_str %>%
+  str_split() %>%
+  str_extract("^[A-Z]")
+```
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Making Word Puzzles", type = "Optional", url = "https://www.youtube.com/watch?v=XldSqU8DbEA")
+```
+
+This video is **very** optional.
+
+It uses several functions we won't cover, but it also has some great examples of
+simple regular expresions being used with `stringr` functions.
+
+---
+
+
+```{r, results = "asis", echo = FALSE}
+checkin("Text Analysis with Regular Expressions")
+```
+
+
+The file `hamlet_speech.txt`, posted on the course sit, contains the text of a famous speech from the play "Hamlet" by Shakespeare.  Download this file and save it somewhere reasonable.  Read it into R with:
+
+```{r, eval = FALSE}
+hamlet <- readLines("hamlet_speech.txt")
+```
+
+Answer the following:
+
+* How many words are in the speech?  (Hint: `str_count`)
+
+* How many times does Hamlet reference death or dying?
+
+* How many sentences are in the speech?
+
+* What is the longest word in the speech?
+
+* What is the only capitalized word that does not start a sentence or line?
+
+
+*Hint:* Right now, your object is a **vector** of type **character**, where each element is a line of the speech.  You may want to use `str_c()` (with appropriate arguments) to turn this into a **single string**.  You may also want to turn it into a vector where each element is **one word**.
+
+Or you may want to do all three!  Different tasks will be easier with different object structures.
+

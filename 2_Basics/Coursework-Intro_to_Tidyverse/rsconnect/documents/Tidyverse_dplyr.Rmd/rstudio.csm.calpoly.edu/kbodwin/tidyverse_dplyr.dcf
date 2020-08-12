@@ -1,0 +1,12 @@
+name: tidyverse_dplyr
+title: Tidyverse_dplyr
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 151
+bundleId: 316
+url: https://rstudio.csm.calpoly.edu/dplyr-331/
+when: 1593500787.83041
+asMultiple: FALSE
+asStatic: TRUE

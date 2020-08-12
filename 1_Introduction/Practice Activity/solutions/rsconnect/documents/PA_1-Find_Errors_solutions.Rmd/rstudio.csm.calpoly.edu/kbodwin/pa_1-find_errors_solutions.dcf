@@ -1,0 +1,12 @@
+name: pa_1-find_errors_solutions
+title: PA_1-Find_Errors_solutions
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 161
+bundleId: 336
+url: https://rstudio.csm.calpoly.edu/content/161/
+when: 1595193716.00982
+asMultiple: FALSE
+asStatic: TRUE
