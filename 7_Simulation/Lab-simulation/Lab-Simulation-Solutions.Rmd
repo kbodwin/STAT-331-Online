@@ -38,17 +38,103 @@ you to figure out the `r, d, p, q` functions for this new distribution yourself.
 Feel free to make up silly names for your fake variables, and/or to add fake names
 or other labels to this dataset, if you are inspired.
 
+```{r}
+candy_ratings <- tibble(
+  red_vines = rnorm(30, 100, 5),
+  twizzlers = runif(30, 60, 70),
+  reeses = rbinom(30, 100, .8),
+  hersheys = rexp(30, .05)
+)
+```
+
+
 2. Calculate the **mean** and **standard deviation** for each of your four variables.
+
+```{r}
+candy_ratings %>%
+  summarize_all(funs(mean, sd)) 
+```
+
 
 3.  Now repeat steps (1) and (2), using the same distributions,
 but instead make **1000** rows in your dataset.
 
+```{r}
+candy_ratings <- tibble(
+  red_vines = rnorm(1000, 100, 5),
+  twizzlers = runif(1000, 60, 70),
+  reeses = rbinom(1000, 100, .8),
+  hersheys = rexp(1000, .05)
+)
+
+
+candy_ratings %>%
+  summarize_all(funs(mean, sd)) 
+```
+
 Comment on the means and standard deviations in this section, as compared to 
 in (2).
+
+```
+They are about the same in both cases, because the data is drawn from the
+same distribution, regardless of the number of samples.
+```
+
 
 
 4.  Make a histogram for each of your four variables, with the underlying 
 distribution overlayed on top.
+
+```{r}
+candy_ratings %>%
+  ggplot(aes(x = red_vines)) +
+  geom_histogram(aes(y = ..density..), 
+                 col = "grey", fill = "pink",
+                 bins = 10) +
+  stat_function(fun = dnorm, 
+                args = list(100, 5),
+                col = "cornflowerblue",
+                lwd = 2) +
+  theme_classic()
+
+
+candy_ratings %>%
+  ggplot(aes(x = twizzlers)) +
+  geom_histogram(aes(y = ..density..), 
+                 col = "grey", fill = "pink",
+                 bins = 10) +
+  stat_function(fun = dunif, 
+                args = list(60, 70),
+                col = "cornflowerblue",
+                lwd = 2) +
+  theme_classic()
+
+candy_ratings %>%
+  count(reeses) %>%
+  mutate(
+    pct = n/sum(n),
+    dbin = dbinom(reeses, 100, .8)
+  ) %>%
+  ggplot() +
+  geom_col(aes(x = reeses, y = pct), 
+                 col = "black", fill = "tan") +
+  geom_line(aes(x = reeses, y = dbin),
+                col = "cornflowerblue",
+                lwd = 2) +
+  theme_classic()
+
+candy_ratings %>%
+  ggplot(aes(x = hersheys)) +
+  geom_histogram(aes(y = ..density..), 
+                 col = "black", fill = "tan",
+                 bins = 10) +
+  stat_function(fun = dexp, 
+                args = list(.05),
+                col = "cornflowerblue",
+                lwd = 2) +
+  theme_classic()
+```
+
 
 
 ## Part Two: Generating sample means
@@ -58,10 +144,34 @@ distribution overlayed on top.
 a vector `vec` and an integer `n`.  It should take a random sample of size `n` from
 `vec`, then calculate and return the mean of that subsample.
 
+```{r}
+sample_mean <- function(vec, n) {
+  
+  subsample <- sample(vec, n)
+  mean(subsample, na.rm = TRUE)
+  
+  
+}
+
+sample_mean(1:10, 5)
+```
+
+
 
 2. Write a function called `many_sample_means`.  This function should take as
 input a vector `vec`, an integer `n`, and an integer `reps`.  It should perform
 the `sample_mean` process many times (`reps`) and return a vector of the results.
+
+```{r}
+many_sample_means <- function(vec, n, reps = 1000) {
+  
+  replicate(reps, sample_mean(vec, n))
+  
+}
+
+many_sample_means(1:10, 5, 10)
+```
+
 
 
 3. Write a function called `sample_means_ns`. This function should take as
@@ -69,21 +179,28 @@ input a vector `vec` and an integer `reps`, and a vector `ns`.  It should perfor
 the `many_sample_means` process for each of the values in the `ns` vector.  It should
 return a **data frame** with the results.
 
-For example, if `ns <- c(5, 50, 500)` and `reps = 2`, you would return something
-like:
+```{r}
+sample_means_ns <- function(vec, ns, reps = 1000) {
+  
+  my_means <- map(ns, ~many_sample_means(vec, .x, reps))
+  
+  tibble(
+    sample_mean = unlist(my_means),
+    n = rep(ns, each = reps)
+  )
+  
+}
 
-```{r, echo = FALSE}
-tibble(
-  sample_mean = rnorm(6, 3, 5),
-  n = rep(c(5, 50, 500), 2)
-)
+sample_means_ns(1:10, 5:7, 10)
 ```
+
+
 
 
 Include the following in your final R Markdown to show your functions work:
 
 ```{r, eval = FALSE}
-vec <- runif(100)
+vec <- runif(1000)
 
 sample_mean(vec, 50)
 many_sample_means(vec, reps = 10, n = 50)
@@ -96,25 +213,111 @@ sample_means_ns(vec, reps = 10, ns = c(5, 50, 500))
 For any **two** of the four variables in your fake dataset from Part One, do the
 following:
 
-1. Use your `many_sample_means` function with `reps = 1000` and `n = 10`.  
+1. Use your `many_sample_means` function with `reps = 1000` and `n = 10`.
+
+
+```{r}
+twiz_means <- candy_ratings %>%
+  pull(twizzlers) %>%
+  many_sample_means(n = 10, reps = 1000)
+
+hersh_means <- candy_ratings %>%
+  pull(hersheys) %>%
+  many_sample_means(n = 10, reps = 1000)
+```
+
 
     (a) Make histograms of each of your results (no overlay required)
+    
+    
+```{r}
+ggplot(, aes(x = twiz_means)) +
+  geom_histogram(col = "grey", fill = "pink") +
+  theme_classic()
+
+
+ggplot(, aes(x = hersh_means)) +
+  geom_histogram(col = "black", fill = "tan") +
+  theme_classic()
+```
+    
+    
+    
     (b) Calculate the mean and standard deviation of each of your results.
     
+```{r}
+mean(twiz_means)
+sd(twiz_means)
 
-2. Use your `many_sample_means` function with `reps = 1000` and `n = 500`.  
+mean(hersh_means)
+sd(hersh_means)
+```
+    
+    
+    
+
+2. Use your `many_sample_means` function with `reps = 1000` and `n = 500`.
+
+```{r}
+twiz_means <- candy_ratings %>%
+  pull(twizzlers) %>%
+  many_sample_means(n = 500, reps = 1000)
+
+hersh_means <- candy_ratings %>%
+  pull(hersheys) %>%
+  many_sample_means(n = 500, reps = 1000)
+```
+
 
     (a) Make histograms of each of your results (no overlay required)
+    
+        
+```{r}
+ggplot(, aes(x = twiz_means)) +
+  geom_histogram(col = "grey", fill = "pink") +
+  theme_classic()
+
+
+ggplot(, aes(x = hersh_means)) +
+  geom_histogram(col = "black", fill = "tan") +
+  theme_classic()
+```
+    
+    
     (b) Calculate the mean and standard deviation of each of your results.
     
+    
+```{r}
+mean(twiz_means)
+sd(twiz_means)
+
+mean(hersh_means)
+sd(hersh_means)
+```
     
 3. Comment on the differences or similarities between (1) and (2)
 
+```
+The means of the sample means are the same in both cases.
+The standard deviations of the sample means are smaller in (2), by a factor
+of about 10.
+The histogram of the means from the exponential data (Hershey's) is more symmetric
+and bell-curve shaped in (2).
+```
 
 4. Use your `sample_means_ns` function to try a variety of values of `n`.  
 Calculate the standard deviation of the results for each value of `n`.
 Make a plot that shows how the standard deviation of the sample means changes with `n`.
 
+```{r, cache = TRUE}
+candy_ratings %>% 
+  pull(hersheys) %>%
+  sample_means_ns(ns = 5:100, reps = 50) %>%
+  group_by(n) %>%
+  summarize(std_dev = sd(sample_mean)) %>%
+  ggplot(aes(x = n, y = std_dev)) +
+  geom_line()
+```
 
 
 
@@ -134,32 +337,32 @@ how unlucky were you this month?
 your `many_sample_means` on these values, with `n = 30` and `reps = 1000`.  How
 many times did your sample mean exceed 55?
 
+```{r, cache = TRUE}
+rand_vals <- rexp(10000, 0.02)
+
+my_sample_means <- many_sample_means(rand_vals, n = 30, reps = 1000)
+
+sum(my_sample_means > 55)
+```
+
+
 2. Use the Central Limit Theorem to assume that a sample mean of exponentially 
 distributed values is Normally distributed, with mean $50$ and standard deviation 
 $50/\sqrt{n}$.  Find the probability that a sample mean exceeds 55.
 
+```{r}
+1 - pnorm(55, mean = 50, sd = 50/sqrt(30))
+```
+
+
 3. Comment on (1) and (2).  Were the answers similar?  Do you believe that bus wait times
 really are distributed `exponential(0.02)`?
 
+```
+Yes, the answers were similar!
 
-## Challenge 1:
+It looks like the chances of an average monthly wait time of 55 minutes or more 
+is about 29% - so it's not too surprising.  It's plausible that the proposed
+distribution of wait times is true.
+```
 
-The Central Limit Theorem works for the sample **mean**.  Does it work for any
-other summary statistics?
-
-Try out at least two other statistics.  Some suggestions:
-* the median
-* the variance
-* the midhinge
-* the maximum
-
-Write a very brief argument, using simulation and visualization, about whether or not
-the CLT works on the statistic in question.
-
-Upload your writeup **separately**.
-
-## Challenge 2:
-
-Put your 3 functions (`sample_mean`, `many_sample_means`, `sample_means_ns`) 
-into an R package in a github repo.  You may copy the `twelvedays` package and
-make changes to that infrastructure, to make this easier.

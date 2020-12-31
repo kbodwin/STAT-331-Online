@@ -1,0 +1,211 @@
+---
+title: "Hypothesis Testing"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(infer)
+library(palmerpenguins)
+```
+
+In this module, you'll review a few basic hypothesis tests, and learn how to
+make R do the calculations for you.
+
+If your memory of hypothesis testing is fresh, you may be able to skip the
+review parts of these sections.
+You are only expected to know the basic idea behind each test, not every detail.
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "10-45 min", 
+                   reading_time = "30 min", 
+                   work_time = "30 min", 
+                   num_activities = 2)
+```
+
+---
+
+## Review of Hypothesis Testing
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of Hypothesis Testing", type = "Required", url = "https://www.youtube.com/embed/0oc49DyA3hU")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of Alternate Hypotheses", type = "Required", url = "https://www.youtube.com/embed/5koKb5B_YWo")
+```
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of p-values", type = "Required", url = "https://www.youtube.com/embed/vemZtEM63GY")
+```
+
+---
+
+## t-Tests in R
+
+A **t-test** is used when your hypotheses involve **one or two mean values**, such as
+$$ H_0:  \mu_1 = \mu_2 $$
+$$ H_a:  \mu_1 > \mu_2 $$
+
+Functions: `t.test()` in base R, or `t_test()` in the `infer` package.
+
+```{r}
+t.test(bill_length_mm ~ sex, data = penguins)
+```
+
+```{r}
+penguins %>%
+  t_test(
+    response = bill_length_mm,
+    explanatory = sex,
+    alternative = "two-sided"
+  )
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("t-tests")
+```
+
+State (in words) the null and alternate hypotheses for the test in the code above.
+
+State your conclusion.
+
+---
+
+## Chi-Square tests in R
+
+A **Chi-Square** Test is used when your hypotheses involve counts or percents.
+
+Similarly, one option is `chisq.test()` in base R, which needs a *two-way table* 
+as input.  
+
+The other option is `chisq_test()` in `infer`, which takes a data frame
+and variables as input.  Be careful, though - the variables must be categorical
+to be appropriate for a chi squared test.
+
+
+
+```{r}
+my_table <- mtcars %>%
+  janitor::tabyl(cyl, gear)
+
+chisq.test(my_table[,-1])
+```
+```{r}
+mtcars %>%
+  mutate(
+    cyl = factor(cyl),
+    gear = factor(gear)
+  ) %>%
+  chisq_test(
+    response = gear,
+    explanatory = cyl
+  )
+```
+
+```{r, results = "asis", echo = FALSE}
+checkin("Chi-Squared Tests")
+```
+
+a) Why did we include the `[,-1]` in the first code chunk?
+
+b) Why did we include the `mutate()` step in the second code chunk?
+
+c) What happens if you swap the response and explanatory variable in the second
+code chunk?
+
+d) What do you conclude from this test?
+
+
+
+---
+
+## Permutation tests
+
+The tests above, and other like them, assume a *distribution* of your test statistic.
+
+We assume that a difference of sample means is approximately Normal (t), because
+of the Central Limit Theorem. There is also underlying math involved in showing
+that the test statistic for the Chi-Square test has - you guessed it! - a Chi-Square
+distribution.
+
+These are called **parametric tests**.
+
+However, sometimes we don't feel comfortable that all our assumptions are met to
+assume a distribution, or perhaps we are interested in a test statistic that
+does not have an easy-to-derive distribution.  In these cases. we might want to
+use a **nonparametric test**.
+
+(Bootstrapping is a form of *nonparametric analysis*!)
+
+The **permutation test** relies on random resampling of the data to determine how
+"extreme" the original data is.
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Illustration of a Permutation Test", type = "Required", url = "https://www.youtube.com/embed/GmvpsJHGCxQ")
+```
+
+(Stop at 8 minutes in.)
+
+
+```{r, results = "asis", echo = FALSE}
+req_read("The infer package", type = "Required", url = "https://teachdatascience.com/infer/")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_read("ModernDive: Hypothesis Testing", type = "Optional", url = "https://bookdown.org/cteplovs/ismaykim/10-hypothesis-testing.html")
+```
+
+
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Permutation Tests")
+```
+
+```{r permute, include = FALSE, warning = FALSE}
+ my_test <- penguins %>% 
+  specify(response = bill_length_mm, explanatory = sex) %>%
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("male", "female"))
+
+
+visualize(my_test) 
+```
+
+```{r, echo = FALSE}
+decorate("permute") %>%
+  mask("specify") %>%
+  mask("hypothesize") %>%
+  mask("generate") %>%
+  mask("calculate") %>%
+  mask("visualize") %>%
+  mask("independence", background = "pink") %>%
+  mask("permute", background = "pink") %>%
+  mask("diff in means", background = "pink")
+```
+
+
+a) Fill in the yellow blanks with the appropriate functions from the `infer` package.
+
+b) Fill in the pink blanks with the appropriate arguments.

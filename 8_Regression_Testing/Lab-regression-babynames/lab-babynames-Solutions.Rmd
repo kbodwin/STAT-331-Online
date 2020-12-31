@@ -1,0 +1,193 @@
+---
+title: "Lab: Baby Names"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, eval = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(modelr)
+```
+
+
+
+## The Data
+
+Our dataset in this lab concerns baby names and their popularity over time.  The dataset `babies_ca` has information about baby names in California from 1940-2016.  For each year, and for each name with at least 50 recorded babies born, we are given the counts of how many babies had that name.
+
+```{r}
+babies_ca <- read.csv(here::here("8_Regression_Testing", "Lab-regression-babynames", "babies_ca.csv"))
+```
+
+At [this link](https://www.dropbox.com/sh/czm61yzmvzl6xfb/AABEFdpy02aNRhZ_vcxrVAQSa?dl=0), you can find the names for ALL 50 states, in separate datasets organized by first letter.
+
+
+## Is my name not cool any more?
+
+Let's take a look at how the name "Kelly" has changed over time.  
+
+1. Make a plot showing the number of babies named "Kelly" born each year in CA.  
+Color the plot to show the gender assigned at birth to these babies.
+
+```{r}
+babies_ca %>%
+  filter(Name == "Kelly") %>%
+  ggplot(aes(x = Year, y = Count, color = Gender)) +
+  geom_line()
+```
+
+
+2. I was born in 1989.  Let's look at only the time frame since I was named.
+Narrow down the dataset to only 1989 onward.
+
+```{r filter}
+kellys_89 <- babies_ca %>%
+  filter(Name == "Kelly") %>%
+  filter(Year >= 1989)
+```
+
+2. Create a linear model with the year as the explanatory variable, and the number 
+of Kellys as the response.  Summarize the results, and plot the model.
+
+```{r model}
+my_model <- lm(Count ~ Year, data = kellys_89)
+
+summary(my_model)
+```
+
+
+
+```{r plot}
+
+ggplot(kellys_89, aes(x = Year, y = Count)) +
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+```
+
+3. Plot the *residuals*: that is, the actual values minus the predicted values.  
+(The function `add_predictions` in the `modelr` package may be useful to you.)
+
+Comment on the residuals - do you see any patterns?
+
+```{r residuals}
+
+kellys_89 <- kellys_89 %>%
+  add_predictions(my_model) %>%
+  mutate(
+    residual = Count - pred
+  )
+
+ggplot(kellys_89, aes(x = Year, y = residual)) + geom_point()
+```
+
+```
+The residuals follow a clear pattern, with half the observations overestimating
+and half underestimating.  This is because we did not account for the gender
+of the babies.
+```
+
+
+4. Now include `Gender` in the model.  Plot the model and the residuals, and comment
+on any patterns in the residuals.
+
+```{r gender model}
+my_model_2 <- lm(Count ~ Year*Gender, data = kellys_89)
+
+summary(my_model_2)
+
+ggplot(kellys_89, aes(x = Year, y = Count, color = Gender)) + geom_point() + stat_smooth(method = "lm")
+
+kellys_89 <- kellys_89 %>%
+  add_predictions(my_model_2) %>%
+  mutate(
+    residual = Count - pred
+  )
+
+ggplot(kellys_89, aes(x = Year, y = residual, color = Gender)) + geom_point()
+```
+
+```
+This is better.  The residuals are mostly scattered randomly around 0 for both
+genders.  We may be a bit concerned about a nonlinear pattern in the male babies.
+```
+
+5. What do you conclude from this model?
+
+```
+There are about 5,558 fewer male babies named Kelly than female babies per year.
+Among female-assigned babies, the name Kelly is decreasing in popularity by about 
+29.97 babies per year.
+Among male-assigned babies, the name Kelly is decreasing in popularity by about
+2.4 babies per year.
+```
+
+
+## Spelling by state
+
+I used to hate it when people would spell my name as "Kelli" or "Kelley".  But
+I don't have it as bad as my good friend Allan.
+
+1.  Narrow the California dataset down to only male-assigned babies named 
+"Allan", "Alan", or "Allen".
+Make a plot comparing the popularity of these names over time.
+
+```{r}
+babies_ca %>%
+  filter(Gender == "M", Name %in% c("Allan", "Alan", "Allen")) %>%
+  ggplot(aes(x = Year, y = Count, color = Name)) +
+  geom_line()
+```
+
+
+2.  In California, Allan's spelling of his name is the least common of the three - but perhaps
+it's not such an unusual name for his home state of Pennsylvania.  Compute
+the total number of babies born with each spelling of "Allan" in 2000, in Pennsylvania
+and in California.
+
+```{r}
+a_names <- read.csv(here::here("8_Regression_Testing", "Lab-regression-babynames", "StateNames_A.csv"))
+
+allans <- a_names %>%
+  filter(Name %in% c("Allan", "Alan", "Allen"),
+         State %in% c("CA", "PA"),
+         Year == 2000) 
+
+allan_counts <- allans %>%
+  group_by(Name, State) %>%
+  summarize(Count = sum(Count))
+
+allan_counts
+```
+
+3. Convert your total counts to overall percents.  That is, what was the percent
+breakdown between the three spellings in CA?  What about in PA?
+
+```{r}
+allan_counts %>%
+  group_by(State) %>%
+  mutate(
+    Count = Count/sum(Count)
+  ) %>%
+  pivot_wider(names_from = State, values_from = Count)
+```
+
+
+4. Perform a Chi-Square test on this data, to determine if CA and PA have different
+distributions of spellings of "Allan".
+
+```{r}
+allan_counts %>%
+  ungroup() %>%
+  pivot_wider(names_from = State, values_from = Count) %>%
+  select(-Name) %>%
+  chisq.test()
+```

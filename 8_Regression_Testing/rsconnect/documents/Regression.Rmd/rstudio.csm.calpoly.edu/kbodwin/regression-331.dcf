@@ -1,0 +1,12 @@
+name: regression-331
+title: Regression-331
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 178
+bundleId: 378
+url: https://rstudio.csm.calpoly.edu/content/178/
+when: 1597814696.22473
+asMultiple: FALSE
+asStatic: TRUE

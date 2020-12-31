@@ -1,65 +1,74 @@
 ---
-title: "Lab 6: Bootstrapping"
-author: "Stat 331"
+title: "Lab: Bootstrapping"
 output: rmdformats::readthedown
 ---
 
-This lab concerns data about salaries in San Francisco.  The dataset, and corresponding information, can be found at [https://www.kaggle.com/kaggle/sf-salaries](https://www.kaggle.com/kaggle/sf-salaries).
+This lab concerns data about salaries in San Francisco.  The dataset, and corresponding information, can be found at [https://www.kaggle.com/kaggle/sf-salaries](https://www.kaggle.com/kaggle/sf-salaries).  We will be using a smaller version of the dataset for this lab - you can find this data as `SF_Salaries_sub.csv` on the course website.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, echo = TRUE)
+knitr::opts_chunk$set(include = TRUE, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 ## The data
 
-1. Import the data.  Hints:
+1. Import the data, and narrow it down to only the 2014 observations.  Hints:
 
-- If you are using `read.csv()`, you will want to use the option \verb!header = TRUE!
+- If you are using `read.csv()`, you will want to use the option `header = TRUE`
 
-- Missing data in this dataset is labeled `"Not Provided"` or `"Not provided"` or is blank.  You will want to replace these values with `NA`s.  Use the arguments `na.string` in `read.csv()` or `na` in `read_csv`.
+- Missing data in this dataset is labeled `"Not Provided"` or `"Not provided"` or is blank.  You will want to replace these values with `NA`s.  Use the arguments `na.strings` in `read.csv()` or `na` in `read_csv`.
 
 
-2. Our variable of interest for this lab is going to be Total Pay. Plot a histogram of Total Pay with an overlaying density. (Reference Lab 5 if you don't remember how to do this!)
+2. Our variable of interest for this lab is going to be Total Pay. Plot a histogram of Total Pay with an overlaying density. (Reference the previous lab if you don't remember how to do this!)
 Comment briefly on the shape, center, and spread.
 
 ```{r, message = FALSE}
 
 library(tidyverse)
+library(infer)
 
-SF_Salaries <- read_csv("./SF_Salaries.csv", na = c("Not Provided", "Not provided", ""))
+set.seed(4893)
 
+SF_Salaries <- read_csv("./SF_Salaries_sub.csv", na = c("Not Provided", "Not provided", ""))
+
+```
+
+```{r}
 SF_Salaries %>%
     ggplot(aes(x = TotalPay, y = ..density..)) +
     geom_histogram() + geom_density()
 
 ```
 
-```
-The distribution is skewed right with a center around or a little under 100000 and what seems like a large spread.
 
 ```
+This plot is bimodal and skewed right.  The mean is around $90,000 and the standard
+deviation is around $50,000.
+```
 
-3. Suppose we're interested in making inference about the typical salary (Total Pay) of all San Francisco city employees and this is our representative sample. Is the mean a good statistic to use here to describe the typical value of salary? Why or why not?
+
+3. Suppose we're interested in making inference about the typical salary (Total Pay) of all San Francisco city employees in 2014, and this is our representative sample. Is the mean a good statistic to use here to describe the typical value of salary? Why or why not?
 
 ```
-Since the distribution is heavily skewed, the mean is probably not the best statistic to use to describe the typical value.
-
+No, the mean is not a good statistic, because the data is very skewed.
+The mean gets "pulled" out towards the extreme values in the tail.
 ```
 
 
 4. Recall that a one-sample t-test requires that the sample mean is approximately Normally distributed. Does this assumption seem reasonable for the mean Total Pay? Why or why not? 
 
 ```
-The plot in (1) is heavily skewed and so it seems unlikely that the population of Total Pay is Normally distributed.
-
-However, since the sample size is so large, the distribution of the *sample mean* is approximately Normal. (The Central Limit Theorem!)
+Yes!
+The original data is not Normally distributed at all, but the SAMPLE MEAN is
+still approximately Normal, according to the CLT.
 ```
 
 
 5. Find a 95% confidence interval for the mean Total Pay using the t distribution.
 ```{r}
-t.test(SF_Salaries$TotalPay)
-# (74511.52, 75025.13)
+SF_Salaries %>%
+  t_test(response = TotalPay) %>%
+  select(lower_ci, upper_ci)
+
 ``` 
 
 
@@ -67,19 +76,19 @@ t.test(SF_Salaries$TotalPay)
 6. Use the bootstrap procedure to construct a 95% bootstrap confidence interval for the mean Total Pay. Compare this interval to your t-interval in (3).
 
 ```{r}
-set.seed(123)
+my_boots <- SF_Salaries %>% modelr::bootstrap(500)
 
-boots <- replicate(1000, sample(SF_Salaries$TotalPay, size = nrow(SF_Salaries), replace = T), simplify = FALSE)
+my_boots <- my_boots %>%
+  mutate(
+    sample_means = map_dbl(strap, ~mean(data.frame(.x)$TotalPay))
+  )
 
-means <- map_dbl(boots, mean)
-
-quantile(means, probs = c(.025, .975))
+my_boots %>%
+  pull(sample_means) %>%
+  quantile(c(0.025, 0.975))
 
 ```
 
-```
-This interval is actually very similar to the t confidence interval above!!!
-```
 
 7. Since the distribution of Total Pay is so skewed, there may be other statistics that are better at describing the typical salary. Write your own function for calculating the following two statistics.  (You may have to Google what they mean!  Feel free to use relevant code from previous labs.)
 
@@ -107,7 +116,8 @@ trimmed_mean <- function(data, trim) {
 }
 ```
 
-8. Perform the bootstrap procedure and produce histogram + density graphs of the distributions of:
+8. Perform the bootstrap procedure to make 95% confidence intervals for the following
+statistics for Total Pay:
 
 - Midhinge
 
@@ -121,50 +131,60 @@ trimmed_mean <- function(data, trim) {
 
 ```{r}
 
-my_stats <- data.frame(
-  midhinge = map_dbl(boots, midhinge),
-  trim_5 = map_dbl(boots, ~trimmed_mean(.x, 0.05)),
-  trim_10 = map_dbl(boots, ~trimmed_mean(.x, 0.10)),
-  trim_25 = map_dbl(boots, ~trimmed_mean(.x, 0.25)),
-  median = map_dbl(boots, median)
+my_boots <- my_boots %>%
+  mutate(
+    midhinge = map_dbl(strap, ~midhinge(data.frame(.x)$TotalPay)),
+    trim_5 = map_dbl(strap, ~trimmed_mean(data.frame(.x)$TotalPay, 0.05)),
+    trim_10 = map_dbl(strap, ~trimmed_mean(data.frame(.x)$TotalPay, 0.10)),
+    trim_25 = map_dbl(strap, ~trimmed_mean(data.frame(.x)$TotalPay, 0.25)),
+    median = map_dbl(strap, ~median(data.frame(.x)$TotalPay))
   )
 
 
-my_stats %>% gather(key = "Statistic", value = "Value") %>%
-  ggplot(aes(x = Value)) + geom_histogram(bins = 100) + facet_wrap(~Statistic)
+my_stats <- my_boots %>% 
+  pivot_longer(sample_means:median, 
+               names_to = "Statistic", 
+               values_to = "Value") 
 
-my_stats %>% gather(key = "Statistic", value = "Value") %>%
-  ggplot(aes(x = Value, fill = Statistic)) + geom_density(alpha = 0.3)
+
+cis <- my_stats %>%
+  group_by(Statistic) %>%
+  summarize(lower_ci = quantile(Value, 0.025),
+            upper_ci = quantile(Value, 0.975))
+
+cis
+
+```
+
+
+
+
+
+9. For each of the statistics in (8), make a plot with a histogram of bootstrapped values and the
+95% confidence interval cutoffs.
+
+```{r}
+my_stats %>%
+  left_join(cis) %>%
+  ggplot(aes(x = Value)) + 
+    geom_histogram(bins = 100) + 
+  geom_vline(aes(xintercept = lower_ci), color = "red") +
+  geom_vline(aes(xintercept = upper_ci), color = "red") +
+    facet_wrap(~Statistic)
+
+
+## Just for fun
+my_stats %>%
+  ggplot(aes(x = Value, fill = Statistic)) + 
+  geom_density(alpha = 0.3)
                            
 
 ```
 
 
-
-9. Compute 95% bootstrap confidence intervals for the statistics listed in (8). For each, compare to your interval to the interval for the *mean* that you computed first. 
-
-```{r}
-map(my_stats, ~quantile(.x, c(.025, .975)))
-
+10. Which of these statistics do you think is the best statistic to describe the typical salary?  Why?  *(There is no single write answer to this question.  Think about what each statistic is measuring, and decide whether that makes sense for this data.)*
 
 ```
-
-
-10. Which of these statistics do you think is the best statistic to describe the typical salary?  Why?  *(There is no single write answer to this question.  Think about what each statistic is measuring, and decide whether that makes sense for this data.)
-
+No single right answer - all the statistics but the mean are resistant to 
+extreme values.
 ```
-No wrong answer - which do you prefer?  Personally, I see that the median and the 10% trim are quite similar, and both seem like good ways to avoid the skew and outlier problem, so I  might go with one of those.
-```
-
-## Flex Points
-
-What is a typical rate of overtime pay?  That is, if `Overtime Pay = X*Regular Pay`, what do you think `X` is equal to?
-
-For 10 Flex Points, answer this question using linear models in R.  Be sure to include a plot and a discussion. 
-
-For 10 additional Flex Points, use bootstrapping to estimate the significance of the model.
-
-For another 10 additional Flex Points, use `modelr`, or your method of choice, to perform a cross-validation study of your linear model.
-
-Submit your writeup to Canvas.
-

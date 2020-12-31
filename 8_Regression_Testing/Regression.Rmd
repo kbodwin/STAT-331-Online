@@ -1,0 +1,120 @@
+---
+title: "Linear Regression"
+author: ""
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+    highlight: github
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options("couRsework-img_path" = here::here("Images", "icons")) 
+### change this if icons local
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+library(couRsework)
+library(flair)
+library(infer)
+library(palmerpenguins)
+```
+
+In this module, you'll learn to compute linear regression models in R.  Feel free
+to skip review sections if you are confident in your knowledge.
+
+
+```{r, results = "asis", echo = FALSE}
+make_summary_table(vid_time = "20 min", 
+                   reading_time = "0 min", 
+                   work_time = "30 min", 
+                   num_activities = 3)
+```
+
+---
+
+## Review of Linear Regression
+
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of Linear Regression I", type = "Required", url = "https://www.youtube.com/embed/PaFPbb66DxQ")
+```
+
+```{r, results = "asis", echo = FALSE}
+req_vid("Review of Linear Regression II", type = "Recommended", url = "https://www.youtube.com/embed/nk2CQITm_eo")
+```
+
+
+---
+
+## Linear Regression in R
+
+```{r}
+library(palmerpenguins)
+
+penguins %>%
+  ggplot(aes(x = bill_depth_mm, y = bill_length_mm)) +
+  geom_point() +
+  stat_smooth(method = "lm")
+
+
+my_model <- penguins %>%
+  lm(bill_length_mm ~ bill_depth_mm, data = .)
+
+my_model
+
+summary(my_model)
+
+broom::tidy(my_model)
+```
+
+---
+
+```{r, results = "asis", echo = FALSE}
+checkin("Linear Regression")
+```
+
+**Question 1: Code**
+
+a) What is the `data = .` argument in the `lm()` function?
+
+b) What happens if you switch the order of `bill_length_mm` and `bill_depth_mm`
+in the `lm()` formula?
+
+c) What object type was returned by `summary()`?  What about by `tidy()`?
+
+
+**Question 2: Interpreation**
+
+a) What is the equation for the regression line?
+
+b) Penguin Bob has a bill that is 5mm deeper than Penguin Judy.  How much longer
+do you expect Penguin Bob's bill to be?
+
+c) Is the relationship between bill length and bill depth statistically significant?
+
+
+**Question 3: A more complex model**
+
+Run the following code, and explore the results:
+
+```{r}
+my_model_2 <- penguins %>%
+  lm(bill_length_mm ~ bill_depth_mm:species, data = .)
+
+my_model_3 <- penguins %>%
+  lm(bill_length_mm ~ bill_depth_mm*species, data = .)
+```
+
+
+a) Make a plot illustrating `my_model_2`.  *(Hint: what needs to change in the 
+aesthetic of the plot above?)*
+
+b) Which model of the three explains the most variance in the response variable?
+
+c) Do the three species of penguin have the same average bill length?  How do you know?
+
+d) Do the three species of penguin have the same bill shape (i.e., the relationship
+between length and depth)?  How do you know?

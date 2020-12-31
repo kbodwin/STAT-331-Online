@@ -1,0 +1,12 @@
+name: lab-simulation-solutions2
+title: Lab-Simulation-Solutions
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 181
+bundleId: 385
+url: https://rstudio.csm.calpoly.edu/content/181/
+when: 1598469918.35389
+asMultiple: FALSE
+asStatic: TRUE

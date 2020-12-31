@@ -1,0 +1,313 @@
+---
+title: "Final Exam"
+author: 'Stat 331: Summer 2020'
+output: rmdformats::readthedown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE)
+```
+
+```{r, eval = TRUE, include = FALSE}
+library(tidyverse)
+library(infer)
+```
+
+```{r}
+np_trails <- read_csv(here::here("11_Final_Exam", "national_park_trails.csv"))
+```
+
+## Introduction
+
+This exam is due at **8:00am** on **Friday, August 28th**.
+Late exams will be docked by a penalty of at least 50%, possibly more.
+**Please do not turn your exam in late!!!**
+
+Please create a new R Markdown file for each of the three parts of this exam.
+Make sure your files are set up to display all your source code when knitted.
+
+Clearly mark the questions, so that I can easily find your answers to grade them.
+Please do NOT use nonstandard R Markdown templates for this exam.
+
+Although you are not directly graded on data exploration, cleaning, and adjusting, 
+you will certainly need to do this to properly address the questions.
+
+### Policies
+
+You may use any resource at all for this exam, with the exception of communicating
+with other human beings, in or out of the class.
+
+If you copy substantial code snippets (say, more than three lines of code) from sources on 
+the internet, that is okay, but please make sure you cite your source.
+
+### The Data
+
+The dataset for this exam concerns hiking trails in America's National Parks system.
+Data is taken from the *AllTrails* app, which allows users to input new trails
+and rate existing ones.
+You can find documentation on the dataset from its creator [here](https://www.kaggle.com/planejane/national-park-trails).
+
+Variables in the data are:
+
+* `trail_id`: An ID number for the trail
+* `name`: Name of the trail
+* `area_name`: National Park where the trial is located
+* `city_name`: City where the trail is located
+* `state_name`: State where the trail is located
+* `country_name`: Country where the trail is located
+* `_geoloc`: Latitude and longitude of trail
+* `popularity`: A score from 0 to 100 of how often the trail is used.
+* `length`: Distance covered by trail (in meters).
+* `elevation_gain`: How much uphill is on the trail (in meters).
+* `difficulty_rating`: Average user rating of trail difficulty
+* `route_type`: Type of trail (loop, out and back, or point to point)
+* `visitor_usage`: (Honestly, I'm not sure what this one is.)
+* `avg_rating`: The average visitor rating of the trail (1 to 5 stars)
+* `num_reviews`: The total number of reviews on the app for that trail
+* `features`: Notable elements about the trail
+* `activities`: Common uses for the trail
+* `units`: **This variable is a lie!** All the lengths are in meters.
+
+
+
+
+## Part One: Short answer questions
+
+Answer each of the following using code.  The output of the code should clearly 
+and directly answer the question.  You do not need to provide any text answers;
+only code and output.  For example, if the question is, "What is the longest bill
+length of any penguin in the dataset?", you might provide:
+
+```{r, echo = TRUE, eval = TRUE}
+library(palmerpenguins)
+
+penguins %>% 
+  top_n(1, bill_length_mm) %>%
+  select(bill_length_mm)
+```
+
+#### Question 1.1  [10 points]
+
+Which National Park contains the most trails with a 5-star average rating?
+
+```{r}
+np_trails %>%
+  filter(avg_rating == 5) %>%
+  count(area_name) %>%
+  top_n(1, n)
+```
+
+
+#### Question 1.2 [10 points]
+
+What are the three longest trails in this dataset, in miles?
+
+```{r}
+np_trails %>%
+  mutate(
+    length_miles = length*3.3/5280
+  ) %>%
+  top_n(3, length_miles) %>%
+  select(name, area_name, length_miles)
+```
+
+#### Question 1.3 [10 points]
+
+What is the most popular trail in each National Park?
+
+```{r}
+np_trails %>%
+  group_by(area_name) %>%
+  summarize(
+    best_trail = name[popularity = max(popularity)])
+```
+
+
+
+#### Question 1.4 [10 points]
+
+How many National Parks contain the word "Canyon" somewhere in their name?
+
+```{r}
+np_trails %>%
+  distinct(area_name) %>%
+  pull(area_name) %>%
+  str_detect("[Cc]anyon") %>%
+  sum()
+```
+
+#### Question 1.5 [20 points]
+
+What are the five common words used in trail names?
+
+Do not include besides words that mean "trail", like "trail", "route", "path", "loop".
+
+Do not include connector words like "to", "and", "with", etc.
+
+```{r}
+trail_words <- np_trails %>%
+  pull(name) %>%
+  str_extract_all("\\w+") %>%
+  unlist() 
+
+word_counts <- tibble(
+  word = trail_words
+) %>%
+  count(word) %>%
+  arrange(desc(n))
+```
+
+#### Question 1.6 [20 points]
+
+Write a function that takes as input the dataset and the name of a National Park, 
+and the following optional arguments:
+
+* A minimum trail length (in miles)
+* A maximum trail length (in miles)
+* A minimum trail rating
+* The type of trail
+
+The function should return all the trails that fit the supplied criteria. You **may**
+assume that the variable names of the inputted dataset match the `np_trails` dataset.
+
+Run the following code to show your function works:
+
+```{r}
+recommend_trails <- function(data, park_name, 
+                            min_len = 0, max_len = Inf, min_rating = 0, type = NULL) {
+  
+  if (!is.null(type)) {
+    data <- data %>%
+      filter(route_type == type)
+  }
+  
+  data %>%
+    mutate(
+      length = length*3.3/5280
+    ) %>%
+    filter(
+      area_name == park_name,
+      length > min_len,
+      length < max_len,
+      avg_rating > min_rating
+    )
+  
+  
+}
+```
+
+
+```{r, echo = TRUE}
+np_trails %>%
+  recommend_trails("Haleakala National Park", min_len = 10, min_rating = 4)
+```
+
+
+#### Question 1.7 [20 points]
+
+Use your function from Question 1.6, along with a `map` or `apply` function, to 
+recommend to me all the trails that are:
+
+* 10-20  miles long  (good for an overnight backpacking trip!)
+
+* Rated at least a 4.5
+
+* Loop trails (I don't like to retrace my steps)
+
+* In one of the parks I can drive to from San Luis Obispo:  Sequoia National Park, 
+Joshua Tree National Park, Lassen Volcanic National Park, Kings Canyon National Park, 
+Pinnacles National Park, Death Valley National Park, Redwood National Park
+
+```{r}
+parks <- c("Sequoia National Park", "Joshua Tree National Park", "Lassen Volcanic National Park", "Kings Canyon National Park", "Death Valley National Park", "Redwood National Park")
+
+map_dfr(parks, ~recommend_trails(np_trails, .x, 10, 20, 4.5, "loop"))
+```
+
+
+
+## Part Two: Comparing Parks
+
+The two National Parks closest to San Luis Obispo are **Kings Canyon** and **Sequoia**.
+These two parks border each other, and are managed under a single forest service;
+sometimes, they are simply referred to together as "SeKi".
+
+But are they actually meaningfully different parks?  Let's find out!
+
+In this section, please show your code and output, but also include appropriate
+text discussion to interpret the output and answer the question.
+
+#### Question 2.1 [50 points]
+
+Is there evidence that one of these two parks has better trails?
+
+That is:
+
+a) Is there a difference in **mean** trail rating in the two parks? Answer using
+a *parametric* hypothesis test.
+
+b) Is there a difference in **median** trail rating in the two parks?  Answer by
+creating a bootstrapped confidence interval for each park.
+
+```{r}
+seki <- np_trails %>%
+  filter(str_detect(area_name, "Kings Canyon|Sequoia")) 
+
+seki %>%
+  t_test(elevation_gain ~ area_name)
+```
+
+```{r}
+seki_boots <- modelr::bootstrap(seki, n=500)
+
+seki_boots <- seki_boots %>%
+  mutate(
+    se_meds = map_dbl(strap, ~ data.frame(.x) %>% filter(str_detect(area_name, "Sequoia")) %$% median(avg_rating)),
+    kc_meds = map_dbl(strap, ~ data.frame(.x) %>% filter(str_detect(area_name, "Kings")) %$% median(avg_rating))
+  )
+
+summary(seki_boots)
+```
+
+
+
+#### Question 2.2 [50 points]
+
+Do these parks have different steepness of trails?
+
+Create a linear model, and a corresponding plot, that predicts the elevation 
+gain of a trail to its length.
+
+Interpret the results to answer:
+
+* What is the average steepness (gain/length) of a trail in Kings Canyon?
+
+* What is the average steepness of a trail in Sequoia?
+
+* Is there evidence that these steepnesses are significantly different?
+
+```{r}
+my_mod <- lm(elevation_gain ~ length*area_name, data = seki)
+
+
+seki %>%
+  ggplot(aes(x = length, y = elevation_gain, color = area_name)) + 
+  geom_point() +
+  stat_smooth(method = "lm")
+```
+
+
+## Part Three: Open-Ended [100 points]
+
+Create a short writeup (~1 page, including figures) to address the following
+question:
+
+**What features or activities make a park or trail well-liked by hikers?**
+
+You may interpret this question however you like:  feel free to study something
+very specific related to the question, such focusing on a single park or a single
+feature/activity.
+
+Your writeup must include at least one visualization and at least one statistical
+analysis.
+

@@ -1,0 +1,165 @@
+---
+title: "Lab: Simulation and the Central Limit Theorem"
+author: ""
+output: rmdformats::readthedown
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE)
+
+library(tidyverse)
+```
+
+
+## Introduction
+
+In your coursework, you learned a bit about the **Central Limit Theorem**.
+
+In this lab, you will use **simulation** to illustrate this concept.
+
+
+## Part One:  Summarize fake data
+
+1. Create a new dataset containing four variables: one that comes from a **Normal**
+distribution, one from a **Uniform** distribution, one from a **Binomial** distribution, 
+and one from an **exponential** distribution.  
+
+You should **not** use the default options for these distributions; e.g., your
+Normal data should not have a mean of 0 or a standard deviation of 1, and your 
+Binomial data should not have a probability of 0.5.
+
+Your data should have **30 rows**.
+
+
+(We did *not* learn about the exponential distribution in lecture; I would like
+you to figure out the `r, d, p, q` functions for this new distribution yourself.)
+
+Feel free to make up silly names for your fake variables, and/or to add fake names
+or other labels to this dataset, if you are inspired.
+
+2. Calculate the **mean** and **standard deviation** for each of your four variables.
+
+3.  Now repeat steps (1) and (2), using the same distributions,
+but instead make **1000** rows in your dataset.
+
+Comment on the means and standard deviations in this section, as compared to 
+in (2).
+
+
+4.  Make a histogram for each of your four variables, with the underlying 
+distribution overlayed on top.
+
+
+## Part Two: Generating sample means
+
+
+1. Write a function called `sample_mean`.  This function should take as input
+a vector `vec` and an integer `n`.  It should take a random sample of size `n` from
+`vec`, then calculate and return the mean of that subsample.
+
+
+2. Write a function called `many_sample_means`.  This function should take as
+input a vector `vec`, an integer `n`, and an integer `reps`.  It should perform
+the `sample_mean` process many times (`reps`) and return a vector of the results.
+
+
+3. Write a function called `sample_means_ns`. This function should take as
+input a vector `vec` and an integer `reps`, and a vector `ns`.  It should perform
+the `many_sample_means` process for each of the values in the `ns` vector.  It should
+return a **data frame** with the results.
+
+For example, if `ns <- c(5, 50, 500)` and `reps = 2`, you would return something
+like:
+
+```{r, echo = FALSE}
+tibble(
+  sample_mean = rnorm(6, 3, 5),
+  n = rep(c(5, 50, 500), 2)
+)
+```
+
+
+Include the following in your final R Markdown to show your functions work:
+
+```{r, eval = FALSE}
+vec <- runif(1000)
+
+sample_mean(vec, 50)
+many_sample_means(vec, reps = 10, n = 50)
+sample_means_ns(vec, reps = 10, ns = c(5, 50, 500))
+
+```
+
+## Part Three:  Putting it all together
+
+For any **two** of the four variables in your fake dataset from Part One, do the
+following:
+
+1. Use your `many_sample_means` function with `reps = 1000` and `n = 10`.  
+
+    (a) Make histograms of each of your results (no overlay required)
+    (b) Calculate the mean and standard deviation of each of your results.
+    
+
+2. Use your `many_sample_means` function with `reps = 1000` and `n = 500`.  
+
+    (a) Make histograms of each of your results (no overlay required)
+    (b) Calculate the mean and standard deviation of each of your results.
+    
+    
+3. Comment on the differences or similarities between (1) and (2)
+
+
+4. Use your `sample_means_ns` function to try a variety of values of `n`.  
+Calculate the standard deviation of the results for each value of `n`.
+Make a plot that shows how the standard deviation of the sample means changes with `n`.
+
+
+
+
+## Part Four:  Appreciate the CLT
+
+You have been told that the amount of time you have to wait for a bus from Cal 
+Poly to Downtown SLO is `exponential(0.02)`; that is, that the true average
+wait time is about 50 minutes.
+
+You think this might be a lie.  In the last 30 days, you have waited for the bus 
+for 55 minutes on average.
+
+If the bus system is telling the truth about the `exponential(0.02)` distribution, 
+how unlucky were you this month?
+
+1. Simulate 10000 random values from the `exponential(0.02)` distribution.  Use
+your `many_sample_means` on these values, with `n = 30` and `reps = 1000`.  How
+many times did your sample mean exceed 55?
+
+2. Use the Central Limit Theorem to assume that a sample mean of exponentially 
+distributed values is Normally distributed, with mean $50$ and standard deviation 
+$50/\sqrt{n}$.  Find the probability that a sample mean exceeds 55.
+
+3. Comment on (1) and (2).  Were the answers similar?  Do you believe that bus wait times
+really are distributed `exponential(0.02)`?
+
+
+## Challenge 1:
+
+The Central Limit Theorem works for the sample **mean**.  Does it work for any
+other summary statistics?
+
+Try out at least two other statistics.  Some suggestions:
+* the median
+* the variance
+* the midhinge
+* the maximum
+
+Write a very brief argument, using simulation and visualization, about whether or not
+the CLT works on the statistic in question.
+
+Upload your writeup **separately**.
+
+## Challenge 2:
+
+Put your 3 functions (`sample_mean`, `many_sample_means`, `sample_means_ns`) 
+into an R package in a github repo.  You may copy the `twelvedays` package and
+make changes to that infrastructure, to make this easier.
