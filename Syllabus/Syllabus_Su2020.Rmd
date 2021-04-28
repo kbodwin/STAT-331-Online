@@ -7,20 +7,20 @@ output: rmdformats::readthedown
 
 #### Professor Kelly Bodwin
 
-**Office:** Discord Sever, the internet.
+**Office:** Discord Server, the internet.
 
-**Email:** prof.bodwin+stat331@gmail.com
+**Email:** (please contact me through Canvas messaging)
 
 
 ### Course Discord:
 
-For questions of general interest, such as course clarifications or conceptual questions, please use the [Class Discord Server](https://discord.gg/UbXwkxQ).  Refer to the Day One Class Setup
+For questions of general interest, such as course clarifications or conceptual questions, please use the [Class Discord Server](https://discord.gg/tuS3RjMWH7).  Refer to the Day One Class Setup
 materials for more information on how to effectively use this server.
 
 
 ### Office Hours:
 
-#### TWRF 10:30am-11:30am
+#### TBD
 
 (All Office Hours held on Discord.)
 
@@ -152,9 +152,9 @@ Extra bonus points beyond 100 earn you extra credit.
 
 ### Dates
 
-**Midterm:** Monday, July 27th
+**Midterm:** Thursday, May 6th
 
-**Final Exam:** Friday, August 28th.
+**Final Exam:** Thursday, June 10th
 
 
 ## Other Policies

@@ -5,8 +5,8 @@ account: kbodwin
 server: rstudio.csm.calpoly.edu
 hostUrl: https://rstudio.csm.calpoly.edu/__api__
 appId: 153
-bundleId: 325
+bundleId: 511
 url: https://rstudio.csm.calpoly.edu/Syllabus-Su2020-331/
-when: 1594097192.52932
+when: 1616019408.72456
 asMultiple: FALSE
 asStatic: TRUE

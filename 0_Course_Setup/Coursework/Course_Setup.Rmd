@@ -49,22 +49,23 @@ app called **Discord**.
 
 Discord is a platform for text chatting, voice chatting, and screen sharing.
 
-In particular, course **office hours** are held via Discord.  Your professor will be
-available for public questions, or one-on-one and small group chats by text, voice, 
-or video.
+In particular, course **office hours** are held via Discord.  During this time, I will be
+available for public questions, and I am always happy to hop into a one-on-one or 
+small group chats by text, voice, or video if you ping me.
 
 The office hours for this class are:
 
-### Tues, Weds, Thurs, and Fri 10:30am-11:30am
+### TBD
 
-I will often be willing to hop on Discord and help out at other times, and I will answer text chat questions regularly throughout every day!
+I will often be willing to hop on Discord and help out at other times, and I will 
+answer text chat questions regularly throughout every day!
 
 ---
 
 ## Join the server
 
 
-Join the [Stat 331 Server](https://discord.gg/UbXwkxQ) to start experimenting with the interface.
+Join the [Stat 331 Server](https://discord.gg/tuS3RjMWH7) to start experimenting with the interface.
 
 When you join the server, you will be given some suggestions to get started.  
 
@@ -238,7 +239,7 @@ These are meant to replace the in-class group work experience; as such, you are 
 
 ### Lab Assignments
 
-*Due Fridays at midnight*
+*Due Sundays at midnight*
 
 Aside from the Final Project and Exams, the majority of your grade in this class 
 comes from Lab Assignments.  You should plan to spend a large amount of time 
@@ -252,7 +253,7 @@ Labs will be submitted on Canvas.
 
 ### Peer Review
 
-*Due Sundays at midnight*
+*Optional*
 
 As part of your Lab Assignment grade, you will also be asked to review and rate your classmates' work.  This will be done on Canvas, and a rubric will be supplied for you.
 

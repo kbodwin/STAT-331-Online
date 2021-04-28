@@ -1,0 +1,12 @@
+name: course_setup
+title: Course_Setup
+username: kbodwin
+account: kbodwin
+server: rstudio.csm.calpoly.edu
+hostUrl: https://rstudio.csm.calpoly.edu/__api__
+appId: 243
+bundleId: 510
+url: https://rstudio.csm.calpoly.edu/content/243/
+when: 1616019155.31269
+asMultiple: FALSE
+asStatic: TRUE
