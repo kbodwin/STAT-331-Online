@@ -3,7 +3,7 @@
   <head>
     <title>Writing your own functions</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Week 4" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -11,7 +11,7 @@
 class: center, middle, inverse, title-slide
 
 # Writing your own functions
-### Week 4
+### 
 
 ---
 
@@ -73,7 +73,7 @@ Whatever is entered in the function is passed along under the name "x".
 The **name** of the function is chosen by the author.
 
 
-&lt;code class ='r hljs remark-code'&gt;&lt;span style='background-color:#ffff7f'&gt;add_two&lt;/span&gt; &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;x + 2&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;&lt;span style='background-color:#ffff7f'&gt;add_two&lt;/span&gt;(5)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;&lt;span style="background-color:#ffff7f"&gt;add_two&lt;/span&gt; &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;x + 2&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;&lt;span style="background-color:#ffff7f"&gt;add_two&lt;/span&gt;(5)&lt;/code&gt;
 
 ```
 
@@ -105,7 +105,7 @@ What will this give us?
 The **argument(s)** of the function are chosen by the author.
 
 
-&lt;code class ='r hljs remark-code'&gt;add_two &lt;- function(&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;x&lt;/span&gt; + 2&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_two(5)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;add_two &lt;- function(&lt;span style="background-color:#ffff7f"&gt;x&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style="background-color:#ffff7f"&gt;x&lt;/span&gt; + 2&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_two(5)&lt;/code&gt;
 
 ```
 
@@ -119,7 +119,7 @@ The **argument(s)** of the function are chosen by the author.
 The **body** of the function is where the action happens.
 
 
-&lt;code class ='r hljs remark-code'&gt;add_two &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style='background-color:#ffff7f'&gt;x + 2&lt;/span&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_two(5)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;add_two &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;span style="background-color:#ffff7f"&gt;x + 2&lt;/span&gt;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_two(5)&lt;/code&gt;
 
 ```
 
@@ -170,7 +170,7 @@ If you supply a default value, the argument is optional:
 
 
 
-&lt;code class ='r hljs remark-code'&gt;add_something &lt;- function(x, &lt;span style='background-color:#ffff7f'&gt;something = 2&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;x + something&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_something(5)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;add_something &lt;- function(x, &lt;span style="background-color:#ffff7f"&gt;something = 2&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;x + something&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;br&gt;&lt;br&gt;add_something(5)&lt;/code&gt;
 
 ```
 
@@ -180,7 +180,7 @@ If you supply a default value, the argument is optional:
 
 
 
-&lt;code class ='r hljs remark-code'&gt;add_something(5, &lt;span style='background-color:#ffff7f'&gt;something = 6&lt;/span&gt;)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;add_something(5, &lt;span style="background-color:#ffff7f"&gt;something = 6&lt;/span&gt;)&lt;/code&gt;
 
 ```
 
@@ -312,7 +312,7 @@ Maybe you want to return different results in different situations
 
 
 
-&lt;code class ='r hljs remark-code'&gt;even_or_odd &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;if (&lt;span style='background-color:#ffff7f'&gt;x %% 2 == 0&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;return("&lt;span style='background-color:green'&gt;It's even!&lt;/span&gt;")&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;} else {&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;return("&lt;span style='background-color:pink'&gt;It's odd.&lt;/span&gt;")&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;}&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;even_or_odd &lt;- function(x) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;if (&lt;span style="background-color:#ffff7f"&gt;x %% 2 == 0&lt;/span&gt;) {&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;return("&lt;span style="background-color:green"&gt;It's even!&lt;/span&gt;")&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;} else {&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;return("&lt;span style="background-color:pink"&gt;It's odd.&lt;/span&gt;")&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;}&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;&amp;nbsp;&amp;nbsp;&lt;br&gt;}&lt;/code&gt;
 ---
 # Print versus return
 
@@ -492,7 +492,7 @@ myiris$Petal.Width &lt;- (myiris$Petal.Width - mean(myiris$Petal.Width)) / sd(my
 # Dangers of copy-paste
 
 
-&lt;code class ='r hljs remark-code'&gt;myiris &lt;- iris&lt;br&gt;&lt;br&gt;myiris$&lt;span style='background-color:pink'&gt;Sepal.Length&lt;/span&gt; &lt;- (myiris$&lt;span style='background-color:pink'&gt;Sepal.Length&lt;/span&gt; - mean(myiris$&lt;span style='background-color:pink'&gt;Sepal.Length&lt;/span&gt;)) / sd(myiris$&lt;span style='background-color:pink'&gt;Sepal.Length&lt;/span&gt;)&lt;br&gt;myiris$&lt;span style='background-color:#ffff7f'&gt;Sepal.Width&lt;/span&gt; &lt;- (myiris$&lt;span style='background-color:#ffff7f'&gt;Sepal.Width&lt;/span&gt; - mean(myiris$&lt;span style='background-color:pink'&gt;Sepal.Length&lt;/span&gt;)) / sd(myiris$&lt;span style='background-color:#ffff7f'&gt;Sepal.Width&lt;/span&gt;)&lt;br&gt;myiris$Petal.Length &lt;- (myiris$Petal.Length - mean(myiris$Petal.Length)) / sd(myiris$Petal.Length)&lt;br&gt;myiris$Petal.Width &lt;- (myiris$Petal.Width - mean(myiris$Petal.Width)) / sd(myiris$Petal.Width)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;myiris &lt;- iris&lt;br&gt;&lt;br&gt;myiris$&lt;span style="background-color:pink"&gt;Sepal.Length&lt;/span&gt; &lt;- (myiris$&lt;span style="background-color:pink"&gt;Sepal.Length&lt;/span&gt; - mean(myiris$&lt;span style="background-color:pink"&gt;Sepal.Length&lt;/span&gt;)) / sd(myiris$&lt;span style="background-color:pink"&gt;Sepal.Length&lt;/span&gt;)&lt;br&gt;myiris$&lt;span style="background-color:#ffff7f"&gt;Sepal.Width&lt;/span&gt; &lt;- (myiris$&lt;span style="background-color:#ffff7f"&gt;Sepal.Width&lt;/span&gt; - mean(myiris$&lt;span style="background-color:pink"&gt;Sepal.Length&lt;/span&gt;)) / sd(myiris$&lt;span style="background-color:#ffff7f"&gt;Sepal.Width&lt;/span&gt;)&lt;br&gt;myiris$Petal.Length &lt;- (myiris$Petal.Length - mean(myiris$Petal.Length)) / sd(myiris$Petal.Length)&lt;br&gt;myiris$Petal.Width &lt;- (myiris$Petal.Width - mean(myiris$Petal.Width)) / sd(myiris$Petal.Width)&lt;/code&gt;
 
 
 ---
@@ -581,7 +581,7 @@ We Only Need to Change the Code in One Place: `standardize()`
 
 
 
-&lt;code class ='r hljs remark-code'&gt;standardize &lt;- function(data) {&lt;br&gt;&amp;nbsp;&amp;nbsp;deviations &lt;- data - mean(data, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;newdata &lt;- deviations / sd(data, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;return(newdata)&lt;br&gt;}&lt;br&gt;&lt;br&gt;testdata &lt;- c(2, 4, 3, 9, NA, 4, 6)&lt;br&gt;standardize(testdata)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;standardize &lt;- function(data) {&lt;br&gt;&amp;nbsp;&amp;nbsp;deviations &lt;- data - mean(data, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;newdata &lt;- deviations / sd(data, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;&amp;nbsp;&amp;nbsp;return(newdata)&lt;br&gt;}&lt;br&gt;&lt;br&gt;testdata &lt;- c(2, 4, 3, 9, NA, 4, 6)&lt;br&gt;standardize(testdata)&lt;/code&gt;
 
 ```
 
@@ -593,7 +593,7 @@ We Only Need to Change the Code in One Place: `standardize()`
 
 
 
-&lt;code class ='r hljs remark-code'&gt;myiris &lt;- iris&lt;br&gt;&lt;br&gt;myiris$Sepal.Length &lt;- (myiris$Sepal.Length - mean(myiris$Sepal.Length, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Sepal.Length, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Sepal.Width &lt;- (myiris$Sepal.Width - mean(myiris$Sepal.Length, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Sepal.Width, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Petal.Length &lt;- (myiris$Petal.Length - mean(myiris$Petal.Length, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Petal.Length, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Petal.Width &lt;- (myiris$Petal.Width - mean(myiris$Petal.Width, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Petal.Width, &lt;span style='background-color:#ffff7f'&gt;na.rm = TRUE&lt;/span&gt;)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;myiris &lt;- iris&lt;br&gt;&lt;br&gt;myiris$Sepal.Length &lt;- (myiris$Sepal.Length - mean(myiris$Sepal.Length, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Sepal.Length, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Sepal.Width &lt;- (myiris$Sepal.Width - mean(myiris$Sepal.Length, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Sepal.Width, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Petal.Length &lt;- (myiris$Petal.Length - mean(myiris$Petal.Length, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Petal.Length, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;br&gt;myiris$Petal.Width &lt;- (myiris$Petal.Width - mean(myiris$Petal.Width, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)) / sd(myiris$Petal.Width, &lt;span style="background-color:#ffff7f"&gt;na.rm = TRUE&lt;/span&gt;)&lt;/code&gt;
 
 ---
 
@@ -1061,7 +1061,7 @@ stdize_column(iris, Petal.Length)
 ```
 
 
-&lt;code class ='r hljs remark-code'&gt;stdize_column &lt;- function(dat, variable) {&lt;br&gt;&amp;nbsp;&amp;nbsp;new_var &lt;- dat %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;pull(&lt;span style='background-color:#ffff7f'&gt;{{variable}}&lt;/span&gt;) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;standardize()&lt;br&gt;&amp;nbsp;&amp;nbsp;return(new_var)&lt;br&gt;}&lt;br&gt;&lt;br&gt;stdize_column(iris, Petal.Length)&lt;/code&gt;
+&lt;code class ='r hljs remark-code'&gt;stdize_column &lt;- function(dat, variable) {&lt;br&gt;&amp;nbsp;&amp;nbsp;new_var &lt;- dat %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;pull(&lt;span style="background-color:#ffff7f"&gt;{{variable}}&lt;/span&gt;) %&gt;%&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;standardize()&lt;br&gt;&amp;nbsp;&amp;nbsp;return(new_var)&lt;br&gt;}&lt;br&gt;&lt;br&gt;stdize_column(iris, Petal.Length)&lt;/code&gt;
 
 ```
 
@@ -1166,6 +1166,9 @@ fibonacci &lt;- function(start, len) {
 ## `debugonce()`
 
 (Try it.)
+
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

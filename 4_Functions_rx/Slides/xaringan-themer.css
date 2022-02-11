@@ -15,7 +15,7 @@
  *    - xaringan wiki: https://github.com/yihui/xaringan/wiki
  *    - remarkjs wiki: https://github.com/gnab/remark/wiki
  *
- *  Version: 0.4.0
+ *  Version: 0.3.0
  *
  * ------------------------------------------------------- */
 @import url(https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap);
@@ -31,7 +31,6 @@
   --text-font-base: sans-serif;
   --header-font-family: Roboto;
   --header-font-is-google: 1;
-  --header-font-family-fallback: Georgia, serif;
   --code-font-family: 'Droid Mono';
   --code-font-is-google: 1;
   --base-font-size: 20px;
@@ -52,7 +51,6 @@
   --inverse-text-color: #26116c;
   --inverse-background-color: #fd5e53;
   --inverse-header-color: #26116c;
-  --inverse-link-color: #fd5e53;
   --title-slide-background-color: #26116c;
   --title-slide-text-color: #fff8e7;
   --header-background-color: #fd5e53;
@@ -71,7 +69,7 @@ body {
   color: var(--text-color);
 }
 h1, h2, h3 {
-  font-family: var(--header-font-family), var(--header-font-family-fallback);
+  font-family: var(--header-font-family);
   font-weight: 600;
   color: var(--header-color);
 }
@@ -104,12 +102,9 @@ h1, h2, h3 {
 .remark-slide-number {
   color: #FEFDFD;
   opacity: 1;
-  font-size: 0.9rem;
+  font-size: 0.9em;
 }
-strong {
-  font-weight: bold;
-  color: var(--text-bold-color);
-}
+strong { color: var(--text-bold-color); }
 a, a > code {
   color: var(--link-color);
   text-decoration: none;
@@ -130,9 +125,6 @@ a, a > code {
 }
 .inverse h1, .inverse h2, .inverse h3 {
   color: var(--inverse-header-color);
-}
-.inverse a, .inverse a > code {
-  color: var(--inverse-link-color);
 }
 .title-slide, .title-slide h1, .title-slide h2, .title-slide h3 {
   color: var(--title-slide-text-color);
@@ -168,7 +160,7 @@ a, a > code {
   float: right;
   width: 47%;
 }
-.pull-right + * {
+.pull-right ~ * {
   clear: both;
 }
 img, video, iframe {

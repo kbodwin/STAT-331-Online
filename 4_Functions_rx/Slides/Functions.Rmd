@@ -1,9 +1,10 @@
 ---
 title: "Writing your own functions"
-author: "Week 4"
+author: ""
 
 output:
   xaringan::moon_reader:
+    self contained: true
     lib_dir: libs
     css: xaringan-themer.css
     nature:

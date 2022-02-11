@@ -3,6 +3,7 @@ title: "Special Data Types"
 subtitle: "Week 3"
 output:
   xaringan::moon_reader:
+    self-contained: true
     lib_dir: libs
     css: xaringan-themer.css
     nature:
